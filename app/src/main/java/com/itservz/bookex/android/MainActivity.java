@@ -1,6 +1,8 @@
 package com.itservz.bookex.android;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -19,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.itservz.bookex.android.service.ServletPostAsyncTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -118,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
             }
         })
         ;
+        new ServletPostAsyncTask().execute(new Pair<Context, String>(getApplicationContext(), "bookex"));
     }
 
     @Override
