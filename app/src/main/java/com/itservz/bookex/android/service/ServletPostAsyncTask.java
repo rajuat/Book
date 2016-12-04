@@ -36,7 +36,7 @@ public class ServletPostAsyncTask extends AsyncTask<Pair<Context, String>, Void,
 
         try {
             // Set up the request
-            URL url = new URL("http://bookexfirebaseproject.appspot.com/send-email");
+            URL url = new URL("http://bookexfirebaseproject.appspot.com/hello");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setDoInput(true);
