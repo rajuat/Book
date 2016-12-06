@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class EmailServlet extends HttpServlet {
-    static Logger Log = Logger.getLogger("com.example.[USERNAME].myapplication.backend.MyServlet");
+    static Logger Log = Logger.getLogger("com.itservz.bookex.backend.EmailServlet");
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -45,8 +45,8 @@ public class EmailServlet extends HttpServlet {
         // Note: Ensure that the [PRIVATE_KEY_FILENAME].json has read
         // permissions set.
         FirebaseOptions options = new FirebaseOptions.Builder()
-                .setServiceAccount(getServletContext().getResourceAsStream("/WEB-INF/[PRIVATE_KEY_FILE]"))
-                .setDatabaseUrl("https://[FIREBASE_PROJECT_ID].firebaseio.com/")
+                .setServiceAccount(getServletContext().getResourceAsStream("/WEB-INF/bookexFirebaseProject-7b1ca935b545.json"))
+                .setDatabaseUrl("https://bookexFirebaseProject.firebaseio.com/")
                 .build();
 
         try {
@@ -98,10 +98,10 @@ public class EmailServlet extends HttpServlet {
                 try {
                     Message msg = new MimeMessage(session);
                     //Make sure you substitute your project-id in the email From field
-                    msg.setFrom(new InternetAddress("reminder@[FIREBASE_PROJECT_ID].appspotmail.com",
+                    msg.setFrom(new InternetAddress("reminder@bookexfirebaseproject.appspotmail.com",
                             "Todo Reminder"));
                     msg.addRecipient(Message.RecipientType.TO,
-                            new InternetAddress("[EMAIL@GMAIL.COM]", "Recipient"));
+                            new InternetAddress("raju.athokpam@gmail.com", "Recipient"));
                     msg.setSubject("Things to do today");
                     msg.setText(todoText);
                     Transport.send(msg);
