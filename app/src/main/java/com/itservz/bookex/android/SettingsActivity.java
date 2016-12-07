@@ -18,6 +18,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 
 import java.util.List;
@@ -139,6 +140,17 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @Override
     public boolean onIsMultiPane() {
         return isXLargeTablet(this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            int SUCCESS_RESULT = 1;
+            setResult(SUCCESS_RESULT, new Intent());
+            finish();  //return to caller
+            return true;
+        }
+        return false;
     }
 
     /**
