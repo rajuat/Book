@@ -1,5 +1,6 @@
 package com.itservz.bookex.android;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -34,25 +36,14 @@ public class SplashScreenActivity extends Activity {
             }
         });
 
-        /*FirebaseStorage storage = FirebaseStorage.getInstance();
-        // Create a storage reference from our app
-        StorageReference storageRef = storage.getReferenceFromUrl("gs://bookexfirebaseproject.appspot.com/");
-        StorageReference splashRef = storageRef.child("splash.png");
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+        // Remember that you should never show the action bar if the status bar is hidden, so hide that too if necessary.
+        ActionBar actionBar = getActionBar();
+        actionBar.hide();
 
-        final long ONE_MEGABYTE = 1024 * 1024;
-        splashRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                ImageView splash = (ImageView) findViewById(R.id.splash);
-                splash.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.d("Splash not found.", exception.getMessage());
-            }
-        });
-*/
         new Handler().postDelayed(new Runnable() {
 
             @Override
@@ -65,6 +56,7 @@ public class SplashScreenActivity extends Activity {
             }
         }, SPLASH_TIME_OUT);
     }
+
     //TODO: caching the splash from firebase
 
 }

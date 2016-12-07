@@ -22,11 +22,9 @@ public class FirebaseDatabaseService {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         // Get a reference to the todoItems child items it the database
         final DatabaseReference myRef = database.getReference("todoItems");
-        // Assign a listener to detect changes to the child items
-        // of the database reference.
+        // Assign a listener to detect changes to the child items of the database reference.
         myRef.addChildEventListener(new ChildEventListener() {
-            // This function is called once for each child that exists
-            // when the listener is added. Then it is called
+            // This function is called once for each child that exists when the listener is added. Then it is called
             // each time a new child is added.
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
