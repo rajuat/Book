@@ -5,7 +5,7 @@ package com.itservz.bookex.android.model;
  */
 
 public class Book {
-
+    public String uuid = null;
     public String ISBN = null;
     public String title = null;
     public String edition = null;
@@ -19,7 +19,8 @@ public class Book {
     @Override
     public String toString() {
         return "Book{" +
-                "ISBN='" + ISBN + '\'' +
+                "uuid='" + uuid + '\'' +
+                ", ISBN='" + ISBN + '\'' +
                 ", title='" + title + '\'' +
                 ", edition='" + edition + '\'' +
                 ", condition='" + condition + '\'' +

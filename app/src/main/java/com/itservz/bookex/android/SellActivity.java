@@ -20,6 +20,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.itservz.bookex.android.model.Book;
 import com.itservz.bookex.android.model.Transaction;
 
+import java.util.UUID;
+
 public class SellActivity extends AppCompatActivity implements  View.OnClickListener{
 
     private Book book;
@@ -43,6 +45,7 @@ public class SellActivity extends AppCompatActivity implements  View.OnClickList
 
     @Override
     public void onClick(View v) {
+        book.uuid = UUID.randomUUID().toString();
         Log.d("Selling", book.toString());
         update();
     }
