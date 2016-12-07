@@ -29,10 +29,17 @@
         android:hint="Book Title">
 
         <android.support.design.widget.TextInputEditText
-            android:id="@+id/title"
+            android:id="@+id/book_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
     </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:id="@+id/sell_button"
+        />
 
 </LinearLayout>
