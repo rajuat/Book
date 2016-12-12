@@ -15,6 +15,7 @@ public class Book {
     public int msp = 0;
     public int mrp = 0;
     public String description;
+    public String image;
 
     @Override
     public String toString() {

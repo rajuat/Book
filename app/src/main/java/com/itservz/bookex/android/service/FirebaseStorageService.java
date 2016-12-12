@@ -36,12 +36,13 @@ public class FirebaseStorageService {
     }
 
     public void setImage(String id, byte[] data){
-        storageRef.child("books").child(""+id);
+        storageRef.child("books").child(id+".jpg");
         UploadTask uploadTask = storageRef.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
+
+                Log.d("ImageNotUploaded", exception.getMessage());
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override

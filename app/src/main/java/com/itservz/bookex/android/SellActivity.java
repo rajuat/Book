@@ -19,6 +19,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -66,10 +67,24 @@ public class SellActivity extends AppCompatActivity implements  View.OnClickList
         });
 
         TextInputEditText isbn = (TextInputEditText) findViewById(R.id.isbn);
-        book.ISBN = isbn.getText().toString();
+        isbn.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus){
+                    book.ISBN = ((TextInputEditText)v).getText().toString();
+                }
+            }
+        });
 
         TextInputEditText title = (TextInputEditText) findViewById(R.id.book_title);
-        book.title = title.getText().toString();
+        title.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus){
+                    book.title = ((TextInputEditText)v).getText().toString();
+                }
+            }
+        });
 
         ((Button) findViewById(R.id.sell_button)).setOnClickListener(this);
 
@@ -132,7 +147,6 @@ public class SellActivity extends AppCompatActivity implements  View.OnClickList
     public void onClick(View v) {
         book.uuid = UUID.randomUUID().toString();
         Log.d("Selling", book.toString());
-        update();
 
         // Get the data from an ImageView as bytes
         bookImage.setDrawingCacheEnabled(true);
@@ -141,8 +155,10 @@ public class SellActivity extends AppCompatActivity implements  View.OnClickList
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
-
-        FirebaseStorageService.INSTANCE.setImage(book.uuid, data);
+        String imageEncoded = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+        book.image = imageEncoded;
+        update();
+        //FirebaseStorageService.INSTANCE.setImage(book.uuid, data);
 
     }
 
