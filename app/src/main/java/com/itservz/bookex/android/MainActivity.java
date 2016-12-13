@@ -2,10 +2,8 @@ package com.itservz.bookex.android;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,17 +13,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.itservz.bookex.android.service.FirebaseDatabaseService;
 import com.itservz.bookex.android.service.ServletPostAsyncTask;
 
@@ -55,10 +47,8 @@ public class MainActivity extends AppCompatActivity {
         // Delete items when clicked
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                Query myQuery = myRef.orderByValue().equalTo((String)
-                        listView.getItemAtPosition(position));
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Query myQuery = myRef.orderByValue().equalTo((String) listView.getItemAtPosition(position));
                 myQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {

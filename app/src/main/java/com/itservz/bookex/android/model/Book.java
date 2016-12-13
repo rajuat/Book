@@ -17,6 +17,14 @@ public class Book {
     public String description;
     public String image;
 
+    public Book() {
+    }
+
+    public Book(String ISBN, String title) {
+        this.ISBN = ISBN;
+        this.title = title;
+    }
+
     @Override
     public String toString() {
         return "Book{" +

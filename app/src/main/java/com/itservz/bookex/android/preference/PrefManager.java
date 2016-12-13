@@ -3,6 +3,8 @@ package com.itservz.bookex.android.preference;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.itservz.bookex.android.model.Book;
+
 /**
  * Created by Raju on 12/6/2016.
  */
@@ -16,9 +18,11 @@ public class PrefManager {
     int PRIVATE_MODE = 0;
 
     // Shared preferences file name
-    private static final String PREF_NAME = "androidhive-welcome";
+    private static final String PREF_NAME = "bp";
 
     private static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
+    private static final String ISBN = "isbn";
+    private static final String TITLE = "title";
 
     public PrefManager(Context context) {
         this._context = context;
@@ -35,4 +39,21 @@ public class PrefManager {
         return pref.getBoolean(IS_FIRST_TIME_LAUNCH, true);
     }
 
+    public void setISBN(String isbn){
+        editor.putString(ISBN, isbn);
+        editor.commit();
+    }
+
+    public String getISBN(){
+        return pref.getString(ISBN, "");
+    }
+
+    public void setTitle(String title){
+        editor.putString(TITLE, title);
+        editor.commit();
+    }
+
+    public String getTitle(){
+        return pref.getString(TITLE, "");
+    }
 }

@@ -16,8 +16,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.GridView;
 
+import com.itservz.bookex.android.adapter.SellItemAdapter;
 import com.itservz.bookex.android.adapter.TopBannerAdapter;
+import com.itservz.bookex.android.model.Book;
+import com.itservz.bookex.android.service.FirebaseDatabaseService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -28,6 +35,7 @@ public class DrawerActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -37,8 +45,6 @@ public class DrawerActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 startActivity(sellIntent);
-                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
             }
         });
 
@@ -51,9 +57,24 @@ public class DrawerActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //top banner
+        // top banner
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPager.setAdapter(new TopBannerAdapter((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE), getResources()));
+
+        // grid list view
+        GridView gridListView = (GridView) findViewById(R.id.sell_list);
+        List<Book> books = new FirebaseDatabaseService().getSellingItems(this);
+        /*List<Book> books = new ArrayList<>();
+        books.add(new Book("ISBN1", "Title1"));
+        books.add(new Book("ISBN2", "Title2"));
+        books.add(new Book("ISBN3", "Title3"));
+        books.add(new Book("ISBN4", "Title4"));
+        books.add(new Book("ISBN5", "Title5"));
+        books.add(new Book("ISBN6", "Title6"));
+        books.add(new Book("ISBN7", "Title7"));*/
+        SellItemAdapter adapter = new SellItemAdapter(this, books);
+        gridListView.setAdapter(adapter);
+
     }
 
     @Override
