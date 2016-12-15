@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
@@ -20,11 +19,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.itservz.bookex.android.model.Book;
 import com.itservz.bookex.android.preference.PrefManager;
-import com.itservz.bookex.android.service.DBRefs;
+import com.itservz.bookex.android.service.FirebaseDatabaseService;
+import com.itservz.bookex.android.service.FirebaseStorageService;
 import com.itservz.bookex.android.service.ImagePickerService;
 
 import java.io.ByteArrayOutputStream;
@@ -84,28 +82,19 @@ public class SellActivity extends AppCompatActivity implements  View.OnClickList
     public void onClick(View v) {
         book.uuid = UUID.randomUUID().toString();
         Log.d("Selling", book.toString());
-        // Get the data from an ImageView as bytes
         bookImage.setDrawingCacheEnabled(true);
         bookImage.buildDrawingCache();
         Bitmap bitmap = bookImage.getDrawingCache();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 0, baos);
         String imageEncoded = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
-        book.image = imageEncoded;
+        //book.image = imageEncoded;
         book.ISBN = prefManager.getISBN();
         book.title = prefManager.getTitle();
-        update();
+        new FirebaseDatabaseService().addSellingItem(book);
+        FirebaseStorageService.INSTANCE.setImage(book.uuid, baos.toByteArray(), this);
         Toast.makeText(this, "Ad posted", Toast.LENGTH_LONG).show();
         finish();
-    }
-
-    @NonNull
-    public void update() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        // Create a new child with a auto-generated ID.
-        DatabaseReference childRef = database.getReference(DBRefs.sells.name()).push();
-        // Set the child's data to the value passed in from the text box.
-        childRef.setValue(book);
     }
 
     @Override
@@ -120,24 +109,18 @@ public class SellActivity extends AppCompatActivity implements  View.OnClickList
                 Bitmap bitmap= BitmapFactory.decodeStream(image_stream);
                 bookImage.setImageBitmap(bitmap);
             } catch (FileNotFoundException e) {
-                // Here, thisActivity is the current activity
                 if (ContextCompat.checkSelfPermission(this,
                         android.Manifest.permission.READ_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
-                    // Should we show an explanation?
                     if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                             android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
                         // Show an explanation to the user *asynchronously* -- don't block
                         // this thread waiting for the user's response! After the user
                         // sees the explanation, try again to request the permission.
                     } else {
-                        // No explanation needed, we can request the permission.
                         ActivityCompat.requestPermissions(this,
                                 new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
                                 MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE);
-                        // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                        // app-defined int constant. The callback method gets the
-                        // result of the request.
                     }
                 }
             }
@@ -148,7 +131,6 @@ public class SellActivity extends AppCompatActivity implements  View.OnClickList
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE: {
-                // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Bitmap bitmap= BitmapFactory.decodeStream(image_stream);
                     bookImage.setImageBitmap(bitmap);
@@ -157,7 +139,6 @@ public class SellActivity extends AppCompatActivity implements  View.OnClickList
                 }
                 return;
             }
-            // other 'case' lines to check for other permissions this app might request
         }
     }
 }

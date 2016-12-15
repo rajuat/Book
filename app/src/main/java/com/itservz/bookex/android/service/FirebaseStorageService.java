@@ -3,13 +3,17 @@ package com.itservz.bookex.android.service;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.itservz.bookex.android.DrawerActivity;
+import com.itservz.bookex.android.SellActivity;
 
 /**
  * Created by Raju on 12/6/2016.
@@ -21,8 +25,7 @@ public class FirebaseStorageService {
     private byte[] image = null;
 
     private FirebaseStorageService() {
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        storageRef = storage.getReferenceFromUrl("gs://bookexfirebaseproject.appspot.com/");
+        storageRef = FirebaseService.getInstance().storage.getReferenceFromUrl("gs://bookexfirebaseproject.appspot.com/");
     }
 
     public FirebaseStorageService getInstance() {
@@ -35,20 +38,19 @@ public class FirebaseStorageService {
         return splashRef.getBytes(ONE_MEGABYTE);
     }
 
-    public void setImage(String id, byte[] data){
-        storageRef.child("books").child(id+".jpg");
-        UploadTask uploadTask = storageRef.putBytes(data);
+    public void setImage(String id, byte[] data, final SellActivity sellActivity){
+        StorageReference ref = FirebaseService.getInstance().storage.getReference("books");
+        ref.child("books/a.jpg");
+        UploadTask uploadTask = ref.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-
-                Log.d("ImageNotUploaded", exception.getMessage());
+                Toast.makeText(sellActivity, "ImageNotUploaded", Toast.LENGTH_SHORT).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                Log.d("ImageUploaded", taskSnapshot.getDownloadUrl().toString());
+                Toast.makeText(sellActivity, "ImageUploaded: " + taskSnapshot.getDownloadUrl().toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }

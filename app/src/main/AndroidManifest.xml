@@ -33,7 +33,6 @@
             android:label="@string/title_activity_settings" />
         <activity
             android:name=".DrawerActivity"
-            android:label="@string/title_activity_drawer"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SellActivity"

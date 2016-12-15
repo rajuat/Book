@@ -24,11 +24,14 @@ import java.util.List;
 
 public class FirebaseDatabaseService {
 
+    private DatabaseReference sellsReference = null;
+
+    public FirebaseDatabaseService(){
+        sellsReference = FirebaseService.getInstance().database.getReference(DBRefs.sells.name());
+    }
+
     public List<Book> getSellingItems(final DrawerActivity drawerActivity){
         final List<Book> books =  new ArrayList<>();
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference sellsReference = database.getReference(DBRefs.sells.name());
         sellsReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
@@ -52,10 +55,14 @@ public class FirebaseDatabaseService {
         return books;
     }
 
+    public void addSellingItem(Book book) {
+        DatabaseReference childRef = FirebaseService.getInstance().database.getReference(DBRefs.sells.name()).push();
+        childRef.setValue(book);
+    }
+
     @NonNull
     public DatabaseReference getDatabaseReference(final ArrayAdapter<String> adapter) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference myRef = database.getReference(DBRefs.todoItems.name());
+        final DatabaseReference myRef = FirebaseService.getInstance().database.getReference(DBRefs.todoItems.name());
         myRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {

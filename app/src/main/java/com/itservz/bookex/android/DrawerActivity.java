@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -17,11 +18,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import com.itservz.bookex.android.adapter.SellItemAdapter;
 import com.itservz.bookex.android.adapter.TopBannerAdapter;
 import com.itservz.bookex.android.model.Book;
 import com.itservz.bookex.android.service.FirebaseDatabaseService;
+import com.itservz.bookex.android.service.FirebaseService;
+import com.itservz.bookex.android.service.LoginDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +34,22 @@ public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ViewPager viewPager;
+    private View loginBtn;
+    private View logoutBtn;
+    private TextView usernameTxt;
+    private String username;
+
+    private void setUsername(String username) {
+        Log.d("DrawerActivity", "setUsername("+String.valueOf(username)+")");
+        if (username == null) {
+            username = "Android";
+        }
+        boolean isLoggedIn = !username.equals("Android");
+        this.username = username;
+        this.usernameTxt.setText(username);
+        this.logoutBtn.setVisibility(isLoggedIn ? View.VISIBLE : View.GONE);
+        this.loginBtn .setVisibility(isLoggedIn ? View.GONE    : View.VISIBLE);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +59,31 @@ public class DrawerActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //login
+        loginBtn = findViewById(R.id.loginBtn);
+        logoutBtn = findViewById(R.id.logoutBtn);
+        usernameTxt = (TextView) findViewById(R.id.usernameTxt);
+        setUsername("Android");
+        // Show a popup when the user asks to sign in
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                LoginDialog.showLoginPrompt(DrawerActivity.this, FirebaseService.getInstance().app);
+            }
+        });
+        // Allow the user to sign out
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                FirebaseService.getInstance().auth.signOut();
+            }
+        });
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_sell);
         final Intent sellIntent = new Intent(this, SellActivity.class);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(username.equals("Android"))
+                LoginDialog.showLoginPrompt(DrawerActivity.this, FirebaseService.getInstance().app);
                 startActivity(sellIntent);
             }
         });
@@ -64,14 +104,6 @@ public class DrawerActivity extends AppCompatActivity
         // grid list view
         GridView gridListView = (GridView) findViewById(R.id.sell_list);
         List<Book> books = new FirebaseDatabaseService().getSellingItems(this);
-        /*List<Book> books = new ArrayList<>();
-        books.add(new Book("ISBN1", "Title1"));
-        books.add(new Book("ISBN2", "Title2"));
-        books.add(new Book("ISBN3", "Title3"));
-        books.add(new Book("ISBN4", "Title4"));
-        books.add(new Book("ISBN5", "Title5"));
-        books.add(new Book("ISBN6", "Title6"));
-        books.add(new Book("ISBN7", "Title7"));*/
         SellItemAdapter adapter = new SellItemAdapter(this, books);
         gridListView.setAdapter(adapter);
 
@@ -89,19 +121,13 @@ public class DrawerActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.drawer, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             startActivityForResult(new Intent(this, SettingsActivity.class), 1);
             return true;
@@ -113,21 +139,14 @@ public class DrawerActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-
         } else if (id == R.id.nav_slideshow) {
-
         } else if (id == R.id.nav_manage) {
-
         } else if (id == R.id.nav_share) {
-
         } else if (id == R.id.nav_send) {
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
