@@ -3,6 +3,7 @@ package com.itservz.bookex.android.service;
 /**
  * Created by raju.athokpam on 15-12-2016.
  */
+
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
@@ -75,9 +76,8 @@ public class LoginDialog {
                                 EmailPasswordResult result = new EmailPasswordResult(email.getText().toString(), password.getText().toString());
                                 if (callback != null) {
                                     callback.onSuccess(result);
-                                }
-                                else {
-                                    for (OnSuccessListener<EmailPasswordResult> callback: callbacks){
+                                } else {
+                                    for (OnSuccessListener<EmailPasswordResult> callback : callbacks) {
                                         callback.onSuccess(result);
                                     }
                                 }

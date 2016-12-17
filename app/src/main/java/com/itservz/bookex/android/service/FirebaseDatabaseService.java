@@ -51,13 +51,16 @@ public class FirebaseDatabaseService {
                 Log.w("TAG:", "Failed to read value.", error.toException());
             }
         });
-
         return books;
     }
 
-    public void addSellingItem(Book book) {
-        DatabaseReference childRef = FirebaseService.getInstance().database.getReference(DBRefs.sells.name()).push();
+    public String addSellingItem(Book book) {
+        DatabaseReference childRef = sellsReference.push();
+        String uId = childRef.getKey();
+        book.uuid = uId;
+        Log.d("Selling", book.toString());
         childRef.setValue(book);
+        return uId;
     }
 
     @NonNull

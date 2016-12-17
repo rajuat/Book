@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -80,19 +81,19 @@ public class SellActivity extends AppCompatActivity implements  View.OnClickList
 
     @Override
     public void onClick(View v) {
-        book.uuid = UUID.randomUUID().toString();
-        Log.d("Selling", book.toString());
+        //book.uuid = UUID.randomUUID().toString();
         bookImage.setDrawingCacheEnabled(true);
         bookImage.buildDrawingCache();
         Bitmap bitmap = bookImage.getDrawingCache();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 0, baos);
-        String imageEncoded = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+        //String imageEncoded = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
         //book.image = imageEncoded;
         book.ISBN = prefManager.getISBN();
         book.title = prefManager.getTitle();
-        new FirebaseDatabaseService().addSellingItem(book);
-        FirebaseStorageService.INSTANCE.setImage(book.uuid, baos.toByteArray(), this);
+        String uId = new FirebaseDatabaseService().addSellingItem(book);
+        FirebaseStorageService.INSTANCE.setImage(uId, baos.toByteArray(), this);
+        //Snackbar.make(findViewById(R.id.sell_id), "Ad posted", Snackbar.LENGTH_LONG).show();
         Toast.makeText(this, "Ad posted", Toast.LENGTH_LONG).show();
         finish();
     }

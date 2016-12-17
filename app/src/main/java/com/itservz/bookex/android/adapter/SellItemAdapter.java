@@ -11,8 +11,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.itservz.bookex.android.R;
 import com.itservz.bookex.android.model.Book;
+import com.itservz.bookex.android.service.FirebaseStorageService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,14 +53,21 @@ public class SellItemAdapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.sell_item, null);
         }
 
-        ImageView imgIcon = (ImageView) convertView.findViewById(R.id.sell_book_img);
+        final ImageView imgIcon = (ImageView) convertView.findViewById(R.id.sell_book_img);
         TextView isbn = (TextView) convertView.findViewById(R.id.sell_book_isbn);
         TextView title = (TextView) convertView.findViewById(R.id.sell_book_title);
 
-        if(book.image != null && book.image.length() > 0) {
+        //image
+        FirebaseStorageService.INSTANCE.getImage("books/"+book.uuid).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                imgIcon.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+            }
+        });
+        /*if(book.image != null && book.image.length() > 0) {
             byte[] imageDecoded = Base64.decode(book.image, Base64.DEFAULT);
             imgIcon.setImageBitmap(BitmapFactory.decodeByteArray(imageDecoded, 0, imageDecoded.length));
-        }
+        }*/
         isbn.setText(book.ISBN);
         title.setText(book.title);
 

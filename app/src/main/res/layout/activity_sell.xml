@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/sell_id"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:padding="@dimen/activity_horizontal_margin"

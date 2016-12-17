@@ -25,6 +25,7 @@ import com.itservz.bookex.android.adapter.TopBannerAdapter;
 import com.itservz.bookex.android.model.Book;
 import com.itservz.bookex.android.service.FirebaseDatabaseService;
 import com.itservz.bookex.android.service.FirebaseService;
+import com.itservz.bookex.android.service.FirebaseStorageService;
 import com.itservz.bookex.android.service.LoginDialog;
 
 import java.util.ArrayList;
@@ -34,8 +35,6 @@ public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ViewPager viewPager;
-    private View loginBtn;
-    private View logoutBtn;
     private TextView usernameTxt;
     private String username;
 
@@ -47,8 +46,6 @@ public class DrawerActivity extends AppCompatActivity
         boolean isLoggedIn = !username.equals("Android");
         this.username = username;
         this.usernameTxt.setText(username);
-        this.logoutBtn.setVisibility(isLoggedIn ? View.VISIBLE : View.GONE);
-        this.loginBtn .setVisibility(isLoggedIn ? View.GONE    : View.VISIBLE);
     }
 
     @Override
@@ -59,31 +56,14 @@ public class DrawerActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //login
-        loginBtn = findViewById(R.id.loginBtn);
-        logoutBtn = findViewById(R.id.logoutBtn);
         usernameTxt = (TextView) findViewById(R.id.usernameTxt);
         setUsername("Android");
-        // Show a popup when the user asks to sign in
-        loginBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                LoginDialog.showLoginPrompt(DrawerActivity.this, FirebaseService.getInstance().app);
-            }
-        });
-        // Allow the user to sign out
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                FirebaseService.getInstance().auth.signOut();
-            }
-        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_sell);
         final Intent sellIntent = new Intent(this, SellActivity.class);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(username.equals("Android"))
-                LoginDialog.showLoginPrompt(DrawerActivity.this, FirebaseService.getInstance().app);
                 startActivity(sellIntent);
             }
         });
@@ -104,6 +84,7 @@ public class DrawerActivity extends AppCompatActivity
         // grid list view
         GridView gridListView = (GridView) findViewById(R.id.sell_list);
         List<Book> books = new FirebaseDatabaseService().getSellingItems(this);
+
         SellItemAdapter adapter = new SellItemAdapter(this, books);
         gridListView.setAdapter(adapter);
 
@@ -147,6 +128,10 @@ public class DrawerActivity extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
         } else if (id == R.id.nav_share) {
         } else if (id == R.id.nav_send) {
+        } else if (id == R.id.loginBtn) {
+            LoginDialog.showLoginPrompt(DrawerActivity.this, FirebaseService.getInstance().app);
+        } else if (id == R.id.logoutBtn) {
+            FirebaseService.getInstance().auth.signOut();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

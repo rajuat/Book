@@ -30,13 +30,11 @@ public class TopBannerAdapter extends PagerAdapter {
         layouts = new int[]{
                 R.layout.top_slide,
                 R.layout.top_slide,
-                R.layout.top_slide,
                 R.layout.top_slide};
     }
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        //layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View view = layoutInflater.inflate(R.layout.top_slide, container, false);
         final ImageView iv = (ImageView) view.findViewById(R.id.topSlide);
         if (position == 0) {

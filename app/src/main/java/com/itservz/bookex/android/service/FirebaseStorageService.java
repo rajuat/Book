@@ -28,7 +28,7 @@ public class FirebaseStorageService {
         storageRef = FirebaseService.getInstance().storage.getReferenceFromUrl("gs://bookexfirebaseproject.appspot.com/");
     }
 
-    public FirebaseStorageService getInstance() {
+    public static FirebaseStorageService getInstance() {
         return INSTANCE;
     }
 
@@ -40,8 +40,7 @@ public class FirebaseStorageService {
 
     public void setImage(String id, byte[] data, final SellActivity sellActivity){
         StorageReference ref = FirebaseService.getInstance().storage.getReference("books");
-        ref.child("books/a.jpg");
-        UploadTask uploadTask = ref.putBytes(data);
+        UploadTask uploadTask = ref.child(id).putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
