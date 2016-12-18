@@ -2,7 +2,10 @@ package com.itservz.bookex.android;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
@@ -12,7 +15,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.itservz.bookex.android.model.Book;
@@ -20,6 +25,8 @@ import com.itservz.bookex.android.service.FirebaseDatabaseService;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.support.v7.recyclerview.R.attr.layoutManager;
 
 /**
  * An activity representing a list of Books. This activity
@@ -52,9 +59,9 @@ public class BookListActivity extends AppCompatActivity {
             actionBar.setDisplayShowHomeEnabled(true);
         }
 
-        View recyclerView = findViewById(R.id.book_list);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.book_list);
         assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+        setupRecyclerView(recyclerView);
 
         if (findViewById(R.id.book_detail_container) != null) {
             // The detail container view will be present only in the
@@ -66,7 +73,36 @@ public class BookListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        //recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(BookContent.ITEMS));
+        float scale = getResources().getDisplayMetrics().density;
+        int dpAsPixels = (int) (8*scale + 0.5f);
+        /*FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        params.setMargins(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+        recyclerView.setLayoutParams(params);*/
+        RecyclerView.ItemDecoration itemDecoration = new RecyclerView.ItemDecoration() {
+            @Override
+            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+                super.onDraw(c, parent, state);
+                int left = parent.getPaddingLeft();
+                int right = parent.getWidth() - parent.getPaddingRight();
+
+                int childCount = parent.getChildCount();
+                for (int i = 0; i < childCount; i++) {
+                    View child = parent.getChildAt(i);
+
+                    RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
+
+                    int top = child.getBottom() + params.bottomMargin;
+                    TypedArray styledAttributes = obtainStyledAttributes(new int[]{android.R.attr.listDivider});
+                    Drawable divider = styledAttributes.getDrawable(0);
+                    styledAttributes.recycle();
+                    int bottom = top + divider.getIntrinsicHeight();
+
+                    divider.setBounds(left, top, right, bottom);
+                    divider.draw(c);
+                }
+            }
+        };
+        recyclerView.addItemDecoration(itemDecoration);
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(
                 new ArrayList<Book>(FirebaseDatabaseService.INSTANCE.getBooks().values())
         ));
@@ -93,8 +129,9 @@ public class BookListActivity extends AppCompatActivity {
             holder.mItem = mValues.get(position);
             byte[] img = mValues.get(position).image;
             holder.mImageView.setImageBitmap(BitmapFactory.decodeByteArray(img, 0, img.length));
-            holder.mIdView.setText(mValues.get(position).ISBN);
-            holder.mContentView.setText(mValues.get(position).title);
+            holder.mTitleView.setText(mValues.get(position).title);
+            holder.mYourPriceView.setText("₹ " + mValues.get(position).yourPrice);
+            holder.mMRPView.setText("₹ " + mValues.get(position).mrp);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -126,21 +163,23 @@ public class BookListActivity extends AppCompatActivity {
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final ImageView mImageView;
-            public final TextView mIdView;
-            public final TextView mContentView;
+            public final TextView mTitleView;
+            public final TextView mYourPriceView;
+            public final TextView mMRPView;
             public Book mItem;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
                 mImageView = (ImageView) view.findViewById(R.id.bookImage);
-                mIdView = (TextView) view.findViewById(R.id.id);
-                mContentView = (TextView) view.findViewById(R.id.content);
+                mTitleView = (TextView) view.findViewById(R.id.book_list_title);
+                mYourPriceView = (TextView) view.findViewById(R.id.booklist_yprice);
+                mMRPView = (TextView) view.findViewById(R.id.book_list_mrp);
             }
 
             @Override
             public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
+                return super.toString() + " '" + mTitleView.getText() + "'";
             }
         }
     }

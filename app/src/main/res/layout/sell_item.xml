@@ -10,7 +10,6 @@
         android:id="@+id/sell_book_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_gravity="center_horizontal"
         android:background="@android:drawable/ic_menu_report_image" />
 
