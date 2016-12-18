@@ -93,8 +93,9 @@ public class SellActivity extends AppCompatActivity implements  View.OnClickList
         book.title = prefManager.getTitle();
         String uId = new FirebaseDatabaseService().addSellingItem(book);
         FirebaseStorageService.INSTANCE.setImage(uId, baos.toByteArray(), this);
-        //Snackbar.make(findViewById(R.id.sell_id), "Ad posted", Snackbar.LENGTH_LONG).show();
-        Toast.makeText(this, "Ad posted", Toast.LENGTH_LONG).show();
+        Snackbar.make(v, "Ad posted", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+        //Toast.makeText(this, "Ad posted", Toast.LENGTH_LONG).show();
         finish();
     }
 

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">@color/dot_light_screen3</color>
+    <color name="colorPrimaryDark">@color/dot_dark_screen3</color>
+    <color name="colorAccent">@color/dot_light_screen4</color>
+    <color name="colorAccentDark">@color/dot_dark_screen4</color>
 
+    <color name="colorWrapper">#CFD8DC</color>
     <!-- Screens background color-->
     <color name="bg_screen1">#f64c73</color>
     <color name="bg_screen2">#20d2bb</color>

@@ -3,6 +3,7 @@ package com.itservz.bookex.android.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +49,11 @@ public class SellItemAdapter extends BaseAdapter {
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
         Book book = books.get(position);
+        return createBookItem(convertView, book);
+    }
+
+    @NonNull
+    public View createBookItem(View convertView, Book book) {
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             convertView = mInflater.inflate(R.layout.sell_item, null);
@@ -70,7 +76,6 @@ public class SellItemAdapter extends BaseAdapter {
         }*/
         isbn.setText(book.ISBN);
         title.setText(book.title);
-
         return convertView;
     }
 

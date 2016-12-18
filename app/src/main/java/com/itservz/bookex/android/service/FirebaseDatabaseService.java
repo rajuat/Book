@@ -2,6 +2,8 @@ package com.itservz.bookex.android.service;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -12,6 +14,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.itservz.bookex.android.DrawerActivity;
+import com.itservz.bookex.android.R;
 import com.itservz.bookex.android.adapter.SellItemAdapter;
 import com.itservz.bookex.android.model.Book;
 
@@ -38,6 +41,7 @@ public class FirebaseDatabaseService {
                 Book book = dataSnapshot.getValue(Book.class);
                 books.add(book);
                 Toast.makeText(drawerActivity, "book added", Toast.LENGTH_SHORT).show();
+                drawerActivity.viewNewlyAdded(book);
             }
             public void onChildRemoved(DataSnapshot dataSnapshot) {
             }

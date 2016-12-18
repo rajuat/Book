@@ -36,7 +36,7 @@ public class EmailServlet extends HttpServlet {
 
         String outString;
         outString = "<p>Sending the todo list email.</p><p><strong>Note:</strong> ";
-        outString = outString.concat("the servlet must be deployed to App Engine in order to ");
+        outString = outString.concat("the servlet must be deployed toApp Engine in order to ");
         outString = outString.concat("send the email. Running the server locally writes a message ");
         outString = outString.concat("to the log file instead of sending an email message.</p>");
 

@@ -1,5 +1,6 @@
 package com.itservz.bookex.android;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,12 +18,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.TextView;
 
 import com.itservz.bookex.android.adapter.SellItemAdapter;
 import com.itservz.bookex.android.adapter.TopBannerAdapter;
 import com.itservz.bookex.android.model.Book;
+import com.itservz.bookex.android.model.BookCategory;
+import com.itservz.bookex.android.service.CategoryService;
 import com.itservz.bookex.android.service.FirebaseDatabaseService;
 import com.itservz.bookex.android.service.FirebaseService;
 import com.itservz.bookex.android.service.FirebaseStorageService;
@@ -78,16 +82,49 @@ public class DrawerActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // top banner
-        viewPager = (ViewPager) findViewById(R.id.view_pager);
+        viewPager = (ViewPager) findViewById(R.id.pagerAds);
         viewPager.setAdapter(new TopBannerAdapter((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE), getResources()));
 
-        // grid list view
+        /*// grid list view
         GridView gridListView = (GridView) findViewById(R.id.sell_list);
         List<Book> books = new FirebaseDatabaseService().getSellingItems(this);
-
         SellItemAdapter adapter = new SellItemAdapter(this, books);
-        gridListView.setAdapter(adapter);
+        gridListView.setAdapter(adapter);*/
 
+        // newly added
+        new FirebaseDatabaseService().getSellingItems(this);
+
+        //category
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        float scale = getResources().getDisplayMetrics().density;
+        int dpAsPixels = (int) (8*scale + 0.5f);
+        ViewGroup containerCategory = (ViewGroup) findViewById(R.id.containerCategory);
+        for(BookCategory cat : new CategoryService().getCategories()){
+            TextView v = new TextView(this, null);
+            v.setText(cat.shortText);
+            v.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+            containerCategory.addView(v, params);
+        }
+
+        //click
+        TextView textView = (TextView) findViewById(R.id.textViewNewlyAdded);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(DrawerActivity.this, BookListActivity.class));
+            }
+        });
+
+    }
+
+    public void viewNewlyAdded(Book book){
+        //newly added
+        ViewGroup containerNewlyAdded = (ViewGroup) findViewById(R.id.containerNewlyAdded);
+        float scale = getResources().getDisplayMetrics().density;
+        int dpAsPixels = (int) (8*scale + 0.5f);
+        View view = new SellItemAdapter(this, null).createBookItem(null, book);
+        view.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+        containerNewlyAdded.addView(view);
     }
 
     @Override
