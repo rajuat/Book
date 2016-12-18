@@ -92,7 +92,7 @@ public class DrawerActivity extends AppCompatActivity
         gridListView.setAdapter(adapter);*/
 
         // newly added
-        new FirebaseDatabaseService().getSellingItems(this);
+        FirebaseDatabaseService.INSTANCE.getSellingItems(this);
 
         //category
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

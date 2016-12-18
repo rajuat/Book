@@ -91,7 +91,7 @@ public class SellActivity extends AppCompatActivity implements  View.OnClickList
         //book.image = imageEncoded;
         book.ISBN = prefManager.getISBN();
         book.title = prefManager.getTitle();
-        String uId = new FirebaseDatabaseService().addSellingItem(book);
+        String uId = FirebaseDatabaseService.INSTANCE.addSellingItem(book);
         FirebaseStorageService.INSTANCE.setImage(uId, baos.toByteArray(), this);
         Snackbar.make(v, "Ad posted", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();

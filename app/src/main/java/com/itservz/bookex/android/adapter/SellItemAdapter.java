@@ -53,7 +53,7 @@ public class SellItemAdapter extends BaseAdapter {
     }
 
     @NonNull
-    public View createBookItem(View convertView, Book book) {
+    public View createBookItem(View convertView, final Book book) {
         if (convertView == null) {
             LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             convertView = mInflater.inflate(R.layout.sell_item, null);
@@ -68,6 +68,7 @@ public class SellItemAdapter extends BaseAdapter {
             @Override
             public void onSuccess(byte[] bytes) {
                 imgIcon.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+                book.image = bytes;
             }
         });
         /*if(book.image != null && book.image.length() > 0) {

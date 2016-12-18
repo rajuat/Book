@@ -19,7 +19,10 @@ import com.itservz.bookex.android.adapter.SellItemAdapter;
 import com.itservz.bookex.android.model.Book;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Raju on 12/6/2016.
@@ -28,18 +31,22 @@ import java.util.List;
 public class FirebaseDatabaseService {
 
     private DatabaseReference sellsReference = null;
+    private Map<String, Book> books =  new HashMap<>();
+    public static FirebaseDatabaseService INSTANCE = new FirebaseDatabaseService();
 
-    public FirebaseDatabaseService(){
+    private FirebaseDatabaseService(){
         sellsReference = FirebaseService.getInstance().database.getReference(DBRefs.sells.name());
     }
+    public Map<String, Book> getBooks(){
+        return books;
+    }
 
-    public List<Book> getSellingItems(final DrawerActivity drawerActivity){
-        final List<Book> books =  new ArrayList<>();
+    public Collection<Book> getSellingItems(final DrawerActivity drawerActivity){
         sellsReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 Book book = dataSnapshot.getValue(Book.class);
-                books.add(book);
+                books.put(book.uuid, book);
                 Toast.makeText(drawerActivity, "book added", Toast.LENGTH_SHORT).show();
                 drawerActivity.viewNewlyAdded(book);
             }
@@ -55,7 +62,7 @@ public class FirebaseDatabaseService {
                 Log.w("TAG:", "Failed to read value.", error.toException());
             }
         });
-        return books;
+        return books.values();
     }
 
     public String addSellingItem(Book book) {

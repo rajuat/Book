@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         // Add items via the Button and EditText at the bottom of the window.
         final EditText text = (EditText) findViewById(R.id.todoText);
         final Button button = (Button) findViewById(R.id.addButton);
-        final DatabaseReference myRef = new FirebaseDatabaseService().getDatabaseReference(adapter);
+        final DatabaseReference myRef = FirebaseDatabaseService.INSTANCE.getDatabaseReference(adapter);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Create a new child with a auto-generated ID.

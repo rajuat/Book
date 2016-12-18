@@ -1,5 +1,7 @@
 package com.itservz.bookex.android.model;
 
+import java.util.List;
+
 /**
  * Created by Raju on 12/7/2016.
  */
@@ -15,7 +17,8 @@ public class Book {
     public int msp = 0;
     public int mrp = 0;
     public String description;
-    public String image;
+    public byte[] image;
+    public List<BookCategory> categories;
 
     public Book() {
     }
