@@ -39,14 +39,16 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/text_view_category"
                 android:text="All Categories"
+                android:textColor="@color/colorPrimaryDark"
                 android:gravity="right" />
 
             <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/horizontalScrollCategory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorWrapper"
+                android:background="@color/colorDivider"
                 >
 
                 <LinearLayout
@@ -73,6 +75,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Newly added"
+                android:textColor="@color/colorPrimaryDark"
                 android:id="@+id/textViewNewlyAdded"
                 android:gravity="right" />
 
@@ -80,7 +83,7 @@
                 android:id="@+id/horizontalScrollNewlyAdded"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorWrapper"
+                android:background="@color/colorDivider"
                 >
 
                 <LinearLayout

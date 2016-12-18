@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.itservz.bookex.android.adapter.SellItemAdapter;
@@ -95,12 +96,15 @@ public class DrawerActivity extends AppCompatActivity
         FirebaseDatabaseService.INSTANCE.getSellingItems(this);
 
         //category
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         float scale = getResources().getDisplayMetrics().density;
         int dpAsPixels = (int) (8*scale + 0.5f);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
         ViewGroup containerCategory = (ViewGroup) findViewById(R.id.containerCategory);
         for(BookCategory cat : new CategoryService().getCategories()){
             TextView v = new TextView(this, null);
+            v.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+            v.setTextColor(getResources().getColor(R.color.colorTextIcon));
             v.setText(cat.shortText);
             v.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
             containerCategory.addView(v, params);
@@ -119,12 +123,15 @@ public class DrawerActivity extends AppCompatActivity
 
     public void viewNewlyAdded(Book book){
         //newly added
-        ViewGroup containerNewlyAdded = (ViewGroup) findViewById(R.id.containerNewlyAdded);
+        LinearLayout containerNewlyAdded = (LinearLayout) findViewById(R.id.containerNewlyAdded);
         float scale = getResources().getDisplayMetrics().density;
         int dpAsPixels = (int) (8*scale + 0.5f);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
         View view = new SellItemAdapter(this, null).createBookItem(null, book);
         view.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
-        containerNewlyAdded.addView(view);
+        containerNewlyAdded.addView(view, layoutParams);
     }
 
     @Override

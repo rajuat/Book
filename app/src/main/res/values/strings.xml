@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Book</string>
+    <string name="app_name">bookex</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_welcome">Home Screen</string>
     <string name="next">NEXT</string>
@@ -99,6 +99,6 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_sell">SellActivity</string>
     <string name="title_activity_overview">Overview</string>
-    <string name="title_book_list">Books</string>
+    <string name="title_book_list">Buy Books</string>
     <string name="title_book_detail">Book Detail</string>
 </resources>

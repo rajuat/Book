@@ -3,6 +3,7 @@ package com.itservz.bookex.android.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.util.Base64;
 import android.view.LayoutInflater;
@@ -60,8 +61,9 @@ public class SellItemAdapter extends BaseAdapter {
         }
 
         final ImageView imgIcon = (ImageView) convertView.findViewById(R.id.sell_book_img);
-        TextView isbn = (TextView) convertView.findViewById(R.id.sell_book_isbn);
         TextView title = (TextView) convertView.findViewById(R.id.sell_book_title);
+        TextView yourPrice = (TextView) convertView.findViewById(R.id.sell_book_your_price);
+        TextView mrp = (TextView) convertView.findViewById(R.id.sell_book_mrp);
 
         //image
         FirebaseStorageService.INSTANCE.getImage("books/"+book.uuid).addOnSuccessListener(new OnSuccessListener<byte[]>() {
@@ -75,7 +77,9 @@ public class SellItemAdapter extends BaseAdapter {
             byte[] imageDecoded = Base64.decode(book.image, Base64.DEFAULT);
             imgIcon.setImageBitmap(BitmapFactory.decodeByteArray(imageDecoded, 0, imageDecoded.length));
         }*/
-        isbn.setText(book.ISBN);
+        yourPrice.append(""+book.yourPrice);
+        mrp.setText("₹ "+book.mrp);
+        mrp.setPaintFlags(mrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         title.setText(book.title);
         return convertView;
     }
