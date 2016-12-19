@@ -15,9 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.itservz.bookex.android.model.Book;
@@ -25,8 +23,6 @@ import com.itservz.bookex.android.service.FirebaseDatabaseService;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.support.v7.recyclerview.R.attr.layoutManager;
 
 /**
  * An activity representing a list of Books. This activity
@@ -73,36 +69,6 @@ public class BookListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        float scale = getResources().getDisplayMetrics().density;
-        int dpAsPixels = (int) (8*scale + 0.5f);
-        /*FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        params.setMargins(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
-        recyclerView.setLayoutParams(params);*/
-        RecyclerView.ItemDecoration itemDecoration = new RecyclerView.ItemDecoration() {
-            @Override
-            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-                super.onDraw(c, parent, state);
-                int left = parent.getPaddingLeft();
-                int right = parent.getWidth() - parent.getPaddingRight();
-
-                int childCount = parent.getChildCount();
-                for (int i = 0; i < childCount; i++) {
-                    View child = parent.getChildAt(i);
-
-                    RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
-
-                    int top = child.getBottom() + params.bottomMargin;
-                    TypedArray styledAttributes = obtainStyledAttributes(new int[]{android.R.attr.listDivider});
-                    Drawable divider = styledAttributes.getDrawable(0);
-                    styledAttributes.recycle();
-                    int bottom = top + divider.getIntrinsicHeight();
-
-                    divider.setBounds(left, top, right, bottom);
-                    divider.draw(c);
-                }
-            }
-        };
-        recyclerView.addItemDecoration(itemDecoration);
         recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(
                 new ArrayList<Book>(FirebaseDatabaseService.INSTANCE.getBooks().values())
         ));
