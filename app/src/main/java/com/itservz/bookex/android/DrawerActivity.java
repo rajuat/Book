@@ -121,9 +121,11 @@ public class DrawerActivity extends AppCompatActivity
 
     }
 
+    //callback from firebase
     public void viewNewlyAdded(Book book){
         //newly added
         LinearLayout containerNewlyAdded = (LinearLayout) findViewById(R.id.containerNewlyAdded);
+        LinearLayout containerNearby = (LinearLayout) findViewById(R.id.containerNearby);
         float scale = getResources().getDisplayMetrics().density;
         int dpAsPixels = (int) (8*scale + 0.5f);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
@@ -132,6 +134,10 @@ public class DrawerActivity extends AppCompatActivity
         View view = new SellItemAdapter(this, null).createBookItem(null, book);
         view.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
         containerNewlyAdded.addView(view, layoutParams);
+
+        View nearbyView = new SellItemAdapter(this, null).createBookItem(null, book);
+        nearbyView.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+        containerNearby.addView(nearbyView, layoutParams);
     }
 
     @Override

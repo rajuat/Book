@@ -1,22 +1,5 @@
 package com.itservz.bookex.android.service;
 
-import android.preference.PreferenceActivity;
-
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.books.Books;
-import com.google.api.services.books.BooksRequestInitializer;
-import com.google.api.services.books.model.Volume;
-import com.google.api.services.books.model.Volumes;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.text.NumberFormat;
-
 /**
  * Created by raju.athokpam on 19-12-2016.
  */
@@ -39,7 +22,7 @@ public class GoogleBooksAPIService {
      * Be sure to specify the name of your application. If the application name is {@code null} or
      * blank, the application will log a warning. Suggested format is "MyCompany-ProductName/1.0".
      */
-    private static final String APPLICATION_NAME = "";
+    /*private static final String APPLICATION_NAME = "";
 
     private static final NumberFormat CURRENCY_FORMATTER = NumberFormat.getCurrencyInstance();
     private static final NumberFormat PERCENT_FORMATTER = NumberFormat.getPercentInstance();
@@ -169,7 +152,7 @@ public class GoogleBooksAPIService {
             t.printStackTrace();
         }
         System.exit(0);
-    }
+    }*/
 
 
     //http://joerichard.net/android/android-google-books-api-example/
