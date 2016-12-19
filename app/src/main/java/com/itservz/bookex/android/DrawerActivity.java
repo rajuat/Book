@@ -46,9 +46,9 @@ public class DrawerActivity extends AppCompatActivity
     private void setUsername(String username) {
         Log.d("DrawerActivity", "setUsername("+String.valueOf(username)+")");
         if (username == null) {
-            username = "Android";
+            username = "James Bond";
         }
-        boolean isLoggedIn = !username.equals("Android");
+        boolean isLoggedIn = !username.equals("James Bond");
         this.username = username;
         this.usernameTxt.setText(username);
     }
@@ -62,7 +62,7 @@ public class DrawerActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         usernameTxt = (TextView) findViewById(R.id.usernameTxt);
-        setUsername("Android");
+        setUsername("James Bond");
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_sell);
         final Intent sellIntent = new Intent(this, SellActivity.class);
@@ -99,7 +99,7 @@ public class DrawerActivity extends AppCompatActivity
         float scale = getResources().getDisplayMetrics().density;
         int dpAsPixels = (int) (8*scale + 0.5f);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+        params.setMargins(dpAsPixels, dpAsPixels, 0, dpAsPixels);
         ViewGroup containerCategory = (ViewGroup) findViewById(R.id.containerCategory);
         for(BookCategory cat : new CategoryService().getCategories()){
             TextView v = new TextView(this, null);
@@ -130,7 +130,7 @@ public class DrawerActivity extends AppCompatActivity
         int dpAsPixels = (int) (8*scale + 0.5f);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+        layoutParams.setMargins(dpAsPixels, dpAsPixels, 0, dpAsPixels);
         View view = new SellItemAdapter(this, null).createBookItem(null, book);
         view.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
         containerNewlyAdded.addView(view, layoutParams);
