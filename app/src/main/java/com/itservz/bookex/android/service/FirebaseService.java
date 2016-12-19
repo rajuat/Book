@@ -11,20 +11,35 @@ import com.google.firebase.storage.FirebaseStorage;
 
 public class FirebaseService {
 
-    public FirebaseApp app;
-    public FirebaseDatabase database;
-    public FirebaseAuth auth;
-    public FirebaseStorage storage;
-    private static FirebaseService INSTANCE = new FirebaseService();
+    private FirebaseApp app;
+    private FirebaseDatabase database;
+    private FirebaseAuth auth;
+    private FirebaseStorage storage;
 
-    public FirebaseService() {
+    private FirebaseService() {
         app = FirebaseApp.getInstance();
         database = FirebaseDatabase.getInstance(app);
         auth = FirebaseAuth.getInstance(app);
         storage = FirebaseStorage.getInstance(app);
     }
-
+    private static FirebaseService INSTANCE = new FirebaseService();
     public static FirebaseService getInstance() {
         return INSTANCE;
+    }
+
+    public FirebaseApp getApp() {
+        return app;
+    }
+
+    public FirebaseAuth getAuth() {
+        return auth;
+    }
+
+    public FirebaseDatabase getDatabase() {
+        return database;
+    }
+
+    public FirebaseStorage getStorage() {
+        return storage;
     }
 }

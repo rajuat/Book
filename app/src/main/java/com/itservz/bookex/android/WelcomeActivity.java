@@ -176,7 +176,7 @@ public class WelcomeActivity extends AppCompatActivity {
             final View view = layoutInflater.inflate(layouts[position], container, false);
             container.addView(view);
             if(position == 0){
-                FirebaseStorageService.INSTANCE.getImage("discount.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                FirebaseStorageService.getInstance().getImage("discount.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
                     @Override
                     public void onSuccess(byte[] bytes) {
                         ImageView iv = (ImageView) view.findViewById(R.id.slide_1_image);
@@ -184,7 +184,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     }
                 });
             } else if(position == 1){
-                FirebaseStorageService.INSTANCE.getImage("food.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                FirebaseStorageService.getInstance().getImage("food.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
                     @Override
                     public void onSuccess(byte[] bytes) {
                         ImageView iv = (ImageView) view.findViewById(R.id.slide_2_image);
@@ -192,7 +192,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     }
                 });
             } else if(position == 2){
-                FirebaseStorageService.INSTANCE.getImage("movie.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                FirebaseStorageService.getInstance().getImage("movie.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
                     @Override
                     public void onSuccess(byte[] bytes) {
                         ImageView iv = (ImageView) view.findViewById(R.id.slide_3_image);
@@ -200,7 +200,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     }
                 });
             } else if(position == 3){
-                FirebaseStorageService.INSTANCE.getImage("travel.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                FirebaseStorageService.getInstance().getImage("travel.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
                     @Override
                     public void onSuccess(byte[] bytes) {
                         ImageView iv = (ImageView) view.findViewById(R.id.slide_4_image);

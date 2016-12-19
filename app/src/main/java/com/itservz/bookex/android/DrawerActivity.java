@@ -173,9 +173,9 @@ public class DrawerActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
         } else if (id == R.id.nav_send) {
         } else if (id == R.id.loginBtn) {
-            LoginDialog.showLoginPrompt(DrawerActivity.this, FirebaseService.getInstance().app);
+            LoginDialog.showLoginPrompt(DrawerActivity.this, FirebaseService.getInstance().getApp());
         } else if (id == R.id.logoutBtn) {
-            FirebaseService.getInstance().auth.signOut();
+            FirebaseService.getInstance().getAuth().signOut();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

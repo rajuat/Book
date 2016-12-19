@@ -20,14 +20,11 @@ import com.itservz.bookex.android.SellActivity;
  */
 
 public class FirebaseStorageService {
-    public static FirebaseStorageService INSTANCE = new FirebaseStorageService();
     private StorageReference storageRef;
-    private byte[] image = null;
-
     private FirebaseStorageService() {
-        storageRef = FirebaseService.getInstance().storage.getReferenceFromUrl("gs://bookexfirebaseproject.appspot.com/");
+        storageRef = FirebaseService.getInstance().getStorage().getReferenceFromUrl("gs://bookexfirebaseproject.appspot.com/");
     }
-
+    private static FirebaseStorageService INSTANCE = new FirebaseStorageService();
     public static FirebaseStorageService getInstance() {
         return INSTANCE;
     }
@@ -39,7 +36,7 @@ public class FirebaseStorageService {
     }
 
     public void setImage(String id, byte[] data, final SellActivity sellActivity){
-        StorageReference ref = FirebaseService.getInstance().storage.getReference("books");
+        StorageReference ref = FirebaseService.getInstance().getStorage().getReference("books");
         UploadTask uploadTask = ref.child(id).putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override

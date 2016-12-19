@@ -39,7 +39,7 @@ public class TopBannerAdapter extends PagerAdapter {
         final ImageView iv = (ImageView) view.findViewById(R.id.topSlide);
         if (position == 0) {
             view.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.bg_screen1, null));
-            FirebaseStorageService.INSTANCE.getImage("discount.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            FirebaseStorageService.getInstance().getImage("discount.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
                 @Override
                 public void onSuccess(byte[] bytes) {
                     iv.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
@@ -47,7 +47,7 @@ public class TopBannerAdapter extends PagerAdapter {
             });
         } else if (position == 1) {
             view.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.bg_screen2, null));
-            FirebaseStorageService.INSTANCE.getImage("food.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            FirebaseStorageService.getInstance().getImage("food.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
                 @Override
                 public void onSuccess(byte[] bytes) {
                     iv.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
@@ -55,7 +55,7 @@ public class TopBannerAdapter extends PagerAdapter {
             });
         } else if (position == 2) {
             view.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.bg_screen3, null));
-            FirebaseStorageService.INSTANCE.getImage("movie.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            FirebaseStorageService.getInstance().getImage("movie.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
                 @Override
                 public void onSuccess(byte[] bytes) {
                     iv.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));

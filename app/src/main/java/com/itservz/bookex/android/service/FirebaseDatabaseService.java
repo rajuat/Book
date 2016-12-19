@@ -31,12 +31,12 @@ import java.util.Map;
 public class FirebaseDatabaseService {
 
     private DatabaseReference sellsReference = null;
-    private Map<String, Book> books =  new HashMap<>();
+    private FirebaseDatabaseService(){
+        sellsReference = FirebaseService.getInstance().getDatabase().getReference(DBRefs.sells.name());
+    }
     public static FirebaseDatabaseService INSTANCE = new FirebaseDatabaseService();
 
-    private FirebaseDatabaseService(){
-        sellsReference = FirebaseService.getInstance().database.getReference(DBRefs.sells.name());
-    }
+    private Map<String, Book> books =  new HashMap<>();
     public Map<String, Book> getBooks(){
         return books;
     }
@@ -76,7 +76,7 @@ public class FirebaseDatabaseService {
 
     @NonNull
     public DatabaseReference getDatabaseReference(final ArrayAdapter<String> adapter) {
-        final DatabaseReference myRef = FirebaseService.getInstance().database.getReference(DBRefs.todoItems.name());
+        final DatabaseReference myRef = FirebaseService.getInstance().getDatabase().getReference(DBRefs.todoItems.name());
         myRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {

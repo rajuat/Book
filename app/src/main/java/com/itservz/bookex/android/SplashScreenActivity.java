@@ -28,7 +28,7 @@ public class SplashScreenActivity extends Activity {
         setContentView(R.layout.activity_splash_screen);
 
         //splash from firebase
-        FirebaseStorageService.INSTANCE.getImage("splash.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
+        FirebaseStorageService.getInstance().getImage("splash.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
                 ImageView splash = (ImageView) findViewById(R.id.splash);

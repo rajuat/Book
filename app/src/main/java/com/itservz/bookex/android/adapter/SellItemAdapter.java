@@ -66,7 +66,7 @@ public class SellItemAdapter extends BaseAdapter {
         TextView mrp = (TextView) convertView.findViewById(R.id.sell_book_mrp);
 
         //image
-        FirebaseStorageService.INSTANCE.getImage("books/"+book.uuid).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+        FirebaseStorageService.getInstance().getImage("books/"+book.uuid).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
                 imgIcon.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
