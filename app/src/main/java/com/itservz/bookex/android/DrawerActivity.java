@@ -32,6 +32,7 @@ import com.itservz.bookex.android.service.FirebaseDatabaseService;
 import com.itservz.bookex.android.service.FirebaseService;
 import com.itservz.bookex.android.service.FirebaseStorageService;
 import com.itservz.bookex.android.service.LoginDialog;
+import com.itservz.bookex.android.util.ScreenSizeScaler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,8 +97,7 @@ public class DrawerActivity extends AppCompatActivity
         FirebaseDatabaseService.INSTANCE.getSellingItems(this);
 
         //category
-        float scale = getResources().getDisplayMetrics().density;
-        int dpAsPixels = (int) (8*scale + 0.5f);
+        int dpAsPixels = new ScreenSizeScaler(getResources()).getdpAspixel(8);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(dpAsPixels, dpAsPixels, 0, dpAsPixels);
         ViewGroup containerCategory = (ViewGroup) findViewById(R.id.containerCategory);
@@ -126,10 +126,9 @@ public class DrawerActivity extends AppCompatActivity
         //newly added
         LinearLayout containerNewlyAdded = (LinearLayout) findViewById(R.id.containerNewlyAdded);
         LinearLayout containerNearby = (LinearLayout) findViewById(R.id.containerNearby);
-        float scale = getResources().getDisplayMetrics().density;
-        int dpAsPixels = (int) (8*scale + 0.5f);
+        int dpAsPixels = new ScreenSizeScaler(getResources()).getdpAspixel(8);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(dpAsPixels, dpAsPixels, 0, dpAsPixels);
         View view = new SellItemAdapter(this, null).createBookItem(null, book);
         view.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);

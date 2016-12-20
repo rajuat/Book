@@ -1,5 +1,8 @@
 package com.itservz.bookex.android.model;
 
+import com.itservz.bookex.android.service.CategoryService;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,7 +21,7 @@ public class Book {
     public int mrp = 0;
     public String description;
     public byte[] image;
-    public List<BookCategory> categories;
+    public List<BookCategory> categories = new CategoryService().getCategories();
 
     public Book() {
     }
@@ -26,6 +29,16 @@ public class Book {
     public Book(String ISBN, String title) {
         this.ISBN = ISBN;
         this.title = title;
+    }
+
+    public String getCategoriesAsString() {
+        StringBuilder sb = new StringBuilder();
+        for (BookCategory category : categories) {
+            sb.append(category.longText);
+            sb.append(" / ");
+        }
+        sb.setLength(sb.length() - 3);
+        return sb.toString();
     }
 
     @Override
@@ -43,4 +56,6 @@ public class Book {
                 ", description='" + description + '\'' +
                 '}';
     }
+
+
 }

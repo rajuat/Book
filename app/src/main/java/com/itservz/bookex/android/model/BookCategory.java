@@ -13,4 +13,12 @@ public class BookCategory {
         this.longText = longText;
         this.shortText = shortText;
     }
+
+    @Override
+    public String toString() {
+        return "BookCategory{" +
+                "longText='" + longText + '\'' +
+                ", shortText='" + shortText + '\'' +
+                '}';
+    }
 }

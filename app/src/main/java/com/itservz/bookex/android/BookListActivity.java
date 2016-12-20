@@ -17,11 +17,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.itservz.bookex.android.model.Book;
+import com.itservz.bookex.android.model.BookCategory;
+import com.itservz.bookex.android.service.CategoryService;
 import com.itservz.bookex.android.service.FirebaseDatabaseService;
 import com.itservz.bookex.android.service.GoogleBooksAPIService;
+import com.itservz.bookex.android.util.ScreenSizeScaler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,11 +102,13 @@ public class BookListActivity extends AppCompatActivity {
             final Book book = mValues.get(position);
             holder.mItem = book;
             byte[] img = book.image;
+            if(img != null)
             holder.mImageView.setImageBitmap(BitmapFactory.decodeByteArray(img, 0, img.length));
             holder.mTitleView.setText(book.title);
+            holder.mCategories.setText("physics / class 11 / science");
+            //holder.mCategories.setText(book.getCategoriesAsString());
             holder.mYourPriceView.setText("₹ " + book.yourPrice);
             holder.mMRPView.setText("₹ " + book.mrp);
-
             if(book.mrp == 0){
                 new GoogleBooksAPIService().getBookByISBN(holder);
             }
@@ -138,6 +144,7 @@ public class BookListActivity extends AppCompatActivity {
             public final View mView;
             public final ImageView mImageView;
             public final TextView mTitleView;
+            public final TextView mCategories;
             public final TextView mYourPriceView;
             public final TextView mMRPView;
             public Book mItem;
@@ -147,6 +154,7 @@ public class BookListActivity extends AppCompatActivity {
                 mView = view;
                 mImageView = (ImageView) view.findViewById(R.id.bookImage);
                 mTitleView = (TextView) view.findViewById(R.id.book_list_title);
+                mCategories = (TextView) view.findViewById(R.id.book_list_cat);
                 mYourPriceView = (TextView) view.findViewById(R.id.booklist_yprice);
                 mMRPView = (TextView) view.findViewById(R.id.book_list_mrp);
             }

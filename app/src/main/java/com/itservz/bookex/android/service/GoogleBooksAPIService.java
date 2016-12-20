@@ -47,16 +47,16 @@ public class GoogleBooksAPIService {
 
                         JSONObject volumeInfo = item.getJSONObject("volumeInfo");
 
-                        if(holder.mItem.title == null || holder.mItem.title.length() > 0) holder.mItem.title = volumeInfo.getString("title");
-                        if(holder.mItem.description == null || holder.mItem.description.length() > 0) holder.mItem.description = volumeInfo.getString("description");
+                        if(holder.mItem.title == null || holder.mItem.title.length() == 0) holder.mItem.title = volumeInfo.getString("title");
+                        if(holder.mItem.description == null || holder.mItem.description.length() == 0) holder.mItem.description = volumeInfo.getString("description");
 
                         JSONObject saleInfo = item.getJSONObject("saleInfo");
                         JSONObject listPrice = saleInfo.getJSONObject("listPrice");
                         if(holder.mItem.mrp == 0) holder.mItem.mrp = listPrice.getInt("amount");
+                        Log.d("Url is book:", url.toString());
                         //}
 
                     } catch (JSONException e) {
-                        Log.d("Url is book:", url.toString());
                         e.printStackTrace();
                     }
 
