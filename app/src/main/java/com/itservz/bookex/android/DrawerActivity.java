@@ -3,6 +3,9 @@ package com.itservz.bookex.android;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -99,14 +102,26 @@ public class DrawerActivity extends AppCompatActivity
         //category
         int dpAsPixels = new ScreenSizeScaler(getResources()).getdpAspixel(8);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(dpAsPixels, dpAsPixels, 0, dpAsPixels);
+        params.setMargins(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
         ViewGroup containerCategory = (ViewGroup) findViewById(R.id.containerCategory);
+
+        int corderRadius = new ScreenSizeScaler(getResources()).getdpAspixel(4);
+        GradientDrawable gd = new GradientDrawable();
+        gd.setCornerRadius(corderRadius);
+        int stroke = new ScreenSizeScaler(getResources()).getdpAspixel(1);
+        gd.setStroke(stroke, Color.BLUE);
+
         for(BookCategory cat : new CategoryService().getCategories()){
             TextView v = new TextView(this, null);
-            v.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-            v.setTextColor(getResources().getColor(R.color.colorTextIcon));
             v.setText(cat.shortText);
             v.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                v.setBackground(gd);
+            } else{
+                v.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                v.setTextColor(getResources().getColor(R.color.colorTextIcon));
+
+            }
             containerCategory.addView(v, params);
         }
 
