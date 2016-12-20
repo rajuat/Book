@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -157,6 +158,7 @@ public class BookListActivity extends AppCompatActivity {
                 mCategories = (TextView) view.findViewById(R.id.book_list_cat);
                 mYourPriceView = (TextView) view.findViewById(R.id.booklist_yprice);
                 mMRPView = (TextView) view.findViewById(R.id.book_list_mrp);
+                mMRPView.setPaintFlags(mMRPView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             }
 
             @Override
