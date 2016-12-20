@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 
 import com.itservz.bookex.android.model.Book;
 import com.itservz.bookex.android.service.FirebaseDatabaseService;
+import com.itservz.bookex.android.service.GoogleBooksAPIService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,7 @@ import java.util.List;
  */
 public class BookListActivity extends AppCompatActivity {
 
+    private static final String TAG = "BookListActivity";
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -92,12 +95,17 @@ public class BookListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
-            byte[] img = mValues.get(position).image;
+            final Book book = mValues.get(position);
+            holder.mItem = book;
+            byte[] img = book.image;
             holder.mImageView.setImageBitmap(BitmapFactory.decodeByteArray(img, 0, img.length));
-            holder.mTitleView.setText(mValues.get(position).title);
-            holder.mYourPriceView.setText("₹ " + mValues.get(position).yourPrice);
-            holder.mMRPView.setText("₹ " + mValues.get(position).mrp);
+            holder.mTitleView.setText(book.title);
+            holder.mYourPriceView.setText("₹ " + book.yourPrice);
+            holder.mMRPView.setText("₹ " + book.mrp);
+
+            if(book.mrp == 0){
+                new GoogleBooksAPIService().getBookByISBN(holder);
+            }
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
