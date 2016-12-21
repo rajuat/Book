@@ -42,6 +42,10 @@
             android:textColor="@color/md_pink_900" />
     </LinearLayout>
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="4dp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -90,16 +94,45 @@
 
     </LinearLayout>
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="4dp" />
 
-    <TextView
-        android:id="@+id/book_place"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:lines="1"
-        android:text="Imphal"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:textColor="@color/colorSecondaryText" />
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_favorite_black_24dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/book_place_dis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="2 km away"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/book_place"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="Imphal"
+                android:textAppearance="?attr/textAppearanceListItem" />
+        </LinearLayout>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/book_cat"
@@ -112,6 +145,10 @@
         android:textColor="@color/colorPrimaryDark"
         android:textSize="12sp" />
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="4dp" />
+
     <TextView
         android:id="@+id/book_description"
         android:layout_width="wrap_content"
@@ -122,6 +159,9 @@
         android:textAppearance="?attr/textAppearanceListItem"
         android:textSize="12sp" />
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="4dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -131,7 +171,7 @@
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="@drawable/common_google_signin_btn_text_light" />
 
         <LinearLayout
@@ -151,17 +191,55 @@
 
             <View
                 android:layout_width="wrap_content"
-                android:layout_height="2dp"/>
+                android:layout_height="2dp" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/common_google_signin_btn_text_light"
-                />
-
+                android:background="@drawable/common_google_signin_btn_text_light" />
         </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:drawableLeft="@drawable/ic_favorite_border_black_24dp"
+            android:text="report Ad"
+            android:textColor="@color/colorPrimaryDark" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".25"
+                android:text="Ad Id: 123456"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="6dp" />
+
+            <View
+                android:layout_width="4dp"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight=".25"
+                android:text="Ad View: 123456"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="6dp" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 </LinearLayout>
