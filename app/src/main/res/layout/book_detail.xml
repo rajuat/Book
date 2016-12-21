@@ -232,7 +232,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
-            android:drawableLeft="@drawable/ic_favorite_border_black_24dp"
+            android:drawableLeft="@drawable/ic_flag_black_24dp"
             android:text="Report Ad"
             android:textColor="@color/colorPrimaryDark" />
 
