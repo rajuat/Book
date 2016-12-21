@@ -42,10 +42,6 @@ public class BookDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-
             mItem = FirebaseDatabaseService.INSTANCE.getBooks().get(getArguments().getString(ARG_ITEM_ID));
 
             Activity activity = this.getActivity();
@@ -61,7 +57,6 @@ public class BookDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.book_detail, container, false);
 
-        // Show the dummy content as text in a TextView.
         if (mItem != null) {
             ((TextView) rootView.findViewById(R.id.book_detail)).setText(mItem.title);
         }

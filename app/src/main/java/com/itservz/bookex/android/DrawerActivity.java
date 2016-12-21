@@ -105,7 +105,7 @@ public class DrawerActivity extends AppCompatActivity
         params.setMargins(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
         ViewGroup containerCategory = (ViewGroup) findViewById(R.id.containerCategory);
 
-        int corderRadius = new ScreenSizeScaler(getResources()).getdpAspixel(4);
+        int corderRadius = new ScreenSizeScaler(getResources()).getdpAspixel(8);
         GradientDrawable gd = new GradientDrawable();
         gd.setCornerRadius(corderRadius);
         int stroke = new ScreenSizeScaler(getResources()).getdpAspixel(1);
