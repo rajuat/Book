@@ -17,7 +17,7 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="4dp" />
+        android:layout_height="8dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,6 +26,7 @@
 
         <TextView
             android:id="@+id/booklist_yprice"
+            style="?android:attr/textAppearanceLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
@@ -44,7 +45,81 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="4dp" />
+        android:layout_height="8dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorPrimaryDark" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="8dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:background="@drawable/ic_place_black_24dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/book_place_dis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="2 km away"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textColor="@color/colorSecondaryText"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/book_place"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="Imphal"
+                android:textAppearance="?attr/textAppearanceListItem" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="8dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorPrimaryDark" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="8dp" />
+
+    <TextView
+        android:id="@+id/book_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:lines="4"
+        android:text="Sometimes the scent of seasonal hand wash is all we need to rouse our holiday spirits. Available in an array of festive fragrances, our naturally derived gel hand wash will leave your hands soft, clean and ready to be tucked into a pair of fair isle mittens. It really is the most wonderful time of the year."
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="12sp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="8dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -94,46 +169,6 @@
 
     </LinearLayout>
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="4dp" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_favorite_black_24dp" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/book_place_dis"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:lines="1"
-                android:text="2 km away"
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:textColor="@color/colorSecondaryText"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/book_place"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:lines="1"
-                android:text="Imphal"
-                android:textAppearance="?attr/textAppearanceListItem" />
-        </LinearLayout>
-    </LinearLayout>
-
     <TextView
         android:id="@+id/book_cat"
         android:layout_width="wrap_content"
@@ -149,19 +184,7 @@
         android:layout_width="match_parent"
         android:layout_height="4dp" />
 
-    <TextView
-        android:id="@+id/book_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:lines="3"
-        android:text="I am trying to do a CollapsingToolbar animation based in Material Design rules. Everything works well but a thing that is breaking down my mind. I am trying to change the color of my Collapsed tool bar when scroll my recycler view, but the transparent color that I get is allways the same..."
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:textSize="12sp" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="4dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -210,7 +233,7 @@
             android:layout_height="wrap_content"
             android:layout_weight=".5"
             android:drawableLeft="@drawable/ic_favorite_border_black_24dp"
-            android:text="report Ad"
+            android:text="Report Ad"
             android:textColor="@color/colorPrimaryDark" />
 
         <LinearLayout
