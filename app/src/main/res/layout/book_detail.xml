@@ -168,7 +168,9 @@
         </LinearLayout>
 
     </LinearLayout>
-
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="8dp" />
     <TextView
         android:id="@+id/book_cat"
         android:layout_width="wrap_content"
@@ -182,7 +184,7 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="4dp" />
+        android:layout_height="8dp" />
 
 
 
@@ -195,11 +197,13 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@drawable/common_google_signin_btn_text_light" />
+            android:id="@+id/seller_profile"
+            android:background="@drawable/side_nav_bar" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/text_margin"
             android:orientation="vertical">
 
             <TextView
@@ -219,10 +223,12 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/common_google_signin_btn_text_light" />
+                android:background="@drawable/ic_contact_phone_black_24dp" />
         </LinearLayout>
     </LinearLayout>
-
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="8dp" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -239,7 +245,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight=".5">
+            android:layout_weight=".5"
+            android:layout_gravity="center_vertical">
 
             <TextView
                 android:layout_width="0dp"

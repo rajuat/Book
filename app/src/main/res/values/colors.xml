@@ -41,6 +41,18 @@
         <item>@color/dot_dark_screen4</item>
     </array>
 
+    <!-- All of the possible tile background colors -->
+    <array name="letter_tile_colors">
+        <item>#f16364</item>
+        <item>#f58559</item>
+        <item>#f9a43e</item>
+        <item>#e4c62e</item>
+        <item>#67bf74</item>
+        <item>#59a2be</item>
+        <item>#2093cd</item>
+        <item>#ad62a7</item>
+    </array>
+
     <!-- google's material design colours from
 http://www.google.com/design/spec/style/color.html#color-ui-color-palette -->
 

@@ -1,16 +1,21 @@
 package com.itservz.bookex.android;
 
 import android.app.Activity;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.itservz.bookex.android.model.Book;
 import com.itservz.bookex.android.service.FirebaseDatabaseService;
+import com.itservz.bookex.android.util.LetterTileProvider;
 
 /**
  * A fragment representing a single Book detail screen.
@@ -50,6 +55,8 @@ public class BookDetailFragment extends Fragment {
                 appBarLayout.setTitle(mItem.title);
             }
         }
+
+
     }
 
     @Override
@@ -60,6 +67,15 @@ public class BookDetailFragment extends Fragment {
         if (mItem != null) {
             ((TextView) rootView.findViewById(R.id.book_detail)).setText(mItem.title);
         }
+
+        final Resources res = getResources();
+        final int tileSize = res.getDimensionPixelSize(R.dimen.letter_tile_size);
+
+        final LetterTileProvider tileProvider = new LetterTileProvider(this.getActivity());
+        final Bitmap letterTile = tileProvider.getLetterTile("JB", "JB", tileSize, tileSize);
+
+        ImageView profile = (ImageView) rootView.findViewById(R.id.seller_profile);
+        profile.setImageDrawable(new BitmapDrawable(getResources(), letterTile));
 
         return rootView;
     }
