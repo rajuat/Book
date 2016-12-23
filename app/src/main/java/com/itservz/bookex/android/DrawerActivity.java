@@ -122,12 +122,37 @@ public class DrawerActivity extends AppCompatActivity
                 v.setTextColor(getResources().getColor(R.color.colorTextIcon));
 
             }
+
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(DrawerActivity.this, BookListActivity.class));
+                }
+            });
             containerCategory.addView(v, params);
         }
 
         //click
-        TextView textView = (TextView) findViewById(R.id.textViewNewlyAdded);
-        textView.setOnClickListener(new View.OnClickListener() {
+        TextView textViewCat = (TextView) findViewById(R.id.text_view_category);
+        textViewCat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(DrawerActivity.this, BookListActivity.class));
+            }
+        });
+
+        //click
+        TextView textViewNewlyAdded = (TextView) findViewById(R.id.textViewNewlyAdded);
+        textViewNewlyAdded.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(DrawerActivity.this, BookListActivity.class));
+            }
+        });
+
+        //click
+        TextView textViewNearby = (TextView) findViewById(R.id.textViewNearby);
+        textViewNearby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(DrawerActivity.this, BookListActivity.class));
@@ -137,7 +162,7 @@ public class DrawerActivity extends AppCompatActivity
     }
 
     //callback from firebase
-    public void viewNewlyAdded(Book book){
+    public void viewNewlyAdded(final Book book){
         //newly added
         LinearLayout containerNewlyAdded = (LinearLayout) findViewById(R.id.containerNewlyAdded);
         LinearLayout containerNearby = (LinearLayout) findViewById(R.id.containerNearby);
@@ -148,8 +173,26 @@ public class DrawerActivity extends AppCompatActivity
         View view = new SellItemAdapter(this, null).createBookItem(null, book);
         view.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
         containerNewlyAdded.addView(view, layoutParams);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Context context = view.getContext();
+                Intent intent = new Intent(context, BookDetailActivity.class);
+                intent.putExtra(BookDetailFragment.ARG_ITEM_ID, book.uuid);
+                context.startActivity(intent);
+            }
+        });
 
         View nearbyView = new SellItemAdapter(this, null).createBookItem(null, book);
+        nearbyView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Context context = view.getContext();
+                Intent intent = new Intent(context, BookDetailActivity.class);
+                intent.putExtra(BookDetailFragment.ARG_ITEM_ID, book.uuid);
+                context.startActivity(intent);
+            }
+        });
         nearbyView.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
         containerNearby.addView(nearbyView, layoutParams);
     }

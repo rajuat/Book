@@ -101,4 +101,5 @@
     <string name="title_activity_overview">Overview</string>
     <string name="title_book_list">Buy Books</string>
     <string name="title_book_detail">Book Detail</string>
+    <string name="title_chat">Chat</string>
 </resources>

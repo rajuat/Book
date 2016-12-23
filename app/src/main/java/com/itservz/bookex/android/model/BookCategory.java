@@ -9,6 +9,10 @@ public class BookCategory {
     public String longText;
     public String shortText;
 
+    public BookCategory() {
+        //for firebase
+    }
+
     public BookCategory(String longText, String shortText) {
         this.longText = longText;
         this.shortText = shortText;

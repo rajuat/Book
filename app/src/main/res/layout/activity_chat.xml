@@ -41,17 +41,36 @@
 
             </android.support.design.widget.AppBarLayout>
 
-            <include layout="@layout/content_drawer" />
+            <ListView
+                android:id="@+id/messages_list"
+                android:layout_width="match_parent"
+                android:layout_height="409dp"
+                android:divider="@null"
+                android:dividerHeight="10.0sp" />
+
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_sell"
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_add_white_24dp" />
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/new_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="100" />
+
+        <Button
+            android:id="@+id/send_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:text="Send"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>
-

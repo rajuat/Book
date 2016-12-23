@@ -41,7 +41,7 @@
         <activity
             android:name=".BookListActivity"
             android:label="@string/title_book_list"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"  />
         <activity
             android:name=".BookDetailActivity"
             android:label="@string/title_book_detail"
@@ -51,6 +51,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.itservz.bookex.android.BookListActivity" />
         </activity>
+        <activity android:name=".ChatActivity"
+            android:label="@string/title_chat"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

@@ -9,13 +9,19 @@ import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
+import android.support.design.widget.TabLayout.Tab;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +71,9 @@ public class BookListActivity extends AppCompatActivity {
             //actionBar.setDisplayShowHomeEnabled(true);
         }
 
+        /*TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.addTab();*/
+
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.book_list);
         assert recyclerView != null;
         setupRecyclerView(recyclerView);
@@ -78,10 +87,30 @@ public class BookListActivity extends AppCompatActivity {
         }
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(
-                new ArrayList<Book>(FirebaseDatabaseService.INSTANCE.getBooks().values())
-        ));
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_book_list, menu);
+        // Define the listener
+        MenuItemCompat.OnActionExpandListener expandListener = new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                // Do something when action item collapses
+                return true;  // Return true to collapse action view
+            }
+
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                // Do something when expanded
+                return true;  // Return true to expand action view
+            }
+        };
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        // Assign the listener to that action item
+        MenuItemCompat.setOnActionExpandListener(searchItem, expandListener);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        // Configure the search info and add any event listeners...
+
+        return true;
     }
 
     @Override
@@ -92,6 +121,12 @@ public class BookListActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(
+                new ArrayList<Book>(FirebaseDatabaseService.INSTANCE.getBooks().values())
+        ));
     }
 
     public class SimpleItemRecyclerViewAdapter
