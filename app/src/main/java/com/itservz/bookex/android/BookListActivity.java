@@ -16,6 +16,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -28,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.itservz.bookex.android.model.Book;
 import com.itservz.bookex.android.model.BookCategory;
@@ -71,8 +73,37 @@ public class BookListActivity extends AppCompatActivity {
             //actionBar.setDisplayShowHomeEnabled(true);
         }
 
-        /*TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.addTab();*/
+        ActionMenuView toolbar2 = (ActionMenuView) findViewById(R.id.toolbar2);
+        Menu menu = toolbar2.getMenu();
+        getMenuInflater().inflate(R.menu.menu_books_action, menu);
+        for (int i = 0; i < menu.size(); i++) {
+            menu.getItem(i).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    return onOptionsItemSelected(item);
+                }
+            });
+        }
+
+
+        /*Toolbar toolbar2 = (Toolbar) findViewById(R.id.toolbar2);
+        toolbar2.inflateMenu(R.menu.menu_books_action);//changed
+        toolbar2.setTitle(null);
+        //toolbar2 menu items CallBack listener
+        toolbar2.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem arg0) {
+                if(arg0.getItemId() == R.id.books_filter){
+                    Toast.makeText(BookListActivity.this, "filter", Toast.LENGTH_LONG).show();
+                } else if(arg0.getItemId() == R.id.books_alert){
+                    Toast.makeText(BookListActivity.this, "alert", Toast.LENGTH_LONG).show();
+                } else if(arg0.getItemId() == R.id.books_sort){
+                    Toast.makeText(BookListActivity.this, "sort", Toast.LENGTH_LONG).show();
+                }
+                return true;
+            }
+        });*/
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.book_list);
         assert recyclerView != null;
@@ -87,6 +118,7 @@ public class BookListActivity extends AppCompatActivity {
         }
     }
 
+    //create the toolbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_book_list, menu);
@@ -113,12 +145,19 @@ public class BookListActivity extends AppCompatActivity {
         return true;
     }
 
+    //create the action on toolbar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             NavUtils.navigateUpTo(this, new Intent(this, DrawerActivity.class));
             return true;
+        } else if(id == R.id.books_filter){
+            Toast.makeText(BookListActivity.this, "filter", Toast.LENGTH_LONG).show();
+        } else if(id == R.id.books_alert){
+            Toast.makeText(BookListActivity.this, "alert", Toast.LENGTH_LONG).show();
+        } else if(id == R.id.books_sort){
+            Toast.makeText(BookListActivity.this, "sort", Toast.LENGTH_LONG).show();
         }
         return super.onOptionsItemSelected(item);
     }
