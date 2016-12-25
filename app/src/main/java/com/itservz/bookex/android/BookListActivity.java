@@ -73,7 +73,30 @@ public class BookListActivity extends AppCompatActivity {
             //actionBar.setDisplayShowHomeEnabled(true);
         }
 
-        ActionMenuView toolbar2 = (ActionMenuView) findViewById(R.id.toolbar2);
+        findViewById(R.id.books_alert).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(BookListActivity.this, "alert", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        findViewById(R.id.books_filter).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(BookListActivity.this, "filter", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        findViewById(R.id.books_sort).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(BookListActivity.this, "sorrt", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+        /*ActionMenuView toolbar2 = (ActionMenuView) findViewById(R.id.toolbar2);
         Menu menu = toolbar2.getMenu();
         getMenuInflater().inflate(R.menu.menu_books_action, menu);
         for (int i = 0; i < menu.size(); i++) {
@@ -83,7 +106,7 @@ public class BookListActivity extends AppCompatActivity {
                     return onOptionsItemSelected(item);
                 }
             });
-        }
+        }*/
 
 
         /*Toolbar toolbar2 = (Toolbar) findViewById(R.id.toolbar2);

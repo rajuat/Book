@@ -21,4 +21,6 @@
     <dimen name="tile_letter_font_size">33sp</dimen>
     <!-- The deafult tile size -->
     <dimen name="letter_tile_size">64dp</dimen>
+    <dimen name="secondary_bar_height">40dp</dimen>
+    <dimen name="secondary_title_size">20sp</dimen>
 </resources>
