@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.itservz.bookex.android.adapter.MyAdapter;
 import com.itservz.bookex.android.model.Book;
 import com.itservz.bookex.android.model.BookCategory;
 import com.itservz.bookex.android.service.CategoryService;
@@ -186,9 +187,14 @@ public class BookListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(
+        /*recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(
                 new ArrayList<Book>(FirebaseDatabaseService.INSTANCE.getBooks().values())
-        ));
+        ));*/
+
+        ArrayList<Book> books = new ArrayList<>(FirebaseDatabaseService.INSTANCE.getBooks().values());
+        MyAdapter myAdapter = new MyAdapter();
+        myAdapter.addAll(books);
+        recyclerView.setAdapter(myAdapter);
     }
 
     public class SimpleItemRecyclerViewAdapter
