@@ -19,7 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.itservz.bookex.android.model.ChatMessage;
-import com.itservz.bookex.android.service.ChatMessageService;
+import com.itservz.bookex.android.backend.ChatMessageService;
 
 import java.util.ArrayList;
 import java.util.Arrays;

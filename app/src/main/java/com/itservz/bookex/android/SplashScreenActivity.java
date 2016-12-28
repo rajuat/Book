@@ -1,21 +1,15 @@
 package com.itservz.bookex.android;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.itservz.bookex.android.service.FirebaseStorageService;
+import com.itservz.bookex.android.backend.FirebaseStorageService;
 
 public class SplashScreenActivity extends Activity {
 

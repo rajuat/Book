@@ -1,4 +1,4 @@
-package com.itservz.bookex.android.service;
+package com.itservz.bookex.android.backend;
 
 import com.itservz.bookex.android.model.BookCategory;
 

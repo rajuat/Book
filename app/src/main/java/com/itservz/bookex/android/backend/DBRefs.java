@@ -1,4 +1,4 @@
-package com.itservz.bookex.android.service;
+package com.itservz.bookex.android.backend;
 
 /**
  * Created by raju.athokpam on 13-12-2016.

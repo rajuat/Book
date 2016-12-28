@@ -1,27 +1,18 @@
-package com.itservz.bookex.android.service;
+package com.itservz.bookex.android.backend;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.itservz.bookex.android.DrawerActivity;
-import com.itservz.bookex.android.R;
-import com.itservz.bookex.android.adapter.SellItemAdapter;
+import com.google.firebase.database.Query;
 import com.itservz.bookex.android.model.Book;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,26 +20,39 @@ import java.util.Map;
  */
 
 public class FirebaseDatabaseService {
-
+    private static final String TAG = "FirebaseDatabaseService";
     private DatabaseReference sellsReference = null;
-    private FirebaseDatabaseService(){
+    private Query sellsQuery = null;
+    private static FirebaseDatabaseService INSTANCE = null;
+
+    private FirebaseDatabaseService(String lastPosted){
         sellsReference = FirebaseService.getInstance().getDatabase().getReference(DBRefs.sells.name());
+        sellsReference.keepSynced(true);
+        sellsQuery = sellsReference.orderByKey().startAt(lastPosted);
     }
-    public static FirebaseDatabaseService INSTANCE = new FirebaseDatabaseService();
+
+    public static FirebaseDatabaseService getInstance(String lastPosted){
+        Log.d(TAG, "Last posted " + lastPosted);
+        return new FirebaseDatabaseService(lastPosted);
+    }
 
     private Map<String, Book> books =  new HashMap<>();
     public Map<String, Book> getBooks(){
         return books;
     }
 
-    public Collection<Book> getSellingItems(final DrawerActivity drawerActivity){
+    public Collection<Book> getSellingItems(final SellItemListener sellItemListener){
+        //final SellItemListener sellItemListener = null;
         sellsReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 Book book = dataSnapshot.getValue(Book.class);
+                Log.d(TAG, book.title);
                 books.put(book.uuid, book);
-                Toast.makeText(drawerActivity, "book added", Toast.LENGTH_SHORT).show();
-                drawerActivity.viewNewlyAdded(book);
+                if(sellItemListener != null){
+                    sellItemListener.onSellItemAdded(book);
+                    Log.d(TAG, book.uuid);
+                }
             }
             public void onChildRemoved(DataSnapshot dataSnapshot) {
             }
@@ -72,6 +76,10 @@ public class FirebaseDatabaseService {
         Log.d("Selling", book.toString());
         childRef.setValue(book);
         return uId;
+    }
+
+    public interface SellItemListener{
+        public void onSellItemAdded(Book book);
     }
 
     @NonNull

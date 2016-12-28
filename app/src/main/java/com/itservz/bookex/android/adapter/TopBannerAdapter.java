@@ -11,7 +11,7 @@ import android.widget.ImageView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.itservz.bookex.android.R;
-import com.itservz.bookex.android.service.FirebaseStorageService;
+import com.itservz.bookex.android.backend.FirebaseStorageService;
 
 /**
  * Created by Raju on 12/7/2016.

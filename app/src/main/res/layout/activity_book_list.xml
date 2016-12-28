@@ -7,87 +7,96 @@
     android:fitsSystemWindows="true"
     tools:context="com.itservz.bookex.android.BookListActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
+    <android.support.v4.widget.NestedScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:elevation="4dp"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar2"
-            android:layout_height="@dimen/secondary_bar_height"
-            android:background="@color/colorPrimaryLight"
-            android:layout_width="match_parent">
-
-            <LinearLayout
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/app_bar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:theme="@style/AppTheme.AppBarOverlay">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".40"
-                    android:id="@+id/books_alert"
-                    android:text="Create alert"
-                    android:textColor="@color/colorPrimaryText"
-                    android:textSize="@dimen/secondary_title_size"
-                    android:gravity="center"
-                    />
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:elevation="4dp"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-                <View
-                    android:layout_width="2dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:background="@color/colorDivider"
-                    />
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar2"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/secondary_bar_height"
+                    android:background="@color/colorPrimaryLight">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".30"
-                    android:id="@+id/books_sort"
-                    android:text="Sort"
-                    android:textColor="@color/colorPrimaryText"
-                    android:textSize="@dimen/secondary_title_size"
-                    android:gravity="center" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-                <View
-                    android:layout_width="2dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:background="@color/colorDivider"
-                    />
+                        <TextView
+                            android:id="@+id/books_alert"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".40"
+                            android:gravity="center"
+                            android:text="Create alert"
+                            android:textColor="@color/colorPrimaryText"
+                            android:textSize="@dimen/secondary_title_size" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight=".30"
-                    android:id="@+id/books_filter"
-                    android:text="Filter"
-                    android:textColor="@color/colorPrimaryText"
-                    android:textSize="@dimen/secondary_title_size"
-                    android:gravity="center"
-                    />
+                        <View
+                            android:layout_width="2dp"
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp"
+                            android:background="@color/colorDivider" />
 
-            </LinearLayout>
+                        <TextView
+                            android:id="@+id/books_sort"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".30"
+                            android:gravity="center"
+                            android:text="Sort"
+                            android:textColor="@color/colorPrimaryText"
+                            android:textSize="@dimen/secondary_title_size" />
 
-        </android.support.v7.widget.Toolbar>
-    </android.support.design.widget.AppBarLayout>
+                        <View
+                            android:layout_width="2dp"
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp"
+                            android:background="@color/colorDivider" />
 
-    <FrameLayout
-        android:id="@+id/frameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                        <TextView
+                            android:id="@+id/books_filter"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight=".30"
+                            android:gravity="center"
+                            android:text="Filter"
+                            android:textColor="@color/colorPrimaryText"
+                            android:textSize="@dimen/secondary_title_size" />
 
-        <include layout="@layout/book_list" />
-    </FrameLayout>
+                    </LinearLayout>
+
+                </android.support.v7.widget.Toolbar>
+            </android.support.design.widget.AppBarLayout>
+
+            <FrameLayout
+                android:id="@+id/frameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <include layout="@layout/book_list" />
+            </FrameLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

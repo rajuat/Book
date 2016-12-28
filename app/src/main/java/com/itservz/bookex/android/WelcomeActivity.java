@@ -18,12 +18,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.itservz.bookex.android.preference.PrefManager;
-import com.itservz.bookex.android.service.FirebaseStorageService;
+import com.itservz.bookex.android.backend.FirebaseStorageService;
 
 public class WelcomeActivity extends AppCompatActivity {
     private ViewPager viewPager;

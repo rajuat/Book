@@ -71,6 +71,10 @@
         <activity android:name=".ChatActivity"
             android:label="@string/title_chat"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".service.FetchAddressIntentService"
+            android:exported="false"/>
     </application>
 
 </manifest>

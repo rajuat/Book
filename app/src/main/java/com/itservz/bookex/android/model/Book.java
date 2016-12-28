@@ -1,8 +1,8 @@
 package com.itservz.bookex.android.model;
 
-import com.itservz.bookex.android.service.CategoryService;
+import com.itservz.bookex.android.backend.CategoryService;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,6 +22,7 @@ public class Book {
     public String description;
     public byte[] image;
     public List<BookCategory> categories = new CategoryService().getCategories();
+    public Location location;
 
     public Book() {
     }
@@ -54,8 +55,9 @@ public class Book {
                 ", msp=" + msp +
                 ", mrp=" + mrp +
                 ", description='" + description + '\'' +
+                ", image=" + (image != null) +
+                ", categories=" + categories +
+                ", location=" + location +
                 '}';
     }
-
-
 }

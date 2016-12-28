@@ -2,21 +2,14 @@ package com.itservz.bookex.android;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
-import android.support.design.widget.TabLayout.Tab;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -27,17 +20,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.itservz.bookex.android.adapter.MyAdapter;
+import com.itservz.bookex.android.adapter.BookListAdapter;
 import com.itservz.bookex.android.model.Book;
-import com.itservz.bookex.android.model.BookCategory;
-import com.itservz.bookex.android.service.CategoryService;
-import com.itservz.bookex.android.service.FirebaseDatabaseService;
-import com.itservz.bookex.android.service.GoogleBooksAPIService;
-import com.itservz.bookex.android.util.ScreenSizeScaler;
+import com.itservz.bookex.android.preference.PrefManager;
+import com.itservz.bookex.android.backend.FirebaseDatabaseService;
+import com.itservz.bookex.android.backend.GoogleBooksAPIService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +40,7 @@ import java.util.List;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class BookListActivity extends AppCompatActivity {
+public class BookListActivity extends AppCompatActivity implements FirebaseDatabaseService.SellItemListener{
 
     private static final String TAG = "BookListActivity";
     /**
@@ -58,6 +48,7 @@ public class BookListActivity extends AppCompatActivity {
      * device.
      */
     private boolean mTwoPane;
+    private BookListAdapter bookListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,8 +86,6 @@ public class BookListActivity extends AppCompatActivity {
             }
         });
 
-
-
         /*ActionMenuView toolbar2 = (ActionMenuView) findViewById(R.id.toolbar2);
         Menu menu = toolbar2.getMenu();
         getMenuInflater().inflate(R.menu.menu_books_action, menu);
@@ -108,8 +97,6 @@ public class BookListActivity extends AppCompatActivity {
                 }
             });
         }*/
-
-
         /*Toolbar toolbar2 = (Toolbar) findViewById(R.id.toolbar2);
         toolbar2.inflateMenu(R.menu.menu_books_action);//changed
         toolbar2.setTitle(null);
@@ -134,10 +121,8 @@ public class BookListActivity extends AppCompatActivity {
         setupRecyclerView(recyclerView);
 
         if (findViewById(R.id.book_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
+            // The detail container view will be present only in the            // large-screen layouts (res/values-w900dp).
+            // If this view is present, then the            // activity should be in two-pane mode.
             mTwoPane = true;
         }
     }
@@ -187,14 +172,21 @@ public class BookListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        /*recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(
-                new ArrayList<Book>(FirebaseDatabaseService.INSTANCE.getBooks().values())
-        ));*/
+        String lastFetch = new PrefManager(this).getLastFetch();
+        FirebaseDatabaseService.getInstance(lastFetch).getSellingItems(this);
 
-        ArrayList<Book> books = new ArrayList<>(FirebaseDatabaseService.INSTANCE.getBooks().values());
-        MyAdapter myAdapter = new MyAdapter();
-        myAdapter.addAll(books);
-        recyclerView.setAdapter(myAdapter);
+        ArrayList<Book> books = new ArrayList<>(FirebaseDatabaseService.getInstance(lastFetch).getBooks().values());
+        bookListAdapter = new BookListAdapter();
+        bookListAdapter.addAll(books);
+        Log.d(TAG, books.toString());
+
+        recyclerView.setAdapter(bookListAdapter);
+    }
+
+    @Override
+    public void onSellItemAdded(Book book) {
+        Log.d(TAG, book.toString());
+        bookListAdapter.add(book);
     }
 
     public class SimpleItemRecyclerViewAdapter

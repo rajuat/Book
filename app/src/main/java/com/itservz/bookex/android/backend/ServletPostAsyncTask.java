@@ -1,10 +1,9 @@
-package com.itservz.bookex.android.service;
+package com.itservz.bookex.android.backend;
 
 import android.content.Context;
 import android.os.AsyncTask;
 
 import android.support.v4.util.Pair;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.io.BufferedReader;

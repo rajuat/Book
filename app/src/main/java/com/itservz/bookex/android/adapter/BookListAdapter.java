@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
-import android.os.Bundle;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,12 +12,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.itservz.bookex.android.BookDetailActivity;
 import com.itservz.bookex.android.BookDetailFragment;
-import com.itservz.bookex.android.BookListActivity;
 import com.itservz.bookex.android.R;
 import com.itservz.bookex.android.model.Book;
-import com.itservz.bookex.android.service.GoogleBooksAPIService;
+import com.itservz.bookex.android.backend.FirebaseStorageService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,10 +26,10 @@ import java.util.List;
  * Created by Raju on 12/26/2016.
  */
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.BookViewHolder> {
+public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookViewHolder> {
     private SortedList<Book> mBooks;
 
-    public MyAdapter() {
+    public BookListAdapter() {
         mBooks = new SortedList<Book>(Book.class, new SortedList.Callback<Book>() {
             @Override
             public int compare(Book o1, Book o2) {
@@ -83,8 +82,17 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.BookViewHolder> {
         final Book book = mBooks.get(position);
         holder.mItem = book;
         byte[] img = book.image;
-        if (img != null)
+        if (img == null){
+            FirebaseStorageService.getInstance().getImage("books/"+book.uuid).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    holder.mImageView.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+                    book.image = bytes;
+                }
+            });
+        } else{
             holder.mImageView.setImageBitmap(BitmapFactory.decodeByteArray(img, 0, img.length));
+        }
         holder.mTitleView.setText(book.title);
         holder.mCategories.setText("physics / class 11 / science");
         //holder.mCategories.setText(book.getCategoriesAsString());
@@ -94,16 +102,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.BookViewHolder> {
             new GoogleBooksAPIService().getBookByISBN(holder);
         }*/
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                Context context = v.getContext();
-                                                Intent intent = new Intent(context, BookDetailActivity.class);
-                                                intent.putExtra(BookDetailFragment.ARG_ITEM_ID, holder.mItem.uuid);
-
-                                                context.startActivity(intent);
-                                            }
-                                        }
+        holder.mView.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Context context = v.getContext();
+                        Intent intent = new Intent(context, BookDetailActivity.class);
+                        intent.putExtra(BookDetailFragment.ARG_ITEM_ID, holder.mItem.uuid);
+                        context.startActivity(intent);
+                    }
+                }
         );
 
     }

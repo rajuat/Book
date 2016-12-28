@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.itservz.bookex.android.R;
 import com.itservz.bookex.android.model.Book;
-import com.itservz.bookex.android.service.FirebaseStorageService;
+import com.itservz.bookex.android.backend.FirebaseStorageService;
 
 import java.util.ArrayList;
 import java.util.List;
