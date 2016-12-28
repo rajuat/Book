@@ -13,6 +13,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -21,10 +22,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.itservz.bookex.android.model.Book;
+import com.itservz.bookex.android.model.Location;
 import com.itservz.bookex.android.preference.PrefManager;
 import com.itservz.bookex.android.backend.FirebaseDatabaseService;
 import com.itservz.bookex.android.backend.FirebaseStorageService;
 import com.itservz.bookex.android.backend.ImagePickerService;
+import com.itservz.bookex.android.util.BitmapHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -36,7 +39,7 @@ public class SellActivity extends BaseActivity implements
     private Book book;
     int PICK_IMAGE = 1;
     private ImageView bookImage;
-    private InputStream image_stream;
+    private InputStream imageStream;
     PrefManager prefManager = null;
     private final static int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 1;
 
@@ -83,6 +86,38 @@ public class SellActivity extends BaseActivity implements
             }
         });
 
+        TextInputEditText author = (TextInputEditText) findViewById(R.id.book_author);
+        author.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                book.author = ((TextInputEditText)v).getText().toString();
+            }
+        });
+
+        TextInputEditText condition = (TextInputEditText) findViewById(R.id.book_condition);
+        condition.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                book.condition = ((TextInputEditText)v).getText().toString();
+            }
+        });
+
+        TextInputEditText yourPrice = (TextInputEditText) findViewById(R.id.book_yourprice);
+        yourPrice.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                book.condition = ((TextInputEditText)v).getText().toString();
+            }
+        });
+
+        TextInputEditText phone = (TextInputEditText) findViewById(R.id.book_phone);
+        phone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                book.condition = ((TextInputEditText)v).getText().toString();
+            }
+        });
+
         ((Button) findViewById(R.id.sell_button)).setOnClickListener(this);
 
         mLatitudeLabel = "Latitude";
@@ -99,21 +134,17 @@ public class SellActivity extends BaseActivity implements
 
     @Override
     public void onClick(View v) {
-        //book.uuid = UUID.randomUUID().toString();
         bookImage.setDrawingCacheEnabled(true);
         bookImage.buildDrawingCache();
         Bitmap bitmap = bookImage.getDrawingCache();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        //String imageEncoded = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
-        //book.image = imageEncoded;
+        //80 is recommended - http://stackoverflow.com/questions/35271817/compressing-image-in-android-is-loosing-the-quality-when-image-is-taken-from-pho
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
         book.ISBN = prefManager.getISBN();
         book.title = prefManager.getTitle();
         String uId = FirebaseDatabaseService.getInstance("").addSellingItem(book);
         FirebaseStorageService.getInstance().setImage(uId, baos.toByteArray(), this);
-        Snackbar.make(v, "Ad posted", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-        //Toast.makeText(this, "Ad posted", Toast.LENGTH_LONG).show();
+        Snackbar.make(v, "Ad posted", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         finish();
     }
 
@@ -140,10 +171,13 @@ public class SellActivity extends BaseActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == PICK_IMAGE) {
             Uri imageUri = data.getData();
-            image_stream = null;
+            Log.d(TAG, imageUri.getPath());
             try {
-                image_stream = getContentResolver().openInputStream(imageUri);
-                Bitmap bitmap = BitmapFactory.decodeStream(image_stream);
+                imageStream = getContentResolver().openInputStream(imageUri);
+                Log.d(TAG, "imageStream "+imageStream.markSupported());
+                //Bitmap bitmap = BitmapHelper.decodeSampledBitmapFromInputStream(getResources(), imageStream);
+                Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
+                Log.d(TAG, "About to set to image view " + bitmap.getByteCount());
                 bookImage.setImageBitmap(bitmap);
             } catch (FileNotFoundException e) {
                 if (ContextCompat.checkSelfPermission(this,
@@ -170,7 +204,7 @@ public class SellActivity extends BaseActivity implements
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Bitmap bitmap = BitmapFactory.decodeStream(image_stream);
+                    Bitmap bitmap = BitmapHelper.decodeSampledBitmapFromInputStream(getResources(), imageStream);
                     bookImage.setImageBitmap(bitmap);
                 } else {
                     Toast.makeText(this, "Denied", Toast.LENGTH_LONG);
@@ -188,6 +222,9 @@ public class SellActivity extends BaseActivity implements
                     mLastLocation.getLatitude()));
             mLongitudeText.setText(String.format("%s: %f", mLongitudeLabel,
                     mLastLocation.getLongitude()));
+
+            book.location.latitude = mLastLocation.getLatitude();
+            book.location.longitude = mLastLocation.getLongitude();
 
             // Determine whether a Geocoder is available.
             if (!Geocoder.isPresent()) {

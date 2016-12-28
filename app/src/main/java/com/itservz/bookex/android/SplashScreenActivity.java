@@ -21,7 +21,7 @@ public class SplashScreenActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        //splash from firebase
+        /*//splash from firebase
         FirebaseStorageService.getInstance().getImage("splash.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
@@ -29,7 +29,7 @@ public class SplashScreenActivity extends Activity {
                 splash.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
             }
         });
-
+*/
         View decorView = getWindow().getDecorView();
         // Hide the status bar.
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
@@ -47,7 +47,4 @@ public class SplashScreenActivity extends Activity {
             }
         }, SPLASH_TIME_OUT);
     }
-
-    //TODO: caching the splash from firebase
-
 }

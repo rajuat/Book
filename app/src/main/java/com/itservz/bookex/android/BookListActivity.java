@@ -176,7 +176,7 @@ public class BookListActivity extends AppCompatActivity implements FirebaseDatab
         FirebaseDatabaseService.getInstance(lastFetch).getSellingItems(this);
 
         ArrayList<Book> books = new ArrayList<>(FirebaseDatabaseService.getInstance(lastFetch).getBooks().values());
-        bookListAdapter = new BookListAdapter();
+        bookListAdapter = new BookListAdapter(this);
         bookListAdapter.addAll(books);
         Log.d(TAG, books.toString());
 

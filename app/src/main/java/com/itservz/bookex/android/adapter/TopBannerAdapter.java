@@ -38,29 +38,19 @@ public class TopBannerAdapter extends PagerAdapter {
         final View view = layoutInflater.inflate(R.layout.top_slide, container, false);
         final ImageView iv = (ImageView) view.findViewById(R.id.topSlide);
         if (position == 0) {
-            view.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.bg_screen1, null));
-            FirebaseStorageService.getInstance().getImage("discount.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            view.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.md_pink_A200, null));
+            /*FirebaseStorageService.getInstance().getImage("discount.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
                 @Override
                 public void onSuccess(byte[] bytes) {
                     iv.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
                 }
-            });
+            });*/
         } else if (position == 1) {
-            view.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.bg_screen2, null));
-            FirebaseStorageService.getInstance().getImage("food.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                @Override
-                public void onSuccess(byte[] bytes) {
-                    iv.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
-                }
-            });
+            view.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.md_amber_A200, null));
+
         } else if (position == 2) {
-            view.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.bg_screen3, null));
-            FirebaseStorageService.getInstance().getImage("movie.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                @Override
-                public void onSuccess(byte[] bytes) {
-                    iv.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
-                }
-            });
+            view.setBackgroundColor(ResourcesCompat.getColor(resources, R.color.md_light_blue_A200, null));
+
         }
         container.addView(view);
         return view;

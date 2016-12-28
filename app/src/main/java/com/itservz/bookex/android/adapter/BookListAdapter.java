@@ -18,6 +18,7 @@ import com.itservz.bookex.android.BookDetailFragment;
 import com.itservz.bookex.android.R;
 import com.itservz.bookex.android.model.Book;
 import com.itservz.bookex.android.backend.FirebaseStorageService;
+import com.itservz.bookex.android.util.BitmapHelper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,8 +29,10 @@ import java.util.List;
 
 public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookViewHolder> {
     private SortedList<Book> mBooks;
+    private Context context;
 
-    public BookListAdapter() {
+    public BookListAdapter(Context context) {
+        this.context = context;
         mBooks = new SortedList<Book>(Book.class, new SortedList.Callback<Book>() {
             @Override
             public int compare(Book o1, Book o2) {
@@ -86,7 +89,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
             FirebaseStorageService.getInstance().getImage("books/"+book.uuid).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                 @Override
                 public void onSuccess(byte[] bytes) {
-                    holder.mImageView.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+                    holder.mImageView.setImageBitmap(BitmapHelper.decodeSampledBitmapFromBytes(context.getResources(), bytes));
                     book.image = bytes;
                 }
             });

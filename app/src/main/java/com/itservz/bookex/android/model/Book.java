@@ -13,6 +13,7 @@ public class Book {
     public String uuid = null;
     public String ISBN = null;
     public String title = null;
+    public String author = null;
     public String edition = null;
     public String condition = null;
     public boolean missingPage = false;
@@ -22,7 +23,7 @@ public class Book {
     public String description;
     public byte[] image;
     public List<BookCategory> categories = new CategoryService().getCategories();
-    public Location location;
+    public Location location = new Location();
 
     public Book() {
     }
@@ -48,6 +49,7 @@ public class Book {
                 "uuid='" + uuid + '\'' +
                 ", ISBN='" + ISBN + '\'' +
                 ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
                 ", edition='" + edition + '\'' +
                 ", condition='" + condition + '\'' +
                 ", missingPage=" + missingPage +

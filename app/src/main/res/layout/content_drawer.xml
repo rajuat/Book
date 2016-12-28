@@ -36,7 +36,7 @@
             android:drawableRight="@drawable/ic_chevron_right_24dp"
             android:gravity="right"
             android:text="All Categories"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorAccent" />
 
         <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/horizontalScrollCategory"
@@ -75,7 +75,7 @@
             android:drawableRight="@drawable/ic_chevron_right_24dp"
             android:gravity="right"
             android:text="Newly added"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorAccent" />
 
         <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/horizontalScrollNewlyAdded"
@@ -111,7 +111,7 @@
             android:drawableRight="@drawable/ic_chevron_right_24dp"
             android:gravity="right"
             android:text="Near by"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorAccent" />
 
         <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/horizontalScrollNearby"

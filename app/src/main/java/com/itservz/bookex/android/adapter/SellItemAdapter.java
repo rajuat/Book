@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +13,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.itservz.bookex.android.R;
 import com.itservz.bookex.android.model.Book;
 import com.itservz.bookex.android.backend.FirebaseStorageService;
+import com.itservz.bookex.android.util.BitmapHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +29,7 @@ import java.util.List;
  */
 
 public class SellItemAdapter extends BaseAdapter {
+    private static final String TAG = "SellItemAdapter";
     private Context context;
     private List<Book> books = new ArrayList<>();
 
@@ -64,11 +69,19 @@ public class SellItemAdapter extends BaseAdapter {
         TextView mrp = (TextView) convertView.findViewById(R.id.sell_book_mrp);
 
         //image
-        FirebaseStorageService.getInstance().getImage("books/"+book.uuid).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+        Task<byte[]> image = FirebaseStorageService.getInstance().getImage("books/" + book.uuid);
+        image.addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
-                imgIcon.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+                Log.d(TAG, "img "+bytes.length);
+                imgIcon.setImageBitmap(BitmapHelper.decodeSampledBitmapFromBytes(context.getResources(), bytes));
                 book.image = bytes;
+            }
+        });
+        image.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "Img failed "+e.getMessage());
             }
         });
         /*if(book.image != null && book.image.length() > 0) {
