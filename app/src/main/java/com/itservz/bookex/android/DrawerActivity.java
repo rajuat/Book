@@ -22,6 +22,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,6 +39,7 @@ import com.itservz.bookex.android.service.FirebaseService;
 import com.itservz.bookex.android.service.FirebaseStorageService;
 import com.itservz.bookex.android.service.LoginDialog;
 import com.itservz.bookex.android.util.ScreenSizeScaler;
+import com.itservz.bookex.android.view.FlowLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +52,7 @@ public class DrawerActivity extends AppCompatActivity
     private String username;
 
     private void setUsername(String username) {
-        Log.d("DrawerActivity", "setUsername("+String.valueOf(username)+")");
+        Log.d("DrawerActivity", "setUsername(" + String.valueOf(username) + ")");
         if (username == null) {
             username = "James Bond";
         }
@@ -99,45 +103,31 @@ public class DrawerActivity extends AppCompatActivity
         // newly added
         FirebaseDatabaseService.INSTANCE.getSellingItems(this);
 
-        //category
-        int dpAsPixels = new ScreenSizeScaler(getResources()).getdpAspixel(8);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
-        ViewGroup containerCategory = (ViewGroup) findViewById(R.id.containerCategory);
 
-        int corderRadius = new ScreenSizeScaler(getResources()).getdpAspixel(8);
-        GradientDrawable gd = new GradientDrawable();
-        gd.setCornerRadius(corderRadius);
-        int stroke = new ScreenSizeScaler(getResources()).getdpAspixel(1);
-        gd.setStroke(stroke, Color.BLUE);
 
-        for(BookCategory cat : new CategoryService().getCategories()){
-            TextView v = new TextView(this, null);
-            v.setText(cat.shortText);
-            v.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                v.setBackground(gd);
-            } else{
-                v.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-                v.setTextColor(getResources().getColor(R.color.colorTextIcon));
+        //NEW CATEGORY
+        final FlowLayout categoriesFL = (FlowLayout) findViewById(R.id.flowLayout);
 
-            }
-
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivity(new Intent(DrawerActivity.this, BookListActivity.class));
-                }
-            });
-            containerCategory.addView(v, params);
+        for (BookCategory cat : new CategoryService().getCategories()) {
+            addCategories(categoriesFL, cat.longText);
         }
 
+        final boolean[] expand = {false};
         //click
-        TextView textViewCat = (TextView) findViewById(R.id.text_view_category);
+        final TextView textViewCat = (TextView) findViewById(R.id.text_view_category);
         textViewCat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(DrawerActivity.this, BookListActivity.class));
+                if(expand[0]){
+                    expandOrCollapseCategories(categoriesFL, "collapse");
+                    textViewCat.setText("Show all categories");
+                    expand[0] = false;
+                } else {
+                    expandOrCollapseCategories(categoriesFL, "expand");
+                    textViewCat.setText("Show less categories");
+                    expand[0] = true;
+                }
+                //startActivity(new Intent(DrawerActivity.this, BookListActivity.class));
             }
         });
 
@@ -161,14 +151,67 @@ public class DrawerActivity extends AppCompatActivity
 
     }
 
+    private void addCategories(FlowLayout flowLayout, String text) {
+        LinearLayout linearLayout = new LinearLayout(this);
+        LinearLayout.LayoutParams layout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        linearLayout.setLayoutParams(layout);
+        ScreenSizeScaler screenSizeScaler = new ScreenSizeScaler(getResources());
+        int px = screenSizeScaler.getdpAspixel(8);
+        linearLayout.setPadding(px, px, px, px);
+
+        final TextView textView = new TextView(this);
+        textView.setLayoutParams(layout);
+        textView.setBackground(getResources().getDrawable(R.drawable.rounded_border));
+        textView.setPadding(px, px, px, px);
+        textView.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+        textView.setText(text);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(DrawerActivity.this, BookListActivity.class));
+            }
+        });
+
+        linearLayout.addView(textView);
+        flowLayout.addView(linearLayout);
+    }
+
+    public void expandOrCollapseCategories(final View v, String exp_or_colpse) {
+        TranslateAnimation anim = null;
+        if ("expand".equals(exp_or_colpse)) {
+            anim = new TranslateAnimation(0.0f, 0.0f, -v.getHeight(), 0.0f);
+            v.setVisibility(View.VISIBLE);
+        } else {
+            anim = new TranslateAnimation(0.0f, 0.0f, 0.0f, -(v.getHeight() - 96f) );
+            Animation.AnimationListener collapselistener = new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    v.setVisibility(View.GONE);
+                }
+            };
+            anim.setAnimationListener(collapselistener);
+        }
+        anim.setDuration(300);
+        anim.setInterpolator(new AccelerateInterpolator(0.5f));
+        v.startAnimation(anim);
+    }
+
     //callback from firebase
-    public void viewNewlyAdded(final Book book){
+    public void viewNewlyAdded(final Book book) {
         //newly added
         LinearLayout containerNewlyAdded = (LinearLayout) findViewById(R.id.containerNewlyAdded);
         LinearLayout containerNearby = (LinearLayout) findViewById(R.id.containerNearby);
         int dpAsPixels = new ScreenSizeScaler(getResources()).getdpAspixel(8);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(dpAsPixels, dpAsPixels, 0, dpAsPixels);
         View view = new SellItemAdapter(this, null).createBookItem(null, book);
         view.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);

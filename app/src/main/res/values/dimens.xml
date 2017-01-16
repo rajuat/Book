@@ -23,4 +23,5 @@
     <dimen name="letter_tile_size">64dp</dimen>
     <dimen name="secondary_bar_height">40dp</dimen>
     <dimen name="secondary_title_size">20sp</dimen>
+    <dimen name="tags_margin">8dp</dimen>
 </resources>
