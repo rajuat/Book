@@ -20,6 +20,7 @@
         android:lines="2"
         android:ellipsize="end"
         android:layout_gravity="center"
+        android:textSize="@dimen/normal_size_text"
         android:text="dummy-title" />
 
     <LinearLayout
@@ -31,6 +32,7 @@
             android:id="@+id/sell_book_your_price"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/normal_size_text"
             android:layout_weight="0.5"
             android:text="₹ "
             android:textColor="@color/colorPrimaryText" />
@@ -40,6 +42,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+            android:textSize="@dimen/small_size_text"
             android:gravity="right"
             android:text="₹ "
             android:textColor="@color/md_pink_900" />

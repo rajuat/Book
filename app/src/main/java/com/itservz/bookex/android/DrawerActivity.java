@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
@@ -32,12 +33,13 @@ import com.itservz.bookex.android.backend.LoginDialog;
 import com.itservz.bookex.android.model.Book;
 import com.itservz.bookex.android.model.BookCategory;
 import com.itservz.bookex.android.preference.PrefManager;
+import com.itservz.bookex.android.util.CategoryBuilder;
 import com.itservz.bookex.android.util.ScreenSizeScaler;
 import com.itservz.bookex.android.view.FlowLayout;
 
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, FirebaseDatabaseService.SellItemListener {
-
+    private static final String TAG = "DrawerActivity";
     private ViewPager viewPager;
     private TextView usernameTxt;
     private String username;
@@ -99,27 +101,53 @@ public class DrawerActivity extends AppCompatActivity
 
         //NEW CATEGORY
         final FlowLayout categoriesFL = (FlowLayout) findViewById(R.id.flowLayout);
+        categoriesFL.setEnabled(true);
+        categoriesFL.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.d(TAG, "touch for expansion");
+                int x=(int)event.getX();
+                int y=(int)event.getY();
+                int width= categoriesFL.getLayoutParams().width;
+                int height = categoriesFL.getLayoutParams().height;
 
+
+                if((x - width <= 20 && x - width > 0) ||(width - x <= 20 && width - x > 0)){
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_DOWN:
+                            break;
+                        case MotionEvent.ACTION_MOVE:
+                            Log.d(TAG,"width:"+width+" height:"+height+" x:"+x+" y:"+y);
+                            categoriesFL.getLayoutParams().width = x;
+                            categoriesFL.getLayoutParams().height = y;
+                            categoriesFL.requestLayout();
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            break;
+                    }
+                }
+                return false;
+            }
+        });
+        final CategoryBuilder categoryBuilder = new CategoryBuilder(this);
         for (BookCategory cat : new CategoryService().getCategories()) {
-            addCategories(categoriesFL, cat.longText);
+            categoryBuilder.addCategories(categoriesFL, cat.longText);
         }
-
-        final boolean[] expand = {false};
         //click
+        final boolean[] expand = {true};
         final TextView textViewCat = (TextView) findViewById(R.id.text_view_category);
         textViewCat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(expand[0]){
-                    expandOrCollapseCategories(categoriesFL, "collapse");
+                    categoryBuilder.expandOrCollapseCategories(categoriesFL, "collapse");
                     textViewCat.setText("Show all categories");
                     expand[0] = false;
                 } else {
-                    expandOrCollapseCategories(categoriesFL, "expand");
+                    categoryBuilder.expandOrCollapseCategories(categoriesFL, "expand");
                     textViewCat.setText("Show less categories");
                     expand[0] = true;
                 }
-                //startActivity(new Intent(DrawerActivity.this, BookListActivity.class));
             }
         });
 
@@ -144,58 +172,7 @@ public class DrawerActivity extends AppCompatActivity
 
     }
 
-    private void addCategories(FlowLayout flowLayout, String text) {
-        LinearLayout linearLayout = new LinearLayout(this);
-        LinearLayout.LayoutParams layout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        linearLayout.setLayoutParams(layout);
-        ScreenSizeScaler screenSizeScaler = new ScreenSizeScaler(getResources());
-        int px = screenSizeScaler.getdpAspixel(8);
-        linearLayout.setPadding(px, px, px, px);
 
-        final TextView textView = new TextView(this);
-        textView.setLayoutParams(layout);
-        textView.setBackground(getResources().getDrawable(R.drawable.rounded_border));
-        textView.setPadding(px, px, px, px);
-        textView.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
-        textView.setText(text);
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(DrawerActivity.this, BookListActivity.class));
-            }
-        });
-
-        linearLayout.addView(textView);
-        flowLayout.addView(linearLayout);
-    }
-
-    public void expandOrCollapseCategories(final View v, String exp_or_colpse) {
-        TranslateAnimation anim = null;
-        if ("expand".equals(exp_or_colpse)) {
-            anim = new TranslateAnimation(0.0f, 0.0f, -v.getHeight(), 0.0f);
-            v.setVisibility(View.VISIBLE);
-        } else {
-            anim = new TranslateAnimation(0.0f, 0.0f, 0.0f, -(v.getHeight() - 96f) );
-            Animation.AnimationListener collapselistener = new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    v.setVisibility(View.GONE);
-                }
-            };
-            anim.setAnimationListener(collapselistener);
-        }
-        anim.setDuration(300);
-        anim.setInterpolator(new AccelerateInterpolator(0.5f));
-        v.startAnimation(anim);
-    }
 
     @Override
     public void onSellItemAdded(final Book book) {
