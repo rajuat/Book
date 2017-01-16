@@ -18,8 +18,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.itservz.bookex.android.service.FirebaseDatabaseService;
-import com.itservz.bookex.android.service.ServletPostAsyncTask;
+import com.itservz.bookex.android.backend.FirebaseDatabaseService;
+import com.itservz.bookex.android.backend.ServletPostAsyncTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         // Add items via the Button and EditText at the bottom of the window.
         final EditText text = (EditText) findViewById(R.id.todoText);
         final Button button = (Button) findViewById(R.id.addButton);
-        final DatabaseReference myRef = FirebaseDatabaseService.INSTANCE.getDatabaseReference(adapter);
+        final DatabaseReference myRef = FirebaseDatabaseService.getInstance("").getDatabaseReference(adapter);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Create a new child with a auto-generated ID.

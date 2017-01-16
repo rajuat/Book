@@ -22,9 +22,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -39,7 +36,6 @@ import com.itservz.bookex.android.service.FirebaseService;
 import com.itservz.bookex.android.service.FirebaseStorageService;
 import com.itservz.bookex.android.service.LoginDialog;
 import com.itservz.bookex.android.util.ScreenSizeScaler;
-import com.itservz.bookex.android.view.FlowLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +46,10 @@ public class DrawerActivity extends AppCompatActivity
     private ViewPager viewPager;
     private TextView usernameTxt;
     private String username;
+    PrefManager prefManager = null;
 
     private void setUsername(String username) {
-        Log.d("DrawerActivity", "setUsername(" + String.valueOf(username) + ")");
+        Log.d("DrawerActivity", "setUsername("+String.valueOf(username)+")");
         if (username == null) {
             username = "James Bond";
         }
@@ -68,6 +65,8 @@ public class DrawerActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        prefManager = new PrefManager(this);
 
         usernameTxt = (TextView) findViewById(R.id.usernameTxt);
         setUsername("James Bond");
@@ -103,8 +102,6 @@ public class DrawerActivity extends AppCompatActivity
         // newly added
         FirebaseDatabaseService.INSTANCE.getSellingItems(this);
 
-
-
         //NEW CATEGORY
         final FlowLayout categoriesFL = (FlowLayout) findViewById(R.id.flowLayout);
 
@@ -131,6 +128,14 @@ public class DrawerActivity extends AppCompatActivity
             }
         });
 
+        //click
+        TextView textViewNewlyAdded = (TextView) findViewById(R.id.textViewNewlyAdded);
+        textViewNewlyAdded.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(DrawerActivity.this, BookListActivity.class));
+            }
+        });
         //click
         TextView textViewNewlyAdded = (TextView) findViewById(R.id.textViewNewlyAdded);
         textViewNewlyAdded.setOnClickListener(new View.OnClickListener() {
@@ -211,7 +216,7 @@ public class DrawerActivity extends AppCompatActivity
         LinearLayout containerNearby = (LinearLayout) findViewById(R.id.containerNearby);
         int dpAsPixels = new ScreenSizeScaler(getResources()).getdpAspixel(8);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(dpAsPixels, dpAsPixels, 0, dpAsPixels);
         View view = new SellItemAdapter(this, null).createBookItem(null, book);
         view.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
@@ -238,6 +243,9 @@ public class DrawerActivity extends AppCompatActivity
         });
         nearbyView.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
         containerNearby.addView(nearbyView, layoutParams);
+
+        prefManager.setLastFetch(book.uuid);
+        Toast.makeText(this, "book added", Toast.LENGTH_SHORT).show();
     }
 
     @Override

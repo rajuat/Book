@@ -3,8 +3,6 @@ package com.itservz.bookex.android.preference;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.itservz.bookex.android.model.Book;
-
 /**
  * Created by Raju on 12/6/2016.
  */
@@ -23,6 +21,7 @@ public class PrefManager {
     private static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
     private static final String ISBN = "isbn";
     private static final String TITLE = "title";
+    private static final String LAST_FETCH = "lastFetch";
 
     public PrefManager(Context context) {
         this._context = context;
@@ -56,4 +55,14 @@ public class PrefManager {
     public String getTitle(){
         return pref.getString(TITLE, "");
     }
+
+    public void setLastFetch(String lastFetch){
+        editor.putString(LAST_FETCH, lastFetch);
+        editor.commit();
+    }
+
+    public String getLastFetch(){
+        return pref.getString(LAST_FETCH, "");
+    }
+
 }

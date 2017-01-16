@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.itservz.bookex.android.model.Book;
-import com.itservz.bookex.android.service.FirebaseDatabaseService;
+import com.itservz.bookex.android.backend.FirebaseDatabaseService;
 import com.itservz.bookex.android.util.LetterTileProvider;
 
 /**
@@ -47,27 +47,23 @@ public class BookDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
-            mItem = FirebaseDatabaseService.INSTANCE.getBooks().get(getArguments().getString(ARG_ITEM_ID));
+            mItem = FirebaseDatabaseService.getInstance("").getBooks().get(getArguments().getString(ARG_ITEM_ID));
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.title);
+                //appBarLayout.setTitle(mItem.title);
+                appBarLayout.setTitle("To be changed");
             }
         }
-
-
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.book_detail, container, false);
-
         if (mItem != null) {
             ((TextView) rootView.findViewById(R.id.book_detail)).setText(mItem.title);
         }
-
         final Resources res = getResources();
         final int tileSize = res.getDimensionPixelSize(R.dimen.letter_tile_size);
 

@@ -1,10 +1,8 @@
-package com.itservz.bookex.android.service;
+package com.itservz.bookex.android.backend;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import com.itservz.bookex.android.BookListActivity;
-import com.itservz.bookex.android.model.Book;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 

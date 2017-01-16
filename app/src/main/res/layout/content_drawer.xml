@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:id="@+id/content_drawer_id"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              app:layout_behavior="@string/appbar_scrolling_view_behavior"
-              tools:context="com.itservz.bookex.android.DrawerActivity"
-              tools:showIn="@layout/app_bar_drawer"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_drawer_id"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.itservz.bookex.android.DrawerActivity"
+    tools:showIn="@layout/app_bar_drawer"
     >
 
     <android.support.v4.view.ViewPager
@@ -19,7 +19,7 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="@dimen/text_margin_small"/>
+        android:layout_height="@dimen/text_margin_small" />
 
     <LinearLayout
         android:id="@+id/category"
@@ -36,8 +36,7 @@
             android:drawableRight="@drawable/ic_chevron_right_24dp"
             android:gravity="right"
             android:text="All Categories"
-            android:textColor="@color/colorPrimaryDark"/>
-
+            android:textColor="@color/colorPrimaryDark" />
 
         <com.itservz.bookex.android.view.FlowLayout
             android:id="@+id/flowLayout"
@@ -65,7 +64,7 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="@dimen/text_margin_small"/>
+        android:layout_height="@dimen/text_margin_small" />
 
     <LinearLayout
         android:id="@+id/newlyAdded"
@@ -82,14 +81,14 @@
             android:drawableRight="@drawable/ic_chevron_right_24dp"
             android:gravity="right"
             android:text="Newly added"
-            android:textColor="@color/colorPrimaryDark"/>
+            android:textColor="@color/colorPrimaryDark" />
 
         <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                              android:id="@+id/horizontalScrollNewlyAdded"
-                              android:layout_width="match_parent"
-                              android:layout_height="wrap_content"
-                              android:background="@color/md_grey_200"
-                              android:scrollbars="none">
+            android:id="@+id/horizontalScrollNewlyAdded"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/md_grey_200"
+            android:scrollbars="none">
 
             <LinearLayout
                 android:id="@+id/containerNewlyAdded"
@@ -101,7 +100,7 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="@dimen/text_margin_small"/>
+        android:layout_height="@dimen/text_margin_small" />
 
     <LinearLayout
         android:id="@+id/nearby"
@@ -118,14 +117,14 @@
             android:drawableRight="@drawable/ic_chevron_right_24dp"
             android:gravity="right"
             android:text="Near by"
-            android:textColor="@color/colorPrimaryDark"/>
+            android:textColor="@color/colorPrimaryDark" />
 
         <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                              android:id="@+id/horizontalScrollNearby"
-                              android:layout_width="match_parent"
-                              android:layout_height="wrap_content"
-                              android:background="@color/md_grey_200"
-                              android:scrollbars="none">
+            android:id="@+id/horizontalScrollNearby"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/md_grey_200"
+            android:scrollbars="none">
 
             <LinearLayout
                 android:id="@+id/containerNearby"

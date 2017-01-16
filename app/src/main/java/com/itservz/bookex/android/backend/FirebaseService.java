@@ -1,4 +1,4 @@
-package com.itservz.bookex.android.service;
+package com.itservz.bookex.android.backend;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,6 +21,7 @@ public class FirebaseService {
         database = FirebaseDatabase.getInstance(app);
         auth = FirebaseAuth.getInstance(app);
         storage = FirebaseStorage.getInstance(app);
+        database.setPersistenceEnabled(true);
     }
     private static FirebaseService INSTANCE = new FirebaseService();
     public static FirebaseService getInstance() {

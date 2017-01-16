@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/sell_book_img"
-        android:layout_width="@dimen/image_size"
-        android:layout_height="@dimen/image_size"
+        android:layout_width="@dimen/image_size_width"
+        android:layout_height="@dimen/image_size_height"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/ic_no_book_96dp" />
 
