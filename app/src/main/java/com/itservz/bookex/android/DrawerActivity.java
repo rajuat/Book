@@ -1,47 +1,42 @@
 package com.itservz.bookex.android;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.widget.GridView;
+import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.itservz.bookex.android.adapter.SellItemAdapter;
 import com.itservz.bookex.android.adapter.TopBannerAdapter;
+import com.itservz.bookex.android.backend.CategoryService;
+import com.itservz.bookex.android.backend.FirebaseDatabaseService;
+import com.itservz.bookex.android.backend.FirebaseService;
+import com.itservz.bookex.android.backend.LoginDialog;
 import com.itservz.bookex.android.model.Book;
 import com.itservz.bookex.android.model.BookCategory;
-import com.itservz.bookex.android.service.CategoryService;
-import com.itservz.bookex.android.service.FirebaseDatabaseService;
-import com.itservz.bookex.android.service.FirebaseService;
-import com.itservz.bookex.android.service.FirebaseStorageService;
-import com.itservz.bookex.android.service.LoginDialog;
+import com.itservz.bookex.android.preference.PrefManager;
 import com.itservz.bookex.android.util.ScreenSizeScaler;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.itservz.bookex.android.view.FlowLayout;
 
 public class DrawerActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, FirebaseDatabaseService.SellItemListener {
 
     private ViewPager viewPager;
     private TextView usernameTxt;
@@ -100,7 +95,7 @@ public class DrawerActivity extends AppCompatActivity
         gridListView.setAdapter(adapter);*/
 
         // newly added
-        FirebaseDatabaseService.INSTANCE.getSellingItems(this);
+        FirebaseDatabaseService.getInstance("").getSellingItems(this);
 
         //NEW CATEGORY
         final FlowLayout categoriesFL = (FlowLayout) findViewById(R.id.flowLayout);
@@ -136,14 +131,7 @@ public class DrawerActivity extends AppCompatActivity
                 startActivity(new Intent(DrawerActivity.this, BookListActivity.class));
             }
         });
-        //click
-        TextView textViewNewlyAdded = (TextView) findViewById(R.id.textViewNewlyAdded);
-        textViewNewlyAdded.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(DrawerActivity.this, BookListActivity.class));
-            }
-        });
+
 
         //click
         TextView textViewNearby = (TextView) findViewById(R.id.textViewNearby);
@@ -209,8 +197,8 @@ public class DrawerActivity extends AppCompatActivity
         v.startAnimation(anim);
     }
 
-    //callback from firebase
-    public void viewNewlyAdded(final Book book) {
+    @Override
+    public void onSellItemAdded(final Book book) {
         //newly added
         LinearLayout containerNewlyAdded = (LinearLayout) findViewById(R.id.containerNewlyAdded);
         LinearLayout containerNearby = (LinearLayout) findViewById(R.id.containerNearby);
