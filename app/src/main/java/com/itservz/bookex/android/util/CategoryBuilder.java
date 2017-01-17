@@ -37,7 +37,7 @@ public class CategoryBuilder {
         random =  new Random();
     }
 
-    public void addCategories(FlowLayout flowLayout, String text) {
+    public void addCategories(FlowLayout flowLayout, final String text) {
         LinearLayout linearLayout = new LinearLayout(activity);
         LinearLayout.LayoutParams layout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         linearLayout.setLayoutParams(layout);
@@ -57,7 +57,9 @@ public class CategoryBuilder {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.startActivity(new Intent(activity, BookListActivity.class));
+                Intent intent = new Intent(activity, BookListActivity.class);
+                intent.putExtra(BundleKeys.CATEGORY.name(), text);
+                activity.startActivity(intent);
             }
         });
 

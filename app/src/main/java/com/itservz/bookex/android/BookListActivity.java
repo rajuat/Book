@@ -28,6 +28,7 @@ import com.itservz.bookex.android.model.Book;
 import com.itservz.bookex.android.preference.PrefManager;
 import com.itservz.bookex.android.backend.FirebaseDatabaseService;
 import com.itservz.bookex.android.backend.GoogleBooksAPIService;
+import com.itservz.bookex.android.util.BundleKeys;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,14 +56,14 @@ public class BookListActivity extends AppCompatActivity implements FirebaseDatab
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_list);
 
+        String title = getIntent().getStringExtra(BundleKeys.CATEGORY.name());
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
+        toolbar.setTitle((title == null || title.trim().length() < 1) ? getTitle() : title);
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            //actionBar.setDisplayShowHomeEnabled(true);
         }
 
         findViewById(R.id.books_alert).setOnClickListener(new View.OnClickListener() {
