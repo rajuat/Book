@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.itservz.bookex.android.model.Book;
 import com.itservz.bookex.android.backend.FirebaseDatabaseService;
+import com.itservz.bookex.android.model.Book;
 import com.itservz.bookex.android.util.LetterTileProvider;
 
 /**
@@ -62,7 +62,7 @@ public class BookDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.book_detail, container, false);
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.book_detail)).setText(mItem.title);
+            ((TextView) rootView.findViewById(R.id.book_detail)).setText(mItem.getTitle());
         }
         final Resources res = getResources();
         final int tileSize = res.getDimensionPixelSize(R.dimen.letter_tile_size);

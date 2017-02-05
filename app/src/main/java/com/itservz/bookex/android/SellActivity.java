@@ -2,6 +2,7 @@ package com.itservz.bookex.android;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Geocoder;
@@ -10,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -21,12 +21,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.itservz.bookex.android.model.Book;
-import com.itservz.bookex.android.model.Location;
-import com.itservz.bookex.android.preference.PrefManager;
 import com.itservz.bookex.android.backend.FirebaseDatabaseService;
 import com.itservz.bookex.android.backend.FirebaseStorageService;
 import com.itservz.bookex.android.backend.ImagePickerService;
+import com.itservz.bookex.android.databinding.ActivitySellBinding;
+import com.itservz.bookex.android.model.Book;
+import com.itservz.bookex.android.model.SellHandler;
+import com.itservz.bookex.android.preference.PrefManager;
 import com.itservz.bookex.android.util.BitmapHelper;
 
 import java.io.ByteArrayOutputStream;
@@ -54,11 +55,15 @@ public class SellActivity extends BaseActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sell);
+        //setContentView(R.layout.activity_sell);
+        book = new Book();
+        //http://www.singhajit.com/android-data-binding/
+        ActivitySellBinding binding = DataBindingUtil.setContentView(this,R.layout.activity_sell);
+        binding.setBook(book);
+        binding.setHandler(new SellHandler());
 
         prefManager = new PrefManager(this);
 
-        book = new Book();
         bookImage = (ImageView) findViewById(R.id.book_image);
         bookImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,37 +73,46 @@ public class SellActivity extends BaseActivity implements
             }
         });
 
-        TextInputEditText isbn = (TextInputEditText) findViewById(R.id.isbn);
+        /*final TextInputEditText isbn = (TextInputEditText) findViewById(R.id.isbn);
         isbn.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 prefManager.setISBN(((TextInputEditText) v).getText().toString());
                 //book.ISBN = ((TextInputEditText)v).getText().toString();
             }
-        });
-
-        TextInputEditText title = (TextInputEditText) findViewById(R.id.book_title);
-        title.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        });*/
+       /* Button button = (Button) findViewById(R.id.getBookDetails);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String isbnText = isbn.getText().toString();
+                Log.d(TAG, "onClick:ISBN " + isbnText);
+                new GoogleBooksAPIService().getBook(isbnText, book);
+                Log.d(TAG, "onClick:ISBN2 " + book.toString());
+            }
+        });*/
+        //TextInputEditText title = (TextInputEditText) findViewById(R.id.book_title);
+        /*title.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 prefManager.setTitle(((TextInputEditText) v).getText().toString());
                 //book.title = ((TextInputEditText)v).getText().toString();
             }
-        });
+        });*/
 
-        TextInputEditText author = (TextInputEditText) findViewById(R.id.book_author);
+       /* TextInputEditText author = (TextInputEditText) findViewById(R.id.book_author);
         author.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                book.author = ((TextInputEditText)v).getText().toString();
+                book.setAuthor(((TextInputEditText)v).getText().toString());
             }
-        });
+        });*/
 
-        TextInputEditText condition = (TextInputEditText) findViewById(R.id.book_condition);
+        /*TextInputEditText condition = (TextInputEditText) findViewById(R.id.book_condition);
         condition.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                book.condition = ((TextInputEditText)v).getText().toString();
+                book.setCondition(((TextInputEditText)v).getText().toString());
             }
         });
 
@@ -106,7 +120,7 @@ public class SellActivity extends BaseActivity implements
         yourPrice.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                book.condition = ((TextInputEditText)v).getText().toString();
+                book.setYourPrice(Integer.parseInt(((TextInputEditText)v).getText().toString()));
             }
         });
 
@@ -114,9 +128,9 @@ public class SellActivity extends BaseActivity implements
         phone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                book.condition = ((TextInputEditText)v).getText().toString();
+                //book.condition = ((TextInputEditText)v).getText().toString();
             }
-        });
+        });*/
 
         ((Button) findViewById(R.id.sell_button)).setOnClickListener(this);
 
@@ -140,8 +154,8 @@ public class SellActivity extends BaseActivity implements
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         //80 is recommended - http://stackoverflow.com/questions/35271817/compressing-image-in-android-is-loosing-the-quality-when-image-is-taken-from-pho
         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
-        book.ISBN = prefManager.getISBN();
-        book.title = prefManager.getTitle();
+        book.setISBN(prefManager.getISBN());
+        book.setTitle(prefManager.getTitle());
         String uId = FirebaseDatabaseService.getInstance("").addSellingItem(book);
         FirebaseStorageService.getInstance().setImage(uId, baos.toByteArray(), this);
         Snackbar.make(v, "Ad posted", Snackbar.LENGTH_LONG).setAction("Action", null).show();
@@ -223,8 +237,8 @@ public class SellActivity extends BaseActivity implements
             mLongitudeText.setText(String.format("%s: %f", mLongitudeLabel,
                     mLastLocation.getLongitude()));
 
-            book.location.latitude = mLastLocation.getLatitude();
-            book.location.longitude = mLastLocation.getLongitude();
+            book.getLocation().latitude = mLastLocation.getLatitude();
+            book.getLocation().longitude = mLastLocation.getLongitude();
 
             // Determine whether a Geocoder is available.
             if (!Geocoder.isPresent()) {

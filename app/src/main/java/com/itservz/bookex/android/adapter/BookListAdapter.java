@@ -16,8 +16,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.itservz.bookex.android.BookDetailActivity;
 import com.itservz.bookex.android.BookDetailFragment;
 import com.itservz.bookex.android.R;
-import com.itservz.bookex.android.model.Book;
 import com.itservz.bookex.android.backend.FirebaseStorageService;
+import com.itservz.bookex.android.model.Book;
 import com.itservz.bookex.android.util.BitmapHelper;
 
 import java.util.Arrays;
@@ -36,7 +36,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
         mBooks = new SortedList<Book>(Book.class, new SortedList.Callback<Book>() {
             @Override
             public int compare(Book o1, Book o2) {
-                return o1.yourPrice - o2.yourPrice;
+                return o1.getYourPrice() - o2.getYourPrice();
             }
 
             @Override
@@ -62,12 +62,12 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
             @Override
             public boolean areContentsTheSame(Book oldItem, Book newItem) {
                 // return whether the items' visual representations are the same or not.
-                return oldItem.uuid.equals(newItem.uuid);
+                return oldItem.getUuid().equals(newItem.getUuid());
             }
 
             @Override
             public boolean areItemsTheSame(Book item1, Book item2) {
-                return item1.uuid == item2.uuid;
+                return item1.getUuid() == item2.getUuid();
             }
         });
 
@@ -84,23 +84,23 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
     public void onBindViewHolder(final BookViewHolder holder, int position) {
         final Book book = mBooks.get(position);
         holder.mItem = book;
-        byte[] img = book.image;
+        byte[] img = book.getImage();
         if (img == null){
-            FirebaseStorageService.getInstance().getImage("books/"+book.uuid).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            FirebaseStorageService.getInstance().getImage("books/"+book.getUuid()).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                 @Override
                 public void onSuccess(byte[] bytes) {
                     holder.mImageView.setImageBitmap(BitmapHelper.decodeSampledBitmapFromBytes(context.getResources(), bytes));
-                    book.image = bytes;
+                    book.setImage(bytes);
                 }
             });
         } else{
             holder.mImageView.setImageBitmap(BitmapFactory.decodeByteArray(img, 0, img.length));
         }
-        holder.mTitleView.setText(book.title);
+        holder.mTitleView.setText(book.getTitle());
         holder.mCategories.setText("physics / class 11 / science");
         //holder.mCategories.setText(book.getCategoriesAsString());
-        holder.mYourPriceView.setText("₹ " + book.yourPrice);
-        holder.mMRPView.setText("₹ " + book.mrp);
+        holder.mYourPriceView.setText("₹ " + book.getYourPrice());
+        holder.mMRPView.setText("₹ " + book.getMrp());
         /*if(book.mrp == 0){
             new GoogleBooksAPIService().getBookByISBN(holder);
         }*/
@@ -111,7 +111,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
                     public void onClick(View v) {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, BookDetailActivity.class);
-                        intent.putExtra(BookDetailFragment.ARG_ITEM_ID, holder.mItem.uuid);
+                        intent.putExtra(BookDetailFragment.ARG_ITEM_ID, holder.mItem.getUuid());
                         context.startActivity(intent);
                     }
                 }

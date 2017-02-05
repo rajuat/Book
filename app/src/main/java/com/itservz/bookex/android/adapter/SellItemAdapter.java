@@ -2,7 +2,6 @@ package com.itservz.bookex.android.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -17,8 +16,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.itservz.bookex.android.R;
-import com.itservz.bookex.android.model.Book;
 import com.itservz.bookex.android.backend.FirebaseStorageService;
+import com.itservz.bookex.android.model.Book;
 import com.itservz.bookex.android.util.BitmapHelper;
 
 import java.util.ArrayList;
@@ -47,7 +46,7 @@ public class SellItemAdapter extends BaseAdapter {
     }
 
     public long getItemId(int position) {
-        return books.get(position).mrp;
+        return books.get(position).getMrp();
     }
 
     // create a new ImageView for each item referenced by the Adapter
@@ -69,13 +68,13 @@ public class SellItemAdapter extends BaseAdapter {
         TextView mrp = (TextView) convertView.findViewById(R.id.sell_book_mrp);
 
         //image
-        Task<byte[]> image = FirebaseStorageService.getInstance().getImage("books/" + book.uuid);
+        Task<byte[]> image = FirebaseStorageService.getInstance().getImage("books/" + book.getUuid());
         image.addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
                 Log.d(TAG, "img "+bytes.length);
                 imgIcon.setImageBitmap(BitmapHelper.decodeSampledBitmapFromBytes(context.getResources(), bytes));
-                book.image = bytes;
+                book.setImage(bytes);
             }
         });
         image.addOnFailureListener(new OnFailureListener() {
@@ -88,10 +87,10 @@ public class SellItemAdapter extends BaseAdapter {
             byte[] imageDecoded = Base64.decode(book.image, Base64.DEFAULT);
             imgIcon.setImageBitmap(BitmapFactory.decodeByteArray(imageDecoded, 0, imageDecoded.length));
         }*/
-        yourPrice.append(""+book.yourPrice);
-        mrp.setText("₹ "+book.mrp);
+        yourPrice.append(""+book.getYourPrice());
+        mrp.setText("₹ "+book.getMrp());
         mrp.setPaintFlags(mrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        title.setText(book.title);
+        title.setText(book.getTitle());
         return convertView;
     }
 

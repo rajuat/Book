@@ -17,9 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -191,7 +188,7 @@ public class DrawerActivity extends AppCompatActivity
             public void onClick(View view) {
                 Context context = view.getContext();
                 Intent intent = new Intent(context, BookDetailActivity.class);
-                intent.putExtra(BookDetailFragment.ARG_ITEM_ID, book.uuid);
+                intent.putExtra(BookDetailFragment.ARG_ITEM_ID, book.getUuid());
                 context.startActivity(intent);
             }
         });
@@ -202,14 +199,14 @@ public class DrawerActivity extends AppCompatActivity
             public void onClick(View view) {
                 Context context = view.getContext();
                 Intent intent = new Intent(context, BookDetailActivity.class);
-                intent.putExtra(BookDetailFragment.ARG_ITEM_ID, book.uuid);
+                intent.putExtra(BookDetailFragment.ARG_ITEM_ID, book.getUuid());
                 context.startActivity(intent);
             }
         });
         nearbyView.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
         containerNearby.addView(nearbyView, layoutParams);
 
-        prefManager.setLastFetch(book.uuid);
+        prefManager.setLastFetch(book.getUuid());
         Toast.makeText(this, "book added", Toast.LENGTH_SHORT).show();
     }
 

@@ -47,11 +47,11 @@ public class FirebaseDatabaseService {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 Book book = dataSnapshot.getValue(Book.class);
-                Log.d(TAG, book.title);
-                books.put(book.uuid, book);
+                Log.d(TAG, book.getTitle());
+                books.put(book.getUuid(), book);
                 if(sellItemListener != null){
                     sellItemListener.onSellItemAdded(book);
-                    Log.d(TAG, book.uuid);
+                    Log.d(TAG, book.getUuid());
                 }
             }
             public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -72,7 +72,7 @@ public class FirebaseDatabaseService {
     public String addSellingItem(Book book) {
         DatabaseReference childRef = sellsReference.push();
         String uId = childRef.getKey();
-        book.uuid = uId;
+        book.setUuid(uId);
         Log.d("Selling", book.toString());
         childRef.setValue(book);
         return uId;

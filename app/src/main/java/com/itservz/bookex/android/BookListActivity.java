@@ -24,10 +24,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.itservz.bookex.android.adapter.BookListAdapter;
-import com.itservz.bookex.android.model.Book;
-import com.itservz.bookex.android.preference.PrefManager;
 import com.itservz.bookex.android.backend.FirebaseDatabaseService;
 import com.itservz.bookex.android.backend.GoogleBooksAPIService;
+import com.itservz.bookex.android.model.Book;
+import com.itservz.bookex.android.preference.PrefManager;
 import com.itservz.bookex.android.util.BundleKeys;
 
 import java.util.ArrayList;
@@ -210,15 +210,15 @@ public class BookListActivity extends AppCompatActivity implements FirebaseDatab
         public void onBindViewHolder(final ViewHolder holder, int position) {
             final Book book = mValues.get(position);
             holder.mItem = book;
-            byte[] img = book.image;
+            byte[] img = book.getImage();
             if(img != null)
             holder.mImageView.setImageBitmap(BitmapFactory.decodeByteArray(img, 0, img.length));
-            holder.mTitleView.setText(book.title);
+            holder.mTitleView.setText(book.getTitle());
             holder.mCategories.setText("physics / class 11 / science");
             //holder.mCategories.setText(book.getCategoriesAsString());
-            holder.mYourPriceView.setText("₹ " + book.yourPrice);
-            holder.mMRPView.setText("₹ " + book.mrp);
-            if(book.mrp == 0){
+            holder.mYourPriceView.setText("₹ " + book.getYourPrice());
+            holder.mMRPView.setText("₹ " + book.getMrp());
+            if(book.getMrp() == 0){
                 new GoogleBooksAPIService().getBookByISBN(holder);
             }
 
@@ -227,7 +227,7 @@ public class BookListActivity extends AppCompatActivity implements FirebaseDatab
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(BookDetailFragment.ARG_ITEM_ID, holder.mItem.uuid);
+                        arguments.putString(BookDetailFragment.ARG_ITEM_ID, holder.mItem.getUuid());
                         BookDetailFragment fragment = new BookDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -236,7 +236,7 @@ public class BookListActivity extends AppCompatActivity implements FirebaseDatab
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, BookDetailActivity.class);
-                        intent.putExtra(BookDetailFragment.ARG_ITEM_ID, holder.mItem.uuid);
+                        intent.putExtra(BookDetailFragment.ARG_ITEM_ID, holder.mItem.getUuid());
 
                         context.startActivity(intent);
                     }
