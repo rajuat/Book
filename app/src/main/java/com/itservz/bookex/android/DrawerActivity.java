@@ -1,15 +1,18 @@
 package com.itservz.bookex.android;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,13 +20,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.Query;
+import com.itservz.bookex.android.adapter.FirebaseSearchListAdapter;
 import com.itservz.bookex.android.adapter.SellItemAdapter;
 import com.itservz.bookex.android.adapter.TopBannerAdapter;
 import com.itservz.bookex.android.backend.CategoryService;
+import com.itservz.bookex.android.backend.DBRefs;
 import com.itservz.bookex.android.backend.FirebaseDatabaseService;
 import com.itservz.bookex.android.backend.FirebaseService;
 import com.itservz.bookex.android.backend.LoginDialog;
@@ -41,6 +50,7 @@ public class DrawerActivity extends AppCompatActivity
     private TextView usernameTxt;
     private String username;
     PrefManager prefManager = null;
+    private FirebaseSearchListAdapter searchAdapter;
 
     private void setUsername(String username) {
         Log.d("DrawerActivity", "setUsername("+String.valueOf(username)+")");
@@ -166,7 +176,11 @@ public class DrawerActivity extends AppCompatActivity
                 startActivity(new Intent(DrawerActivity.this, BookListActivity.class));
             }
         });
-
+        //search
+        Query query = FirebaseService.getInstance().getDatabase().getReference(DBRefs.sells.name());
+        searchAdapter = new FirebaseSearchListAdapter(query, Book.class, R.layout.basic_search, this);
+        ListView searchList = (ListView) findViewById(R.id.search_list);
+        searchList.setAdapter(searchAdapter);
     }
 
 
@@ -223,6 +237,66 @@ public class DrawerActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.drawer, menu);
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        MenuItemCompat.OnActionExpandListener expandListener = new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                return true;  // Return true to collapse action view
+            }
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;  // Return true to expand action view
+            }
+        };
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        // Assign the listener to that action item
+        MenuItemCompat.setOnActionExpandListener(searchItem, expandListener);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+
+
+        // Get the search close button image view
+        ImageView closeButton = (ImageView) searchView.findViewById(R.id.search_close_btn);
+        // Set on click listener
+        closeButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Search close button clicked");
+                EditText editText = (EditText) findViewById(R.id.search_src_text);
+                //Clear the text from EditText view
+                editText.setText("");
+
+                //Clear query
+                searchView.setQuery("", false);
+               /* searchAdapter = new SearchAdapter(BookListActivity.this, query);
+                mListView.setAdapter(searchAdapter);*/
+            }
+        });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String search) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String search) {
+                Log.d(TAG, "Search :: " + search);
+                searchAdapter.filter(search);
+                return true;
+            }
+        });
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                return false;
+            }
+        });
+
         return true;
     }
 

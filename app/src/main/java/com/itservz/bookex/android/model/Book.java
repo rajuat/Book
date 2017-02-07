@@ -4,7 +4,6 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -163,12 +162,6 @@ public class Book extends BaseObservable {
         return imageUrl;
     }
 
-    @Bindable
-    public Bitmap getImageFromUrl() {
-        new DownloadImageTask(imageFromUrl).execute(imageUrl);
-        return imageFromUrl;
-    }
-
     public void setImageFromUrl(Bitmap imageFromUrl) {
         this.imageFromUrl = imageFromUrl;
     }
@@ -179,15 +172,13 @@ public class Book extends BaseObservable {
             view.setImageURI(null);
         } else {
             new DownloadImageTask(view).execute(imageUri);
-            //view.setImageBitmap(imageFromUrl);
-            //view.setImageURI(Uri.parse(imageUri));
         }
     }
 
-    @BindingAdapter("android:src")
+    /*@BindingAdapter("android:src")
     public static void setImageUri(ImageView view, Uri imageUri) {
         view.setImageURI(imageUri);
-    }
+    }*/
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
