@@ -5,10 +5,10 @@ android {
     buildToolsVersion "24.0.3"
     defaultConfig {
         applicationId "com.itservz.bookex.android"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 24
         versionCode 1
-        versionName "1.0"
+        versionName "0.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -40,7 +40,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:24.2.1'
 
     compile 'com.firebaseui:firebase-ui-database:1.1.1'
-    //compile 'com.firebaseui:firebase-ui-auth:1.1.1'
+    compile 'com.firebaseui:firebase-ui-auth:1.1.1'
     compile 'com.firebaseui:firebase-ui-storage:1.1.1'
 
     /*compile 'com.google.firebase:firebase-database:10.0.1'
@@ -54,7 +54,9 @@ dependencies {
 
     //compile 'com.google.apis:google-api-services-books:v1-rev89-1.22.0'
     compile 'com.google.android.gms:play-services:10.0.1'
-    //compile 'com.google.android.gms:play-services-auth:10.0.1'
+    compile 'com.google.android.gms:play-services-auth:10.0.1'
+
+    //compile 'com.miguelcatalan:materialsearchview:1.4.0'
 
     testCompile 'junit:junit:4.12'
 }

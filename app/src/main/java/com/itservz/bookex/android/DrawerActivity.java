@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -51,16 +52,8 @@ public class DrawerActivity extends AppCompatActivity
     private String username;
     PrefManager prefManager = null;
     private FirebaseSearchListAdapter searchAdapter;
+    private ListView searchList;
 
-    private void setUsername(String username) {
-        Log.d("DrawerActivity", "setUsername("+String.valueOf(username)+")");
-        if (username == null) {
-            username = "James Bond";
-        }
-        boolean isLoggedIn = !username.equals("James Bond");
-        this.username = username;
-        this.usernameTxt.setText(username);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +65,8 @@ public class DrawerActivity extends AppCompatActivity
 
         prefManager = new PrefManager(this);
 
-        usernameTxt = (TextView) findViewById(R.id.usernameTxt);
-        setUsername("James Bond");
+        /*usernameTxt = (TextView) findViewById(R.id.usernameTxt);
+        setUsername("James Bond");*/
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_sell);
         final Intent sellIntent = new Intent(this, SellActivity.class);
@@ -178,12 +171,10 @@ public class DrawerActivity extends AppCompatActivity
         });
         //search
         Query query = FirebaseService.getInstance().getDatabase().getReference(DBRefs.sells.name());
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         searchAdapter = new FirebaseSearchListAdapter(query, Book.class, R.layout.basic_search, this);
-        ListView searchList = (ListView) findViewById(R.id.search_list);
-        searchList.setAdapter(searchAdapter);
+        searchList = (ListView) findViewById(R.id.search_list);
     }
-
-
 
     @Override
     public void onSellItemAdded(final Book book) {
@@ -296,7 +287,7 @@ public class DrawerActivity extends AppCompatActivity
                 return false;
             }
         });
-
+        searchList.setAdapter(searchAdapter);
         return true;
     }
 
@@ -332,4 +323,14 @@ public class DrawerActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    /*private void setUsername(String username) {
+        Log.d("DrawerActivity", "setUsername("+String.valueOf(username)+")");
+        if (username == null) {
+            username = "James Bond";
+        }
+        boolean isLoggedIn = !username.equals("James Bond");
+        this.username = username;
+        this.usernameTxt.setText(username);
+    }*/
 }

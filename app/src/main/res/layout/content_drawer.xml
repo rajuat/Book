@@ -10,12 +10,10 @@
     tools:context="com.itservz.bookex.android.DrawerActivity"
     tools:showIn="@layout/app_bar_drawer"
     >
-
     <ListView
         android:id="@+id/search_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </ListView>
+        android:layout_height="wrap_content"></ListView>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pagerAds"

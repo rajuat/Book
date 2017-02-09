@@ -188,7 +188,6 @@ public class FirebaseSearchListAdapter extends FirebaseListAdapter {
         textView.setText(((Book) model).getTitle() + " : " + position);
     }
 
-
     public void filter(String text) {
         books.clear();
         if (text.isEmpty()) {
@@ -203,6 +202,4 @@ public class FirebaseSearchListAdapter extends FirebaseListAdapter {
         }
         notifyDataSetChanged();
     }
-
-
 }

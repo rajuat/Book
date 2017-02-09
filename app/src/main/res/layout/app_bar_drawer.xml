@@ -7,10 +7,12 @@
     android:fitsSystemWindows="true"
     tools:context="com.itservz.bookex.android.DrawerActivity">
 
-    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v4.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,13 +31,13 @@
                     android:background="?attr/colorPrimary"
                     app:popupTheme="@style/AppTheme.PopupOverlay">
 
-                    <TextView
+                   <!-- <TextView
                         android:id="@+id/usernameTxt"
                         android:layout_width="141dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0"
                         android:gravity="right"
-                        tools:text="Username" />
+                        tools:text="Username" />-->
 
                 </android.support.v7.widget.Toolbar>
 
