@@ -185,13 +185,14 @@ public class FirebaseSearchListAdapter extends FirebaseListAdapter {
     protected void populateView(View v, Object model, int position) {
         Log.d(TAG, "populateView: " + v + " : " + model + " : " + position);
         TextView textView = (TextView) v.findViewById(R.id.search_title);
-        textView.setText(((Book) model).getTitle() + " : " + position);
+        textView.setText(((Book) model).getTitle() );
     }
 
     public void filter(String text) {
         books.clear();
         if (text.isEmpty()) {
-            books.addAll(booksCopy);
+            //books.addAll(booksCopy);
+            return;
         } else {
             text = text.toLowerCase();
             for (Book book : booksCopy) {

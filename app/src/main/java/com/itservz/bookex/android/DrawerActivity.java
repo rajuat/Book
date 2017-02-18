@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -53,7 +52,6 @@ public class DrawerActivity extends AppCompatActivity
     PrefManager prefManager = null;
     private FirebaseSearchListAdapter searchAdapter;
     private ListView searchList;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,7 +149,7 @@ public class DrawerActivity extends AppCompatActivity
             }
         });
 
-        //click
+        //click newly added
         TextView textViewNewlyAdded = (TextView) findViewById(R.id.textViewNewlyAdded);
         textViewNewlyAdded.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,7 +159,7 @@ public class DrawerActivity extends AppCompatActivity
         });
 
 
-        //click
+        //click nearby
         TextView textViewNearby = (TextView) findViewById(R.id.textViewNearby);
         textViewNearby.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,11 +167,12 @@ public class DrawerActivity extends AppCompatActivity
                 startActivity(new Intent(DrawerActivity.this, BookListActivity.class));
             }
         });
+
         //search
         Query query = FirebaseService.getInstance().getDatabase().getReference(DBRefs.sells.name());
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         searchAdapter = new FirebaseSearchListAdapter(query, Book.class, R.layout.basic_search, this);
         searchList = (ListView) findViewById(R.id.search_list);
+        searchList.setNestedScrollingEnabled(true);
     }
 
     @Override
@@ -236,6 +235,11 @@ public class DrawerActivity extends AppCompatActivity
             }
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
+                /*FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                SearchFragment sf = new SearchFragment();
+                ft.replace(R.id.content_drawer_id, sf);
+                ft.addToBackStack(null);
+                ft.commit();*/
                 return true;  // Return true to expand action view
             }
         };
