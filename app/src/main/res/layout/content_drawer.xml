@@ -10,22 +10,14 @@
     tools:context="com.itservz.bookex.android.DrawerActivity"
     tools:showIn="@layout/app_bar_drawer">
 
-
-    <ListView
-        android:id="@+id/search_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical"></ListView>
-
-
-    <android.support.v4.view.ViewPager
+    <!--<android.support.v4.view.ViewPager
         android:id="@+id/pagerAds"
         android:layout_width="match_parent"
         android:layout_height="96dp" />
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="@dimen/text_margin_small" />
+        android:layout_height="@dimen/text_margin_small" />-->
 
     <LinearLayout
         android:id="@+id/category"

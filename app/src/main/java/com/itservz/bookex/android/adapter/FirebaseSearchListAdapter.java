@@ -177,6 +177,9 @@ public class FirebaseSearchListAdapter extends FirebaseListAdapter {
         Log.d(TAG, "populateView: " + v + " : " + model + " : " + position);
         TextView textView = (TextView) v.findViewById(R.id.search_title);
         textView.setText(((Book) model).getTitle() );
+
+        TextView searchCat = (TextView) v.findViewById(R.id.search_list_cat);
+        searchCat.setText(((Book) model).getCategoriesAsString() );
     }
 
     public void filter(String text) {

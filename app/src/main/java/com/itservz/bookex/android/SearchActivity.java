@@ -1,17 +1,19 @@
 package com.itservz.bookex.android;
 
-import android.app.ActionBar;
+
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -36,9 +38,20 @@ public class SearchActivity extends AppCompatActivity {
         searchAdapter = new FirebaseSearchListAdapter(query, Book.class, R.layout.basic_search, this);
         searchList = (ListView) findViewById(R.id.search_list);
 
-        /*ActionBar actionBar = getActionBar();
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);*/
+        searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Book book = searchAdapter.getItem(i);
+                Context context = view.getContext();
+                Intent intent = new Intent(context, BookDetailActivity.class);
+                intent.putExtra(BookDetailFragment.ARG_ITEM_ID, book.getUuid());
+                context.startActivity(intent);
+            }
+        });
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
@@ -105,11 +118,10 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.home) {
+        if (id == android.R.id.home) {
             finish();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

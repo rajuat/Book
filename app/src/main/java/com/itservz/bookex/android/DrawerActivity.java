@@ -1,18 +1,15 @@
 package com.itservz.bookex.android;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,19 +17,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.Query;
 import com.itservz.bookex.android.adapter.FirebaseSearchListAdapter;
 import com.itservz.bookex.android.adapter.SellItemAdapter;
 import com.itservz.bookex.android.adapter.TopBannerAdapter;
 import com.itservz.bookex.android.backend.CategoryService;
-import com.itservz.bookex.android.backend.DBRefs;
 import com.itservz.bookex.android.backend.FirebaseDatabaseService;
 import com.itservz.bookex.android.backend.FirebaseService;
 import com.itservz.bookex.android.backend.LoginDialog;
@@ -85,8 +78,8 @@ public class DrawerActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // top banner
-        viewPager = (ViewPager) findViewById(R.id.pagerAds);
-        viewPager.setAdapter(new TopBannerAdapter((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE), getResources()));
+        /*viewPager = (ViewPager) findViewById(R.id.pagerAds);
+        viewPager.setAdapter(new TopBannerAdapter((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE), getResources()));*/
 
         /*// grid list view
         GridView gridListView = (GridView) findViewById(R.id.sell_list);
@@ -167,12 +160,6 @@ public class DrawerActivity extends AppCompatActivity
                 startActivity(new Intent(DrawerActivity.this, BookListActivity.class));
             }
         });
-
-        //search
-        Query query = FirebaseService.getInstance().getDatabase().getReference(DBRefs.sells.name());
-        searchAdapter = new FirebaseSearchListAdapter(query, Book.class, R.layout.basic_search, this);
-        searchList = (ListView) findViewById(R.id.search_list);
-        searchList.setNestedScrollingEnabled(true);
     }
 
     @Override
@@ -239,7 +226,7 @@ public class DrawerActivity extends AppCompatActivity
             startActivityForResult(new Intent(this, SettingsActivity.class), 1);
             return true;
         } else if (id == R.id.action_search) {
-            startActivityForResult(new Intent(this, SearchActivity.class), 1);
+            startActivity(new Intent(this, SearchActivity.class));
             return true;
         }
 

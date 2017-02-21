@@ -33,21 +33,9 @@ import com.itservz.bookex.android.util.BundleKeys;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * An activity representing a list of Books. This activity
- * has different presentations for handset and tablet-size devices. On
- * handsets, the activity presents a list of items, which when touched,
- * lead to a {@link BookDetailActivity} representing
- * item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
- */
 public class BookListActivity extends AppCompatActivity implements FirebaseDatabaseService.SellItemListener{
 
     private static final String TAG = "BookListActivity";
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
     private boolean mTwoPane;
     private BookListAdapter bookListAdapter;
 
@@ -60,114 +48,36 @@ public class BookListActivity extends AppCompatActivity implements FirebaseDatab
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle((title == null || title.trim().length() < 1) ? getTitle() : title);
-        // Show the Up button in the action bar.
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
-        findViewById(R.id.books_alert).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(BookListActivity.this, "alert", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        findViewById(R.id.books_filter).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(BookListActivity.this, "filter", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        findViewById(R.id.books_sort).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(BookListActivity.this, "sorrt", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        /*ActionMenuView toolbar2 = (ActionMenuView) findViewById(R.id.toolbar2);
-        Menu menu = toolbar2.getMenu();
-        getMenuInflater().inflate(R.menu.menu_books_action, menu);
-        for (int i = 0; i < menu.size(); i++) {
-            menu.getItem(i).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    return onOptionsItemSelected(item);
-                }
-            });
-        }*/
-        /*Toolbar toolbar2 = (Toolbar) findViewById(R.id.toolbar2);
-        toolbar2.inflateMenu(R.menu.menu_books_action);//changed
-        toolbar2.setTitle(null);
-        //toolbar2 menu items CallBack listener
-        toolbar2.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-
-            @Override
-            public boolean onMenuItemClick(MenuItem arg0) {
-                if(arg0.getItemId() == R.id.books_filter){
-                    Toast.makeText(BookListActivity.this, "filter", Toast.LENGTH_LONG).show();
-                } else if(arg0.getItemId() == R.id.books_alert){
-                    Toast.makeText(BookListActivity.this, "alert", Toast.LENGTH_LONG).show();
-                } else if(arg0.getItemId() == R.id.books_sort){
-                    Toast.makeText(BookListActivity.this, "sort", Toast.LENGTH_LONG).show();
-                }
-                return true;
-            }
-        });*/
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.book_list);
         assert recyclerView != null;
         setupRecyclerView(recyclerView);
 
         if (findViewById(R.id.book_detail_container) != null) {
-            // The detail container view will be present only in the            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the            // activity should be in two-pane mode.
             mTwoPane = true;
         }
     }
 
-    //create the toolbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_book_list, menu);
-        // Define the listener
-        MenuItemCompat.OnActionExpandListener expandListener = new MenuItemCompat.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                // Do something when action item collapses
-                return true;  // Return true to collapse action view
-            }
-
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                // Do something when expanded
-                return true;  // Return true to expand action view
-            }
-        };
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        // Assign the listener to that action item
-        MenuItemCompat.setOnActionExpandListener(searchItem, expandListener);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        // Configure the search info and add any event listeners...
-
         return true;
     }
 
-    //create the action on toolbar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             NavUtils.navigateUpTo(this, new Intent(this, DrawerActivity.class));
             return true;
-        } else if(id == R.id.books_filter){
-            Toast.makeText(BookListActivity.this, "filter", Toast.LENGTH_LONG).show();
-        } else if(id == R.id.books_alert){
-            Toast.makeText(BookListActivity.this, "alert", Toast.LENGTH_LONG).show();
-        } else if(id == R.id.books_sort){
-            Toast.makeText(BookListActivity.this, "sort", Toast.LENGTH_LONG).show();
+        } else if (id == R.id.action_search) {
+            startActivity(new Intent(this, SearchActivity.class));
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -276,3 +186,57 @@ public class BookListActivity extends AppCompatActivity implements FirebaseDatab
         }
     }
 }
+
+/*
+        sorting and all
+
+        findViewById(R.id.books_alert).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(BookListActivity.this, "alert", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        findViewById(R.id.books_filter).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(BookListActivity.this, "filter", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        findViewById(R.id.books_sort).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(BookListActivity.this, "sorrt", Toast.LENGTH_SHORT).show();
+            }
+        });
+        */
+        /*ActionMenuView toolbar2 = (ActionMenuView) findViewById(R.id.toolbar2);
+        Menu menu = toolbar2.getMenu();
+        getMenuInflater().inflate(R.menu.menu_books_action, menu);
+        for (int i = 0; i < menu.size(); i++) {
+            menu.getItem(i).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    return onOptionsItemSelected(item);
+                }
+            });
+        }*/
+        /*Toolbar toolbar2 = (Toolbar) findViewById(R.id.toolbar2);
+        toolbar2.inflateMenu(R.menu.menu_books_action);//changed
+        toolbar2.setTitle(null);
+        //toolbar2 menu items CallBack listener
+        toolbar2.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem arg0) {
+                if(arg0.getItemId() == R.id.books_filter){
+                    Toast.makeText(BookListActivity.this, "filter", Toast.LENGTH_LONG).show();
+                } else if(arg0.getItemId() == R.id.books_alert){
+                    Toast.makeText(BookListActivity.this, "alert", Toast.LENGTH_LONG).show();
+                } else if(arg0.getItemId() == R.id.books_sort){
+                    Toast.makeText(BookListActivity.this, "sort", Toast.LENGTH_LONG).show();
+                }
+                return true;
+            }
+        });*/
