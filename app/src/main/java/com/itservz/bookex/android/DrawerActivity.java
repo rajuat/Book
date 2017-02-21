@@ -176,6 +176,12 @@ public class DrawerActivity extends AppCompatActivity
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.drawer, menu);
+        return true;
+    }
+
+    @Override
     public void onSellItemAdded(final Book book) {
         //newly added
         LinearLayout containerNewlyAdded = (LinearLayout) findViewById(R.id.containerNewlyAdded);
@@ -224,82 +230,16 @@ public class DrawerActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.drawer, menu);
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        MenuItemCompat.OnActionExpandListener expandListener = new MenuItemCompat.OnActionExpandListener() {
-            @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
-                return true;  // Return true to collapse action view
-            }
-            @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
-                /*FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                SearchFragment sf = new SearchFragment();
-                ft.replace(R.id.content_drawer_id, sf);
-                ft.addToBackStack(null);
-                ft.commit();*/
-                return true;  // Return true to expand action view
-            }
-        };
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        // Assign the listener to that action item
-        MenuItemCompat.setOnActionExpandListener(searchItem, expandListener);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        // Assumes current activity is the searchable activity
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
 
-
-        // Get the search close button image view
-        ImageView closeButton = (ImageView) searchView.findViewById(R.id.search_close_btn);
-        // Set on click listener
-        closeButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "Search close button clicked");
-                EditText editText = (EditText) findViewById(R.id.search_src_text);
-                //Clear the text from EditText view
-                editText.setText("");
-
-                //Clear query
-                searchView.setQuery("", false);
-               /* searchAdapter = new SearchAdapter(BookListActivity.this, query);
-                mListView.setAdapter(searchAdapter);*/
-            }
-        });
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String search) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String search) {
-                Log.d(TAG, "Search :: " + search);
-                searchAdapter.filter(search);
-                return true;
-            }
-        });
-
-        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                return false;
-            }
-        });
-        searchList.setAdapter(searchAdapter);
-        return true;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             startActivityForResult(new Intent(this, SettingsActivity.class), 1);
+            return true;
+        } else if (id == R.id.action_search) {
+            startActivityForResult(new Intent(this, SearchActivity.class), 1);
             return true;
         }
 
