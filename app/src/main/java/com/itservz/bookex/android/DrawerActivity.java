@@ -3,8 +3,10 @@ package com.itservz.bookex.android;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -12,7 +14,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -22,19 +23,23 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.ErrorCodes;
+import com.firebase.ui.auth.IdpResponse;
+import com.firebase.ui.auth.ResultCodes;
+import com.google.firebase.auth.FirebaseAuth;
 import com.itservz.bookex.android.adapter.FirebaseSearchListAdapter;
 import com.itservz.bookex.android.adapter.SellItemAdapter;
-import com.itservz.bookex.android.adapter.TopBannerAdapter;
 import com.itservz.bookex.android.backend.CategoryService;
 import com.itservz.bookex.android.backend.FirebaseDatabaseService;
-import com.itservz.bookex.android.backend.FirebaseService;
-import com.itservz.bookex.android.backend.LoginDialog;
 import com.itservz.bookex.android.model.Book;
 import com.itservz.bookex.android.model.BookCategory;
 import com.itservz.bookex.android.preference.PrefManager;
 import com.itservz.bookex.android.util.CategoryBuilder;
 import com.itservz.bookex.android.util.ScreenSizeScaler;
 import com.itservz.bookex.android.view.FlowLayout;
+
+import java.util.Arrays;
 
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, FirebaseDatabaseService.SellItemListener {
@@ -222,10 +227,10 @@ public class DrawerActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        /*if (id == R.id.action_settings) {
             startActivityForResult(new Intent(this, SettingsActivity.class), 1);
             return true;
-        } else if (id == R.id.action_search) {
+        } else*/ if (id == R.id.action_search) {
             startActivity(new Intent(this, SearchActivity.class));
             return true;
         }
@@ -245,14 +250,63 @@ public class DrawerActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
         } else if (id == R.id.nav_send) {
         } else if (id == R.id.loginBtn) {
-            LoginDialog.showLoginPrompt(DrawerActivity.this, FirebaseService.getInstance().getApp());
+            //https://github.com/firebase/FirebaseUI-Android/tree/master/auth
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            if (auth.getCurrentUser() != null) {
+                Log.d(TAG, "signin: already");
+            } else {
+                startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
+                .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+                .setIsSmartLockEnabled(!BuildConfig.DEBUG)
+                .build(), RC_SIGN_IN);
+            }
         } else if (id == R.id.logoutBtn) {
-            FirebaseService.getInstance().getAuth().signOut();
+            //FirebaseService.getInstance().getAuth().signOut();
+            AuthUI.getInstance().signOut(this);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    private static final int RC_SIGN_IN = 123;
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            IdpResponse response = IdpResponse.fromResultIntent(data);
+
+            if (resultCode == ResultCodes.OK) {
+                /*Intent in = IdpResponse.getIntent(response);
+                in.setClass(context, SignedInActivity.class);
+                startActivity(SignedInActivity.createIntent(this, response));
+                finish();*/
+                return;
+            } else {
+                if (response == null) {
+                    // User pressed back button
+                    showSnackbar(R.string.sign_in_cancelled);
+                    return;
+                }
+
+                if (response.getErrorCode() == ErrorCodes.NO_NETWORK) {
+                    showSnackbar(R.string.no_internet_connection);
+                    return;
+                }
+
+                if (response.getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
+                    showSnackbar(R.string.unknown_error);
+                    return;
+                }
+            }
+
+            showSnackbar(R.string.unknown_sign_in_response);
+        }
+    }
+
+    private void showSnackbar(@StringRes int errorMessageRes) {
+        Snackbar.make(findViewById(R.id.drawer_layout), errorMessageRes, Snackbar.LENGTH_LONG)
+                .show();
     }
 
     /*private void setUsername(String username) {
