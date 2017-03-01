@@ -53,8 +53,9 @@ dependencies {
     //compile 'org.apache.httpcomponents:httpcore:4.3.2'
 
     //compile 'com.google.apis:google-api-services-books:v1-rev89-1.22.0'
-    compile 'com.google.android.gms:play-services:10.0.1'
+    //compile 'com.google.android.gms:play-services:10.0.1'
     compile 'com.google.android.gms:play-services-auth:10.0.1'
+    compile 'com.google.android.gms:play-services-location:10.0.1'
 
     //compile 'com.miguelcatalan:materialsearchview:1.4.0'
 

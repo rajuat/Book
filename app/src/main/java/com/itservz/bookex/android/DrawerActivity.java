@@ -254,6 +254,7 @@ public class DrawerActivity extends AppCompatActivity
             FirebaseAuth auth = FirebaseAuth.getInstance();
             if (auth.getCurrentUser() != null) {
                 Log.d(TAG, "signin: already");
+                Snackbar.make(findViewById(R.id.drawer_layout), "Already Signin", Snackbar.LENGTH_LONG).show();
             } else {
                 startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
                 .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
@@ -263,6 +264,7 @@ public class DrawerActivity extends AppCompatActivity
         } else if (id == R.id.logoutBtn) {
             //FirebaseService.getInstance().getAuth().signOut();
             AuthUI.getInstance().signOut(this);
+            Snackbar.make(findViewById(R.id.drawer_layout), "Signout", Snackbar.LENGTH_LONG).show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -277,6 +279,7 @@ public class DrawerActivity extends AppCompatActivity
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if (resultCode == ResultCodes.OK) {
+                Snackbar.make(findViewById(R.id.drawer_layout), "Signin", Snackbar.LENGTH_LONG).show();
                 /*Intent in = IdpResponse.getIntent(response);
                 in.setClass(context, SignedInActivity.class);
                 startActivity(SignedInActivity.createIntent(this, response));
