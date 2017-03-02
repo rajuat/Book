@@ -28,6 +28,7 @@ import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.ResultCodes;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.itservz.bookex.android.adapter.FirebaseSearchListAdapter;
 import com.itservz.bookex.android.adapter.SellItemAdapter;
 import com.itservz.bookex.android.backend.CategoryService;
@@ -60,10 +61,6 @@ public class DrawerActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         prefManager = new PrefManager(this);
-
-        /*usernameTxt = (TextView) findViewById(R.id.usernameTxt);
-        setUsername("James Bond");*/
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_sell);
         final Intent sellIntent = new Intent(this, SellActivity.class);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -165,6 +162,29 @@ public class DrawerActivity extends AppCompatActivity
                 startActivity(new Intent(DrawerActivity.this, BookListActivity.class));
             }
         });
+        //user
+        setLoginInfo();
+        View headerView = ((NavigationView)findViewById(R.id.nav_view)).getHeaderView(0);
+        headerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), UserActivity.class );
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void setLoginInfo() {
+        View headerView = ((NavigationView)findViewById(R.id.nav_view)).getHeaderView(0);
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if(currentUser != null){
+            ((TextView)headerView.findViewById(R.id.loginNameTxt)).setText(currentUser.getDisplayName());
+            ((TextView)headerView.findViewById(R.id.loginEmailTxt)).setText(currentUser.getEmail());
+        } else {
+            ((TextView)headerView.findViewById(R.id.loginNameTxt)).setText("Guest");
+            ((TextView)headerView.findViewById(R.id.loginEmailTxt)).setText("");
+        }
     }
 
     @Override
@@ -222,8 +242,6 @@ public class DrawerActivity extends AppCompatActivity
         }
     }
 
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -243,11 +261,7 @@ public class DrawerActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-        } else if (id == R.id.nav_gallery) {
-        } else if (id == R.id.nav_slideshow) {
-        } else if (id == R.id.nav_manage) {
-        } else if (id == R.id.nav_share) {
+        if (id == R.id.nav_share) {
         } else if (id == R.id.nav_send) {
         } else if (id == R.id.loginBtn) {
             //https://github.com/firebase/FirebaseUI-Android/tree/master/auth
@@ -264,6 +278,9 @@ public class DrawerActivity extends AppCompatActivity
         } else if (id == R.id.logoutBtn) {
             //FirebaseService.getInstance().getAuth().signOut();
             AuthUI.getInstance().signOut(this);
+            View headerView = ((NavigationView)findViewById(R.id.nav_view)).getHeaderView(0);
+            ((TextView)headerView.findViewById(R.id.loginNameTxt)).setText("Guest");
+            ((TextView)headerView.findViewById(R.id.loginEmailTxt)).setText("");
             Snackbar.make(findViewById(R.id.drawer_layout), "Signout", Snackbar.LENGTH_LONG).show();
         }
 
@@ -277,9 +294,9 @@ public class DrawerActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
-
             if (resultCode == ResultCodes.OK) {
                 Snackbar.make(findViewById(R.id.drawer_layout), "Signin", Snackbar.LENGTH_LONG).show();
+                setLoginInfo();
                 /*Intent in = IdpResponse.getIntent(response);
                 in.setClass(context, SignedInActivity.class);
                 startActivity(SignedInActivity.createIntent(this, response));
@@ -312,13 +329,4 @@ public class DrawerActivity extends AppCompatActivity
                 .show();
     }
 
-    /*private void setUsername(String username) {
-        Log.d("DrawerActivity", "setUsername("+String.valueOf(username)+")");
-        if (username == null) {
-            username = "James Bond";
-        }
-        boolean isLoggedIn = !username.equals("James Bond");
-        this.username = username;
-        this.usernameTxt.setText(username);
-    }*/
 }
