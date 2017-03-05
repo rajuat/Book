@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.3"
+    buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId "com.itservz.bookex.android"
         minSdkVersion 16
@@ -39,9 +39,9 @@ dependencies {
     compile 'com.android.support:support-vector-drawable:24.2.1'
     compile 'com.android.support:recyclerview-v7:24.2.1'
 
-    compile 'com.firebaseui:firebase-ui-database:1.1.1'
-    compile 'com.firebaseui:firebase-ui-auth:1.1.1'
-    compile 'com.firebaseui:firebase-ui-storage:1.1.1'
+    compile 'com.firebaseui:firebase-ui-database:1.2.0'
+    compile 'com.firebaseui:firebase-ui-auth:1.2.0'
+    compile 'com.firebaseui:firebase-ui-storage:1.2.0'
 
     /*compile 'com.google.firebase:firebase-database:10.0.1'
     compile 'com.google.firebase:firebase-core:10.0.1'
@@ -54,8 +54,8 @@ dependencies {
 
     //compile 'com.google.apis:google-api-services-books:v1-rev89-1.22.0'
     //compile 'com.google.android.gms:play-services:10.0.1'
-    compile 'com.google.android.gms:play-services-auth:10.0.1'
-    compile 'com.google.android.gms:play-services-location:10.0.1'
+    compile 'com.google.android.gms:play-services-auth:10.2.0'
+    compile 'com.google.android.gms:play-services-location:10.2.0'
 
     //compile 'com.miguelcatalan:materialsearchview:1.4.0'
 
