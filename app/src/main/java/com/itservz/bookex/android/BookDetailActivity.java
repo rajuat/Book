@@ -1,6 +1,8 @@
 package com.itservz.bookex.android;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,6 +13,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
+import com.itservz.bookex.android.model.Book;
+import com.itservz.bookex.android.util.BitmapHelper;
+
+import java.io.Serializable;
+
 /**
  * An activity representing a single Book detail screen. This
  * activity is only used narrow width devices. On tablet-size devices,
@@ -19,12 +26,19 @@ import android.view.MenuItem;
  */
 public class BookDetailActivity extends AppCompatActivity {
 
+    private Book book;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
+
+        book = (Book) getIntent().getSerializableExtra(BookDetailFragment.ARG_ITEM_ID);
+
+        Bitmap bitmap = BitmapHelper.decodeSampledBitmapFromBytes(getResources(), book.getImage());
+        findViewById(R.id.backdrop).setBackground(new BitmapDrawable(getResources(), bitmap));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -57,8 +71,8 @@ public class BookDetailActivity extends AppCompatActivity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(BookDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(BookDetailFragment.ARG_ITEM_ID));
+
+            arguments.putSerializable(BookDetailFragment.ARG_ITEM_ID, book);
             BookDetailFragment fragment = new BookDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

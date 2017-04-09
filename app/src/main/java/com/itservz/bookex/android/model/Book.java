@@ -11,6 +11,7 @@ import com.itservz.bookex.android.BR;
 import com.itservz.bookex.android.backend.FirebaseCategoryService;
 import com.itservz.bookex.android.util.DownloadImageTask;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
  * Created by Raju on 12/7/2016.
  */
 
-public class Book extends BaseObservable {
+public class Book extends BaseObservable implements Serializable{
     private static final String TAG = "Book";
     private String uuid = null;
     private String ISBN = null;
@@ -38,6 +39,19 @@ public class Book extends BaseObservable {
     private Location location = new Location();
     private long uploadTime = 0;
     private long soldTime = 0;
+
+    //for person
+    private String phoneNumber;
+
+    @Bindable
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+        notifyChange();
+    }
 
     @Bindable
     public long getUploadTime() {

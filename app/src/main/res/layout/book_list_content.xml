@@ -26,8 +26,9 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:lines="1"
-            android:text="The fundamentals of physics"
+            android:text=""
             android:textAppearance="?attr/textAppearanceListItem"
+            android:textColor="@color/colorPrimaryText"
             android:textStyle="bold" />
 
         <TextView
@@ -36,7 +37,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:lines="1"
-            android:text="Imphal"
+            android:text=""
             android:textAppearance="?attr/textAppearanceListItem"
             android:textColor="@color/colorSecondaryText"
             android:textSize="12sp" />
@@ -47,14 +48,14 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:lines="1"
-            android:text="physics"
+            android:text=""
             android:textAppearance="?attr/textAppearanceListItem"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="12sp" />
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="4dp" />
+            android:layout_height="16dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -66,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight=".5"
-                android:text="₹ 100"
+                android:text="₹ "
                 android:textColor="@color/colorPrimaryText" />
 
             <TextView
@@ -75,11 +76,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/text_margin_small"
                 android:layout_weight=".5"
-                android:text="₹ 1000"
+                android:text="MRP ₹ "
                 android:textColor="@color/md_pink_900" />
         </LinearLayout>
 
-        <LinearLayout
+        <!--<LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
@@ -127,7 +128,7 @@
                     android:textSize="12sp" />
             </LinearLayout>
 
-        </LinearLayout>
+        </LinearLayout>-->
     </LinearLayout>
 
 

@@ -223,7 +223,7 @@ public class DrawerActivity extends AppCompatActivity
                 public void onClick(View view) {
                     Context context = view.getContext();
                     Intent intent = new Intent(context, BookDetailActivity.class);
-                    intent.putExtra(BookDetailFragment.ARG_ITEM_ID, book.getUuid());
+                    intent.putExtra(BookDetailFragment.ARG_ITEM_ID, book);
                     context.startActivity(intent);
                 }
             });
@@ -234,7 +234,7 @@ public class DrawerActivity extends AppCompatActivity
                 public void onClick(View view) {
                     Context context = view.getContext();
                     Intent intent = new Intent(context, BookDetailActivity.class);
-                    intent.putExtra(BookDetailFragment.ARG_ITEM_ID, book.getUuid());
+                    intent.putExtra(BookDetailFragment.ARG_ITEM_ID, book);
                     context.startActivity(intent);
                 }
             });

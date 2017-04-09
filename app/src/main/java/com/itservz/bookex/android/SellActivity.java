@@ -213,7 +213,7 @@ public class SellActivity extends BaseActivity implements
         //80 is recommended - http://stackoverflow.com/questions/35271817/compressing-image-in-android-is-loosing-the-quality-when-image-is-taken-from-pho
         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
         book.setISBN(prefManager.getISBN());
-        book.setTitle(prefManager.getTitle());
+        //book.setTitle(prefManager.getTitle());
         book.setUploadTime(-1 * new Date().getTime());
         book.setCategories(categories);
         String uId = FirebaseDatabaseService.getInstance("").addSellingItem(book);

@@ -47,13 +47,13 @@ public class BookDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
-            mItem = FirebaseDatabaseService.getInstance("").getBooks().get(getArguments().getString(ARG_ITEM_ID));
-
+            //mItem = FirebaseDatabaseService.getInstance("").getBooks().get(getArguments().getString(ARG_ITEM_ID));
+            mItem = (Book) getArguments().getSerializable(ARG_ITEM_ID);
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
                 //appBarLayout.setTitle(mItem.title);
-                appBarLayout.setTitle("To be changed");
+                //appBarLayout.setTitle("To be changed");
             }
         }
     }

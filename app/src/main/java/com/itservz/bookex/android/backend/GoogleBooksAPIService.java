@@ -55,19 +55,19 @@ public class GoogleBooksAPIService {
         //return book;
     }
 
-    public void getBookByISBN(final BookListActivity.SimpleItemRecyclerViewAdapter.ViewHolder holder) {
+    /*public void getBookByISBN(final BookListActivity.SimpleItemRecyclerViewAdapter.ViewHolder holder) {
         if (holder.mItem.getISBN().length() > 0) {
             final String url = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + holder.mItem.getISBN() + "&fields=kind,totalItems,items(volumeInfo/title,volumeInfo/description,volumeInfo/industryIdentifiers,saleInfo/listPrice)";
 
             AsyncHttpClient client = new AsyncHttpClient();
             client.get(url, new AsyncHttpResponseHandler() {
-                /**
+                *//**
                  * Fired when a request returns successfully, override to handle in your own code
                  *
                  * @param statusCode   the status code of the response
                  * @param headers      return headers, if any
                  * @param responseBody the body of the HTTP response from the server
-                 */
+                 *//*
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                     String json = new String(responseBody);
@@ -97,14 +97,14 @@ public class GoogleBooksAPIService {
 
                 }
 
-                /**
+                *//**
                  * Fired when a request fails to complete, override to handle in your own code
                  *
                  * @param statusCode   return HTTP status code
                  * @param headers      return headers, if any
                  * @param responseBody the response body, if any
                  * @param error        the underlying cause of the failure
-                 */
+                 *//*
                 @Override
                 public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                     Log.d("GoogleBooksAPIService", "Book not found: " + error.getMessage());
@@ -112,5 +112,5 @@ public class GoogleBooksAPIService {
             });
         }
 
-    }
+    }*/
 }

@@ -12,7 +12,7 @@
         style="?android:attr/textAppearanceLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="The fundamentals of Physics"
+        android:text=""
         android:textIsSelectable="true" />
 
     <Space

@@ -90,7 +90,7 @@ public class BookListActivity extends AppCompatActivity implements FirebaseDatab
         FirebaseDatabaseService.getInstance(lastFetch).getSellingItems(this, sortBy);
 
         //ArrayList<Book> books = new ArrayList<>(FirebaseDatabaseService.getInstance(lastFetch).getBooks().values());
-        bookListAdapter = new BookListAdapter(this);
+        bookListAdapter = new BookListAdapter(this, sortBy);
         //bookListAdapter.addAll(books);
         //Log.d(TAG, books.toString());
 
@@ -103,7 +103,7 @@ public class BookListActivity extends AppCompatActivity implements FirebaseDatab
         bookListAdapter.add(book);
     }
 
-    public class SimpleItemRecyclerViewAdapter
+   /* public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final List<Book> mValues;
@@ -187,7 +187,7 @@ public class BookListActivity extends AppCompatActivity implements FirebaseDatab
                 return super.toString() + " '" + mTitleView.getText() + "'";
             }
         }
-    }
+    }*/
 }
 
 /*

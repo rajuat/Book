@@ -18,6 +18,7 @@ import com.itservz.bookex.android.BookDetailFragment;
 import com.itservz.bookex.android.R;
 import com.itservz.bookex.android.backend.FirebaseStorageService;
 import com.itservz.bookex.android.model.Book;
+import com.itservz.bookex.android.model.SortBy;
 import com.itservz.bookex.android.util.BitmapHelper;
 
 import java.util.Arrays;
@@ -31,12 +32,19 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
     private SortedList<Book> mBooks;
     private Context context;
 
-    public BookListAdapter(Context context) {
+    public BookListAdapter(Context context, final String sortBy) {
         this.context = context;
+
         mBooks = new SortedList<Book>(Book.class, new SortedList.Callback<Book>() {
             @Override
             public int compare(Book o1, Book o2) {
-                return o1.getYourPrice() - o2.getYourPrice();
+                if(SortBy.price.name().equals(sortBy)){
+                    return o1.getYourPrice() - o2.getYourPrice();
+                } else if(SortBy.recent.name().equals(sortBy)){
+                    return (int)(o2.getUploadTime() - o1.getUploadTime());//uploadTime is in negative
+                } else {
+                    return 0;
+                }
             }
 
             @Override
@@ -97,7 +105,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
             holder.mImageView.setImageBitmap(BitmapFactory.decodeByteArray(img, 0, img.length));
         }
         holder.mTitleView.setText(book.getTitle());
-        holder.mCategories.setText("physics / class 11 / science");
+        holder.mCategories.setText(book.getCategoriesAsString());
         //holder.mCategories.setText(book.getCategoriesAsString());
         holder.mYourPriceView.setText("₹ " + book.getYourPrice());
         holder.mMRPView.setText("₹ " + book.getMrp());
@@ -111,7 +119,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
                     public void onClick(View v) {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, BookDetailActivity.class);
-                        intent.putExtra(BookDetailFragment.ARG_ITEM_ID, holder.mItem.getUuid());
+                        intent.putExtra(BookDetailFragment.ARG_ITEM_ID, holder.mItem);
                         context.startActivity(intent);
                     }
                 }

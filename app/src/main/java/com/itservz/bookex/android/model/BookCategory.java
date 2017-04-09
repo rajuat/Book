@@ -1,11 +1,13 @@
 package com.itservz.bookex.android.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Raju on 12/18/2016.
  * Each item can have list of categories
  */
 
-public class BookCategory {
+public class BookCategory implements Serializable {
     public String longText;
     public String shortText;
 
