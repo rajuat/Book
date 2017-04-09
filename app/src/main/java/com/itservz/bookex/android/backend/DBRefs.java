@@ -5,5 +5,5 @@ package com.itservz.bookex.android.backend;
  */
 
 public enum DBRefs {
-    sells, todoItems, chats
+    sells, todoItems, chats, categories
 }

@@ -48,14 +48,14 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp">
 
-                <TextView
+                <!--<TextView
                     android:id="@+id/notification"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/rounded_border"
                     android:padding="@dimen/tags_margin"
                     android:text="ABC"
-                    android:textColor="@color/colorPrimaryDark" />
+                    android:textColor="@color/colorPrimaryDark" />-->
             </LinearLayout>
         </com.itservz.bookex.android.view.FlowLayout>
     </LinearLayout>
@@ -114,7 +114,7 @@
             android:drawablePadding="@dimen/text_margin_small"
             android:drawableRight="@drawable/ic_chevron_right_24dp"
             android:gravity="right"
-            android:text="Near by"
+            android:text="Best price"
             android:textColor="@color/colorPrimaryDark" />
 
         <HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"

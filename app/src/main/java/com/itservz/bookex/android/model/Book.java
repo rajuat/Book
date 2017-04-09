@@ -8,9 +8,10 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.itservz.bookex.android.BR;
-import com.itservz.bookex.android.backend.CategoryService;
+import com.itservz.bookex.android.backend.FirebaseCategoryService;
 import com.itservz.bookex.android.util.DownloadImageTask;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,8 +34,30 @@ public class Book extends BaseObservable {
     private byte[] image;
     private String imageUrl;
     private Bitmap imageFromUrl;
-    private List<BookCategory> categories = new CategoryService().getCategories();
+    private List<BookCategory> categories ;//new FirebaseCategoryService().getCategories();
     private Location location = new Location();
+    private long uploadTime = 0;
+    private long soldTime = 0;
+
+    @Bindable
+    public long getUploadTime() {
+        return uploadTime;
+    }
+
+    public void setUploadTime(long uploadTime) {
+        this.uploadTime = uploadTime;
+        notifyPropertyChanged(BR.book);
+    }
+
+    @Bindable
+    public long getSoldTime() {
+        return soldTime;
+    }
+
+    public void setSoldTime(long soldTime) {
+        this.soldTime = soldTime;
+        notifyPropertyChanged(BR.book);
+    }
 
     @Bindable
     public String getUuid() {
@@ -115,6 +138,7 @@ public class Book extends BaseObservable {
 
     public void setYourPrice(int yourPrice) {
         this.yourPrice = yourPrice;
+        notifyChange();
     }
 
     @Bindable
@@ -241,6 +265,8 @@ public class Book extends BaseObservable {
                 ", imageUrl=" + imageUrl +
                 ", categories=" + categories +
                 ", location=" + location +
+                ", uploadTime=" + uploadTime +
+                ", soldTime=" + soldTime +
                 '}';
     }
 }

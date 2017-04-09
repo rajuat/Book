@@ -84,18 +84,21 @@ public class BookListActivity extends AppCompatActivity implements FirebaseDatab
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         String lastFetch = new PrefManager(this).getLastFetch();
-        FirebaseDatabaseService.getInstance(lastFetch).getSellingItems(this);
+        Intent intent = getIntent();
+        String sortBy = intent.getStringExtra("sortBy");
+        Log.d(TAG, "setupRecyclerView: " + sortBy);
+        FirebaseDatabaseService.getInstance(lastFetch).getSellingItems(this, sortBy);
 
-        ArrayList<Book> books = new ArrayList<>(FirebaseDatabaseService.getInstance(lastFetch).getBooks().values());
+        //ArrayList<Book> books = new ArrayList<>(FirebaseDatabaseService.getInstance(lastFetch).getBooks().values());
         bookListAdapter = new BookListAdapter(this);
-        bookListAdapter.addAll(books);
-        Log.d(TAG, books.toString());
+        //bookListAdapter.addAll(books);
+        //Log.d(TAG, books.toString());
 
         recyclerView.setAdapter(bookListAdapter);
     }
 
     @Override
-    public void onSellItemAdded(Book book) {
+    public void onSellItemAdded(Book book, String sortBy) {
         Log.d(TAG, book.toString());
         bookListAdapter.add(book);
     }

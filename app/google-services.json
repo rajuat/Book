@@ -1,35 +1,27 @@
 {
   "project_info": {
-    "project_number": "882953822862",
-    "firebase_url": "https://bookexfirebaseproject.firebaseio.com",
-    "project_id": "bookexfirebaseproject",
-    "storage_bucket": "bookexfirebaseproject.appspot.com"
+    "project_number": "904898419818",
+    "firebase_url": "https://bookex-2017.firebaseio.com",
+    "project_id": "bookex-2017",
+    "storage_bucket": "bookex-2017.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:882953822862:android:28e1c9aa1406ebe2",
+        "mobilesdk_app_id": "1:904898419818:android:28e1c9aa1406ebe2",
         "android_client_info": {
           "package_name": "com.itservz.bookex.android"
         }
       },
       "oauth_client": [
         {
-          "client_id": "882953822862-t5igef6gbu19potard13qejt96jr4s80.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.itservz.bookex.android",
-            "certificate_hash": "74BFCA75E03F44BE491F14A62E67FBA1D71E2D6F"
-          }
-        },
-        {
-          "client_id": "882953822862-8ki6dee4c52fkp55fmc8n0p9n8gm8t4r.apps.googleusercontent.com",
+          "client_id": "904898419818-v2krt4arg8rnhbnbv31kecnaq67rbp7r.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCy2I-DRMSBhWrkoY7dgfAnTi5QhVnhHNs"
+          "current_key": "AIzaSyDcUtl6T8v2c3NfM-SYQ8bkO_39UocmrBo"
         }
       ],
       "services": {
@@ -37,13 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "882953822862-8ki6dee4c52fkp55fmc8n0p9n8gm8t4r.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

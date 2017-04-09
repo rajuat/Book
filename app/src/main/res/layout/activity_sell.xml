@@ -122,6 +122,7 @@
                     android:id="@+id/book_yourprice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@={`` + book.yourPrice}"
                     />
 
             </android.support.design.widget.TextInputLayout>
@@ -138,6 +139,13 @@
                     android:layout_height="wrap_content" />
 
             </android.support.design.widget.TextInputLayout>
+
+            <com.itservz.bookex.android.view.FlowLayout
+                android:id="@+id/book_categories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="horizontal"></com.itservz.bookex.android.view.FlowLayout>
 
             <Button
                 android:id="@+id/sell_button"

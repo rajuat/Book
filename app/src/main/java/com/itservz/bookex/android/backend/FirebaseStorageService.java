@@ -17,7 +17,7 @@ import com.itservz.bookex.android.SellActivity;
 public class FirebaseStorageService {
     private StorageReference storageRef;
     private FirebaseStorageService() {
-        storageRef = FirebaseService.getInstance().getStorage().getReferenceFromUrl("gs://bookexfirebaseproject.appspot.com/");
+        storageRef = FirebaseService.getInstance().getStorage().getReferenceFromUrl("gs://bookex-2017.appspot.com");
     }
     private static FirebaseStorageService INSTANCE = new FirebaseStorageService();
     public static FirebaseStorageService getInstance() {
@@ -36,12 +36,12 @@ public class FirebaseStorageService {
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(sellActivity, "ImageNotUploaded", Toast.LENGTH_SHORT).show();
+                Toast.makeText(sellActivity, "Image Not Uploaded", Toast.LENGTH_SHORT).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(sellActivity, "ImageUploaded: " + taskSnapshot.getDownloadUrl().toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(sellActivity, "Image Uploaded", Toast.LENGTH_SHORT).show();
             }
         });
     }

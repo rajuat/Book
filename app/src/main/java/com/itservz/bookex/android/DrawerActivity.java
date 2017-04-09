@@ -31,10 +31,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.itservz.bookex.android.adapter.FirebaseSearchListAdapter;
 import com.itservz.bookex.android.adapter.SellItemAdapter;
-import com.itservz.bookex.android.backend.CategoryService;
+import com.itservz.bookex.android.backend.FirebaseCategoryService;
 import com.itservz.bookex.android.backend.FirebaseDatabaseService;
 import com.itservz.bookex.android.model.Book;
 import com.itservz.bookex.android.model.BookCategory;
+import com.itservz.bookex.android.model.SortBy;
 import com.itservz.bookex.android.preference.PrefManager;
 import com.itservz.bookex.android.util.CategoryBuilder;
 import com.itservz.bookex.android.util.ScreenSizeScaler;
@@ -43,7 +44,7 @@ import com.itservz.bookex.android.view.FlowLayout;
 import java.util.Arrays;
 
 public class DrawerActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, FirebaseDatabaseService.SellItemListener {
+        implements NavigationView.OnNavigationItemSelectedListener, FirebaseDatabaseService.SellItemListener, FirebaseCategoryService.CategoryListener {
     private static final String TAG = "DrawerActivity";
     private ViewPager viewPager;
     private TextView usernameTxt;
@@ -51,6 +52,8 @@ public class DrawerActivity extends AppCompatActivity
     PrefManager prefManager = null;
     private FirebaseSearchListAdapter searchAdapter;
     private ListView searchList;
+    private FlowLayout categoriesFL;
+    private CategoryBuilder categoryBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,8 @@ public class DrawerActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        login();//user are ask to login
 
         prefManager = new PrefManager(this);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_sell);
@@ -80,20 +85,17 @@ public class DrawerActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // top banner
-        /*viewPager = (ViewPager) findViewById(R.id.pagerAds);
-        viewPager.setAdapter(new TopBannerAdapter((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE), getResources()));*/
+        /*viewPager = (ViewPager) findViewById(R.id.pagerAds);        viewPager.setAdapter(new TopBannerAdapter((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE), getResources()));*/
 
         /*// grid list view
-        GridView gridListView = (GridView) findViewById(R.id.sell_list);
-        List<Book> books = new FirebaseDatabaseService().getSellingItems(this);
-        SellItemAdapter adapter = new SellItemAdapter(this, books);
-        gridListView.setAdapter(adapter);*/
+        GridView gridListView = (GridView) findViewById(R.id.sell_list);        List<Book> books = new FirebaseDatabaseService().getSellingItems(this);        SellItemAdapter adapter = new SellItemAdapter(this, books);        gridListView.setAdapter(adapter);*/
 
         // newly added
-        FirebaseDatabaseService.getInstance("").getSellingItems(this);
+        FirebaseDatabaseService.getInstance("").getSellingItems(this, SortBy.recent.name());
+        FirebaseDatabaseService.getInstance("").getSellingItems(this, SortBy.price.name());
 
         //NEW CATEGORY
-        final FlowLayout categoriesFL = (FlowLayout) findViewById(R.id.flowLayout);
+        categoriesFL = (FlowLayout) findViewById(R.id.flowLayout);
         categoriesFL.setEnabled(true);
         categoriesFL.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -122,12 +124,11 @@ public class DrawerActivity extends AppCompatActivity
                 return false;
             }
         });
-        final CategoryBuilder categoryBuilder = new CategoryBuilder(this);
-        for (BookCategory cat : new CategoryService().getCategories()) {
-            categoryBuilder.addCategories(categoriesFL, cat.longText);
-        }
-        //click
-        final boolean[] expand = {true};
+        categoryBuilder = new CategoryBuilder(this);
+        new FirebaseCategoryService(this).getCategories();
+
+        // show all less category
+        /*final boolean[] expand = {true};
         final TextView textViewCat = (TextView) findViewById(R.id.text_view_category);
         textViewCat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,14 +143,16 @@ public class DrawerActivity extends AppCompatActivity
                     expand[0] = true;
                 }
             }
-        });
+        });*/
 
         //click newly added
         TextView textViewNewlyAdded = (TextView) findViewById(R.id.textViewNewlyAdded);
         textViewNewlyAdded.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(DrawerActivity.this, BookListActivity.class));
+                Intent intent = new Intent(DrawerActivity.this, BookListActivity.class);
+                intent.putExtra("sortBy", SortBy.recent.name());
+                startActivity(intent);
             }
         });
 
@@ -159,9 +162,12 @@ public class DrawerActivity extends AppCompatActivity
         textViewNearby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(DrawerActivity.this, BookListActivity.class));
+                Intent intent = new Intent(DrawerActivity.this, BookListActivity.class);
+                intent.putExtra("sortBy", SortBy.price.name());
+                startActivity(intent);
             }
         });
+
         //user
         setLoginInfo();
         View headerView = ((NavigationView)findViewById(R.id.nav_view)).getHeaderView(0);
@@ -172,6 +178,11 @@ public class DrawerActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onCategoryAdded(BookCategory bookCategory) {
+        categoryBuilder.addCategories(categoriesFL, bookCategory.longText);
     }
 
     private void setLoginInfo() {
@@ -194,7 +205,7 @@ public class DrawerActivity extends AppCompatActivity
     }
 
     @Override
-    public void onSellItemAdded(final Book book) {
+    public void onSellItemAdded(final Book book, final String sortBy) {
         //newly added
         LinearLayout containerNewlyAdded = (LinearLayout) findViewById(R.id.containerNewlyAdded);
         LinearLayout containerNearby = (LinearLayout) findViewById(R.id.containerNearby);
@@ -202,34 +213,37 @@ public class DrawerActivity extends AppCompatActivity
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(dpAsPixels, dpAsPixels, 0, dpAsPixels);
-        View view = new SellItemAdapter(this, null).createBookItem(null, book);
-        view.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
-        containerNewlyAdded.addView(view, layoutParams);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Context context = view.getContext();
-                Intent intent = new Intent(context, BookDetailActivity.class);
-                intent.putExtra(BookDetailFragment.ARG_ITEM_ID, book.getUuid());
-                context.startActivity(intent);
-            }
-        });
 
-        View nearbyView = new SellItemAdapter(this, null).createBookItem(null, book);
-        nearbyView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Context context = view.getContext();
-                Intent intent = new Intent(context, BookDetailActivity.class);
-                intent.putExtra(BookDetailFragment.ARG_ITEM_ID, book.getUuid());
-                context.startActivity(intent);
-            }
-        });
-        nearbyView.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
-        containerNearby.addView(nearbyView, layoutParams);
+        if(SortBy.recent.name().equals(sortBy)) {
+            View view = new SellItemAdapter(this, null).createBookItem(null, book);
+            view.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+            containerNewlyAdded.addView(view, layoutParams);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Context context = view.getContext();
+                    Intent intent = new Intent(context, BookDetailActivity.class);
+                    intent.putExtra(BookDetailFragment.ARG_ITEM_ID, book.getUuid());
+                    context.startActivity(intent);
+                }
+            });
+        } else if(SortBy.price.name().equals(sortBy)) {
+            View priceView = new SellItemAdapter(this, null).createBookItem(null, book);
+            priceView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Context context = view.getContext();
+                    Intent intent = new Intent(context, BookDetailActivity.class);
+                    intent.putExtra(BookDetailFragment.ARG_ITEM_ID, book.getUuid());
+                    context.startActivity(intent);
+                }
+            });
+            priceView.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
+            containerNearby.addView(priceView, layoutParams);
+        }
 
         prefManager.setLastFetch(book.getUuid());
-        Toast.makeText(this, "book added", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "book added", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -264,17 +278,7 @@ public class DrawerActivity extends AppCompatActivity
         if (id == R.id.nav_share) {
         } else if (id == R.id.nav_send) {
         } else if (id == R.id.loginBtn) {
-            //https://github.com/firebase/FirebaseUI-Android/tree/master/auth
-            FirebaseAuth auth = FirebaseAuth.getInstance();
-            if (auth.getCurrentUser() != null) {
-                Log.d(TAG, "signin: already");
-                Snackbar.make(findViewById(R.id.drawer_layout), "Already Signin", Snackbar.LENGTH_LONG).show();
-            } else {
-                startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
-                .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
-                .setIsSmartLockEnabled(!BuildConfig.DEBUG)
-                .build(), RC_SIGN_IN);
-            }
+            login();
         } else if (id == R.id.logoutBtn) {
             //FirebaseService.getInstance().getAuth().signOut();
             AuthUI.getInstance().signOut(this);
@@ -288,6 +292,21 @@ public class DrawerActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private void login() {
+        //https://github.com/firebase/FirebaseUI-Android/tree/master/auth
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() != null) {
+            Log.d(TAG, "signin: already");
+            Snackbar.make(findViewById(R.id.drawer_layout), "Already Signin", Snackbar.LENGTH_LONG).show();
+        } else {
+            startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
+            .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+            .setIsSmartLockEnabled(!BuildConfig.DEBUG)
+            .build(), RC_SIGN_IN);
+        }
+    }
+
     private static final int RC_SIGN_IN = 123;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -328,5 +347,6 @@ public class DrawerActivity extends AppCompatActivity
         Snackbar.make(findViewById(R.id.drawer_layout), errorMessageRes, Snackbar.LENGTH_LONG)
                 .show();
     }
+
 
 }

@@ -10,6 +10,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.itservz.bookex.android.model.Book;
+import com.itservz.bookex.android.model.SortBy;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -28,7 +29,7 @@ public class FirebaseDatabaseService {
     private FirebaseDatabaseService(String lastPosted){
         sellsReference = FirebaseService.getInstance().getDatabase().getReference(DBRefs.sells.name());
         sellsReference.keepSynced(true);
-        sellsQuery = sellsReference.orderByKey().startAt(lastPosted);
+
     }
 
     public static FirebaseDatabaseService getInstance(String lastPosted){
@@ -41,16 +42,23 @@ public class FirebaseDatabaseService {
         return books;
     }
 
-    public Collection<Book> getSellingItems(final SellItemListener sellItemListener){
+    public Collection<Book> getSellingItems(final SellItemListener sellItemListener, final String sortBy){
         //final SellItemListener sellItemListener = null;
-        sellsReference.addChildEventListener(new ChildEventListener() {
+        if(SortBy.price.name().equals(sortBy)){
+            sellsQuery = sellsReference.orderByChild("yourPrice");
+        } else if(SortBy.recent.name().equals(sortBy)) {
+            sellsQuery = sellsReference.orderByChild("uploadTime");
+        } else {
+            sellsQuery = sellsReference.orderByKey();//default
+        }
+        sellsQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 Book book = dataSnapshot.getValue(Book.class);
                 Log.d(TAG, book.getTitle());
                 books.put(book.getUuid(), book);
                 if(sellItemListener != null){
-                    sellItemListener.onSellItemAdded(book);
+                    sellItemListener.onSellItemAdded(book, sortBy);
                     Log.d(TAG, book.getUuid());
                 }
             }
@@ -79,7 +87,7 @@ public class FirebaseDatabaseService {
     }
 
     public interface SellItemListener{
-        public void onSellItemAdded(Book book);
+        public void onSellItemAdded(Book book, String sortBy);
     }
 
     @NonNull

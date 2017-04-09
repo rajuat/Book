@@ -17,27 +17,36 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.itservz.bookex.android.backend.FirebaseCategoryService;
 import com.itservz.bookex.android.backend.FirebaseDatabaseService;
 import com.itservz.bookex.android.backend.FirebaseStorageService;
 import com.itservz.bookex.android.backend.ImagePickerService;
 import com.itservz.bookex.android.databinding.ActivitySellBinding;
 import com.itservz.bookex.android.model.Book;
+import com.itservz.bookex.android.model.BookCategory;
 import com.itservz.bookex.android.model.SellHandler;
 import com.itservz.bookex.android.preference.PrefManager;
 import com.itservz.bookex.android.util.BitmapHelper;
+import com.itservz.bookex.android.util.ScreenSizeScaler;
+import com.itservz.bookex.android.view.FlowLayout;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class SellActivity extends BaseActivity implements
-        View.OnClickListener {
+        View.OnClickListener, FirebaseCategoryService.CategoryListener {
     protected static final String TAG = "SellActivity";
     private Book book;
+    private List<BookCategory> categories = new ArrayList<>();
     int PICK_IMAGE = 1;
     private ImageView bookImage;
     private InputStream imageStream;
@@ -51,6 +60,7 @@ public class SellActivity extends BaseActivity implements
     protected TextView mLocationAddressTextView;
     ProgressBar mProgressBar;
     Button mFetchAddressButton;
+    private FlowLayout bookCategoriesLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +71,9 @@ public class SellActivity extends BaseActivity implements
         ActivitySellBinding binding = DataBindingUtil.setContentView(this,R.layout.activity_sell);
         binding.setBook(book);
         binding.setHandler(new SellHandler());
+
+        new FirebaseCategoryService(this).getCategories();
+        bookCategoriesLayout = (FlowLayout) findViewById(R.id.book_categories);
 
         prefManager = new PrefManager(this);
 
@@ -147,6 +160,51 @@ public class SellActivity extends BaseActivity implements
     }
 
     @Override
+    public void onCategoryAdded(BookCategory bookCategory) {
+        addCategories(bookCategoriesLayout, bookCategory.longText);
+    }
+
+    private void addCategories(FlowLayout flowLayout, String label) {
+        LinearLayout linearLayout = new LinearLayout(this);
+        LinearLayout.LayoutParams layout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        linearLayout.setLayoutParams(layout);
+        ScreenSizeScaler screenSizeScaler = new ScreenSizeScaler(getResources());
+        final int px = screenSizeScaler.getdpAspixel(8);
+        linearLayout.setPadding(px, px, px, px);
+
+        final TextView textView = new TextView(this);
+        textView.setLayoutParams(layout);
+        textView.setBackground(getResources().getDrawable(R.drawable.rounded_border));
+        textView.setPadding(px, px, px, px);
+        textView.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+        textView.setText(label);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String value = textView.getText().toString();
+                if ("added".equals(textView.getTag())) {//deselect
+                    textView.setBackground(getResources().getDrawable(R.drawable.rounded_border));
+                    textView.setPadding(px, px, px, px);
+                    if (categories.contains(value)) {
+                        categories.remove(new BookCategory(value, value));
+                    }
+                    textView.setTag("");
+                } else {
+                    textView.setBackground(getResources().getDrawable(R.drawable.rounded_border_selected));
+                    textView.setPadding(px, px, px, px);
+                    if (!categories.contains(value)) {
+                        categories.add(new BookCategory(value, value));
+                    }
+                    textView.setTag("added");
+                }
+            }
+        });
+
+        linearLayout.addView(textView);
+        flowLayout.addView(linearLayout);
+    }
+
+    @Override
     public void onClick(View v) {
         bookImage.setDrawingCacheEnabled(true);
         bookImage.buildDrawingCache();
@@ -156,6 +214,8 @@ public class SellActivity extends BaseActivity implements
         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
         book.setISBN(prefManager.getISBN());
         book.setTitle(prefManager.getTitle());
+        book.setUploadTime(-1 * new Date().getTime());
+        book.setCategories(categories);
         String uId = FirebaseDatabaseService.getInstance("").addSellingItem(book);
         FirebaseStorageService.getInstance().setImage(uId, baos.toByteArray(), this);
         Snackbar.make(v, "Ad posted", Snackbar.LENGTH_LONG).setAction("Action", null).show();
@@ -292,4 +352,5 @@ public class SellActivity extends BaseActivity implements
             }
         }
     }
+
 }
