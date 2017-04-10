@@ -2,11 +2,15 @@ package com.itservz.bookex.android.util;
 
 import android.util.Log;
 
+import com.itservz.bookex.android.model.Location;
+
 /**
  * Created by Raju on 12/28/2016.
  */
 
 public class DistanceCalculator {
+
+
 
     public static double distance(double lat1, double lng1, double lat2, double lng2) {
         double earthRadius = 6371; //kilometers

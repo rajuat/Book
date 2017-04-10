@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
-            android:text="₹ 100"
+            android:text=""
             android:textColor="@color/colorPrimaryText" />
 
         <TextView
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/text_margin_small"
             android:layout_weight=".5"
-            android:text="₹ 1000"
+            android:text=""
             android:textColor="@color/md_pink_900" />
     </LinearLayout>
 
@@ -64,6 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
+            android:id="@+id/book_list_place_icon"
             android:background="@drawable/ic_place_black_24dp" />
 
         <LinearLayout
@@ -77,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:lines="1"
-                android:text="2 km away"
+                android:text=""
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="12sp" />
@@ -88,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:lines="1"
-                android:text="Imphal"
+                android:text=""
                 android:textAppearance="?attr/textAppearanceListItem" />
         </LinearLayout>
     </LinearLayout>
@@ -113,7 +114,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:lines="4"
-        android:text="Sometimes the scent of seasonal hand wash is all we need to rouse our holiday spirits. Available in an array of festive fragrances, our naturally derived gel hand wash will leave your hands soft, clean and ready to be tucked into a pair of fair isle mittens. It really is the most wonderful time of the year."
+        android:text="Description: "
         android:textAppearance="?attr/textAppearanceListItem"
         android:textSize="12sp" />
 
@@ -121,7 +122,17 @@
         android:layout_width="match_parent"
         android:layout_height="8dp" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/book_condition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:lines="4"
+        android:text="Condition: "
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="12sp" />
+
+    <!--<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -167,7 +178,7 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
-    </LinearLayout>
+    </LinearLayout>-->
     <Space
         android:layout_width="match_parent"
         android:layout_height="8dp" />
@@ -177,7 +188,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:lines="1"
-        android:text="physics"
+        android:text="Categories: "
         android:textAppearance="?attr/textAppearanceListItem"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="12sp" />
@@ -185,8 +196,6 @@
     <Space
         android:layout_width="match_parent"
         android:layout_height="8dp" />
-
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -209,24 +218,31 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="James Bond" />
+                android:id="@+id/seller_name"
+                android:text="" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="james@bond.com" />
+                android:id="@+id/seller_email"
+                android:text="" />
 
             <View
                 android:layout_width="wrap_content"
                 android:layout_height="2dp" />
 
-            <ImageView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_contact_phone_black_24dp" />
+                android:id="@+id/seller_phone"
+                android:text="" />
+            <!--<ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_contact_phone_black_24dp" />-->
         </LinearLayout>
     </LinearLayout>
-    <Space
+    <!--<Space
         android:layout_width="match_parent"
         android:layout_height="8dp" />
     <LinearLayout
@@ -269,7 +285,7 @@
                 android:textSize="6dp" />
         </LinearLayout>
 
-    </LinearLayout>
+    </LinearLayout>-->
 
 
 </LinearLayout>

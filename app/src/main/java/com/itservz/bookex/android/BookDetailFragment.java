@@ -7,14 +7,17 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.itservz.bookex.android.backend.FirebaseDatabaseService;
 import com.itservz.bookex.android.model.Book;
+import com.itservz.bookex.android.model.Location;
+import com.itservz.bookex.android.util.DistanceCalculator;
 import com.itservz.bookex.android.util.LetterTileProvider;
 
 /**
@@ -33,7 +36,9 @@ public class BookDetailFragment extends Fragment {
     /**
      * The dummy content this fragment is presenting.
      */
-    private Book mItem;
+    private Book book;
+    private android.location.Location location;
+    private BookDetailActivity activity;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -46,14 +51,16 @@ public class BookDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        activity = (BookDetailActivity) getActivity();
+
         if (getArguments().containsKey(ARG_ITEM_ID)) {
-            //mItem = FirebaseDatabaseService.getInstance("").getBooks().get(getArguments().getString(ARG_ITEM_ID));
-            mItem = (Book) getArguments().getSerializable(ARG_ITEM_ID);
+            //book = FirebaseDatabaseService.getInstance("").getBooks().get(getArguments().getString(ARG_ITEM_ID));
+            book = (Book) getArguments().getSerializable(ARG_ITEM_ID);
+            location = (android.location.Location) getArguments().getParcelable(Location.LOCATION_KEY);
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                //appBarLayout.setTitle(mItem.title);
-                //appBarLayout.setTitle("To be changed");
+                appBarLayout.setTitle(book.getTitle());
             }
         }
     }
@@ -61,17 +68,35 @@ public class BookDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.book_detail, container, false);
-        if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.book_detail)).setText(mItem.getTitle());
+        if (book != null) {
+            ((TextView) rootView.findViewById(R.id.book_detail)).setText(book.getTitle());
+            ((TextView) rootView.findViewById(R.id.booklist_yprice)).setText("₹ " + book.getYourPrice());
+            if(book.getMrp() != 0){
+                ((TextView) rootView.findViewById(R.id.book_list_mrp)).setText("₹ " + book.getMrp());
+            }
+            if(book.getLocation()!= null && book.getLocation().latitude != 0
+                    && location != null && location.getLatitude() != 0){
+                double distanceinKM = DistanceCalculator.distance(book.getLocation().latitude, book.getLocation().longitude, location.getLatitude(), location.getLongitude());
+                ((TextView) rootView.findViewById(R.id.book_place_dis)).setText(distanceinKM + "km away");
+            }
+            ((TextView) rootView.findViewById(R.id.book_description)).setText(book.getDescription());
+            ((TextView) rootView.findViewById(R.id.book_cat)).setText(book.getCategoriesAsString());
+            ((TextView) rootView.findViewById(R.id.book_condition)).append(book.getCondition());
+
         }
         final Resources res = getResources();
         final int tileSize = res.getDimensionPixelSize(R.dimen.letter_tile_size);
 
         final LetterTileProvider tileProvider = new LetterTileProvider(this.getActivity());
-        final Bitmap letterTile = tileProvider.getLetterTile("JB", "JB", tileSize, tileSize);
+        String login = activity.getLoginDisplayName();
+        final Bitmap letterTile = tileProvider.getLetterTile(login, login, tileSize, tileSize);
 
         ImageView profile = (ImageView) rootView.findViewById(R.id.seller_profile);
         profile.setImageDrawable(new BitmapDrawable(getResources(), letterTile));
+
+        ((TextView) rootView.findViewById(R.id.seller_name)).setText(book.seller.name);
+        ((TextView) rootView.findViewById(R.id.seller_email)).setText(book.seller.email);
+        ((TextView) rootView.findViewById(R.id.seller_phone)).setText(book.seller.phone);
 
         return rootView;
     }

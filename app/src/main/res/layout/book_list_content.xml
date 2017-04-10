@@ -57,6 +57,17 @@
             android:layout_width="match_parent"
             android:layout_height="16dp" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/book_list_condition"
+            android:text="Condition: "
+            />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -67,7 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight=".5"
-                android:text="₹ "
+                android:text=""
                 android:textColor="@color/colorPrimaryText" />
 
             <TextView
@@ -76,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/text_margin_small"
                 android:layout_weight=".5"
-                android:text="MRP ₹ "
+                android:text=""
                 android:textColor="@color/md_pink_900" />
         </LinearLayout>
 

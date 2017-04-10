@@ -42,14 +42,17 @@ public class Book extends BaseObservable implements Serializable{
 
     //for person
     private String phoneNumber;
+    public User seller = new User();
 
     @Bindable
     public String getPhoneNumber() {
-        return phoneNumber;
+        //return phoneNumber;
+        return seller.phone;
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        //this.phoneNumber = phoneNumber;
+        this.seller.phone = phoneNumber;
         notifyChange();
     }
 

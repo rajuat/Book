@@ -33,7 +33,7 @@ import com.itservz.bookex.android.util.BundleKeys;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookListActivity extends AppCompatActivity implements FirebaseDatabaseService.SellItemListener{
+public class BookListActivity extends BaseActivity implements FirebaseDatabaseService.SellItemListener{
 
     private static final String TAG = "BookListActivity";
     private boolean mTwoPane;
@@ -61,6 +61,16 @@ public class BookListActivity extends AppCompatActivity implements FirebaseDatab
         if (findViewById(R.id.book_detail_container) != null) {
             mTwoPane = true;
         }
+    }
+
+    @Override
+    void displayAddressOutput() {
+
+    }
+
+    @Override
+    void updateUIWidgets() {
+
     }
 
     @Override

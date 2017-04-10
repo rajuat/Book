@@ -88,7 +88,9 @@ public class SellItemAdapter extends BaseAdapter {
             imgIcon.setImageBitmap(BitmapFactory.decodeByteArray(imageDecoded, 0, imageDecoded.length));
         }*/
         yourPrice.append(""+book.getYourPrice());
-        mrp.setText("₹ "+book.getMrp());
+        if(book.getMrp() > 0){
+            mrp.setText("₹ "+book.getMrp());
+        }
         mrp.setPaintFlags(mrp.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         title.setText(book.getTitle());
         return convertView;

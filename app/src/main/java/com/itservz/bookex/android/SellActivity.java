@@ -216,6 +216,8 @@ public class SellActivity extends BaseActivity implements
         //book.setTitle(prefManager.getTitle());
         book.setUploadTime(-1 * new Date().getTime());
         book.setCategories(categories);
+        book.seller.name = getLoginDisplayName();
+        book.seller.email = getLoginEmail();
         String uId = FirebaseDatabaseService.getInstance("").addSellingItem(book);
         FirebaseStorageService.getInstance().setImage(uId, baos.toByteArray(), this);
         Snackbar.make(v, "Ad posted", Snackbar.LENGTH_LONG).setAction("Action", null).show();

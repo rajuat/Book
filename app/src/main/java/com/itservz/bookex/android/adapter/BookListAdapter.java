@@ -106,9 +106,11 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
         }
         holder.mTitleView.setText(book.getTitle());
         holder.mCategories.setText(book.getCategoriesAsString());
-        //holder.mCategories.setText(book.getCategoriesAsString());
+        holder.mCondition.append(book.getCondition());
         holder.mYourPriceView.setText("₹ " + book.getYourPrice());
-        holder.mMRPView.setText("₹ " + book.getMrp());
+        if(book.getMrp() > 0) {
+            holder.mMRPView.setText("MRP ₹ " + book.getMrp());
+        }
         /*if(book.mrp == 0){
             new GoogleBooksAPIService().getBookByISBN(holder);
         }*/
@@ -185,6 +187,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
         public final TextView mCategories;
         public final TextView mYourPriceView;
         public final TextView mMRPView;
+        public final TextView mCondition;
         public Book mItem;
 
         public BookViewHolder(View view) {
@@ -193,6 +196,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
             mImageView = (ImageView) view.findViewById(R.id.bookImage);
             mTitleView = (TextView) view.findViewById(R.id.book_list_title);
             mCategories = (TextView) view.findViewById(R.id.book_list_cat);
+            mCondition = (TextView) view.findViewById(R.id.book_list_condition);
             mYourPriceView = (TextView) view.findViewById(R.id.booklist_yprice);
             mMRPView = (TextView) view.findViewById(R.id.book_list_mrp);
             mMRPView.setPaintFlags(mMRPView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);

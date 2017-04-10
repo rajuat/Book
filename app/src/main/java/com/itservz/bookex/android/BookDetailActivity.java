@@ -12,8 +12,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import com.itservz.bookex.android.model.Book;
+import com.itservz.bookex.android.model.Location;
 import com.itservz.bookex.android.util.BitmapHelper;
 
 import java.io.Serializable;
@@ -24,7 +26,7 @@ import java.io.Serializable;
  * item details are presented side-by-side with a list of items
  * in a {@link BookListActivity}.
  */
-public class BookDetailActivity extends AppCompatActivity {
+public class BookDetailActivity extends BaseActivity {
 
     private Book book;
 
@@ -38,7 +40,7 @@ public class BookDetailActivity extends AppCompatActivity {
         book = (Book) getIntent().getSerializableExtra(BookDetailFragment.ARG_ITEM_ID);
 
         Bitmap bitmap = BitmapHelper.decodeSampledBitmapFromBytes(getResources(), book.getImage());
-        findViewById(R.id.backdrop).setBackground(new BitmapDrawable(getResources(), bitmap));
+        ((ImageView)findViewById(R.id.backdrop)).setImageDrawable(new BitmapDrawable(getResources(), bitmap));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -73,12 +75,23 @@ public class BookDetailActivity extends AppCompatActivity {
             Bundle arguments = new Bundle();
 
             arguments.putSerializable(BookDetailFragment.ARG_ITEM_ID, book);
+            arguments.putParcelable(Location.LOCATION_KEY, mLastLocation);
             BookDetailFragment fragment = new BookDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.book_detail_container, fragment)
                     .commit();
         }
+    }
+
+    @Override
+    void displayAddressOutput() {
+
+    }
+
+    @Override
+    void updateUIWidgets() {
+
     }
 
     @Override

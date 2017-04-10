@@ -9,6 +9,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -18,10 +19,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.auth.FirebaseAuth;
 import com.itservz.bookex.android.service.FetchAddressIntentService;
+
+import java.util.Arrays;
 
 /**
  * Created by Raju on 12/28/2016.
@@ -222,5 +227,37 @@ public abstract class BaseActivity extends AppCompatActivity implements GoogleAp
 
     abstract void displayAddressOutput();
     abstract void updateUIWidgets();
+
+    //login
+    protected static final int RC_SIGN_IN = 123;
+    protected void login() {
+        //https://github.com/firebase/FirebaseUI-Android/tree/master/auth
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() != null) {
+            Log.d(TAG, "signin: already");
+            Snackbar.make(findViewById(R.id.drawer_layout), "Already Signin", Snackbar.LENGTH_LONG).show();
+        } else {
+            startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
+                    .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+                    .setIsSmartLockEnabled(!BuildConfig.DEBUG)
+                    .build(), RC_SIGN_IN);
+        }
+    }
+
+    protected String getLoginDisplayName(){
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if(auth.getCurrentUser()!= null){
+            return auth.getCurrentUser().getDisplayName();
+        }
+        return "Guest";
+    }
+
+    protected String getLoginEmail(){
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if(auth.getCurrentUser()!= null){
+            return auth.getCurrentUser().getEmail();
+        }
+        return "Guest";
+    }
 
 }

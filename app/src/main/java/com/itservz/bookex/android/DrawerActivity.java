@@ -43,7 +43,7 @@ import com.itservz.bookex.android.view.FlowLayout;
 
 import java.util.Arrays;
 
-public class DrawerActivity extends AppCompatActivity
+public class DrawerActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, FirebaseDatabaseService.SellItemListener, FirebaseCategoryService.CategoryListener {
     private static final String TAG = "DrawerActivity";
     private ViewPager viewPager;
@@ -181,6 +181,16 @@ public class DrawerActivity extends AppCompatActivity
     }
 
     @Override
+    void displayAddressOutput() {
+
+    }
+
+    @Override
+    void updateUIWidgets() {
+
+    }
+
+    @Override
     public void onCategoryAdded(BookCategory bookCategory) {
         categoryBuilder.addCategories(categoriesFL, bookCategory.longText);
     }
@@ -293,21 +303,9 @@ public class DrawerActivity extends AppCompatActivity
         return true;
     }
 
-    private void login() {
-        //https://github.com/firebase/FirebaseUI-Android/tree/master/auth
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        if (auth.getCurrentUser() != null) {
-            Log.d(TAG, "signin: already");
-            Snackbar.make(findViewById(R.id.drawer_layout), "Already Signin", Snackbar.LENGTH_LONG).show();
-        } else {
-            startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
-            .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
-            .setIsSmartLockEnabled(!BuildConfig.DEBUG)
-            .build(), RC_SIGN_IN);
-        }
-    }
 
-    private static final int RC_SIGN_IN = 123;
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

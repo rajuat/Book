@@ -9,6 +9,7 @@ import java.io.Serializable;
 public class Location implements Serializable{
     public double latitude;
     public double longitude;
+    public final static String LOCATION_KEY = "LOCATION_KEY";
 
     public Location(){
         //firebase

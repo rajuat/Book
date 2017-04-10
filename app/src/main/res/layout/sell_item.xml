@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/normal_size_text"
             android:layout_weight="0.5"
-            android:text="₹ "
+            android:text=""
             android:textColor="@color/colorPrimaryText" />
 
         <TextView
@@ -44,7 +44,7 @@
             android:layout_weight="0.5"
             android:textSize="@dimen/small_size_text"
             android:gravity="right"
-            android:text="₹ "
+            android:text=""
             android:textColor="@color/md_pink_900" />
     </LinearLayout>
 
