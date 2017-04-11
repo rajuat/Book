@@ -8,31 +8,43 @@ import java.util.Date;
 
 public class ChatMessage {
 
-    private String mText;
-    private String mSender;
-    private Date mDate;
+    private String messageText;
+    private String messageUser;
+    private long messageTime;
 
-    public Date getDate() {
-        return mDate;
+    public ChatMessage(String messageText, String messageUser) {
+        this.messageText = messageText;
+        this.messageUser = messageUser;
+
+        // Initialize to current time
+        messageTime = new Date().getTime();
     }
 
-    public void setDate(Date date) {
-        mDate = date;
+    public ChatMessage(){
+
     }
 
-    public String getText() {
-        return mText;
+    public String getMessageText() {
+        return messageText;
     }
 
-    public void setText(String text) {
-        mText = text;
+    public void setMessageText(String messageText) {
+        this.messageText = messageText;
     }
 
-    public String getSender() {
-        return mSender;
+    public String getMessageUser() {
+        return messageUser;
     }
 
-    public void setSender(String sender) {
-        mSender = sender;
+    public void setMessageUser(String messageUser) {
+        this.messageUser = messageUser;
+    }
+
+    public long getMessageTime() {
+        return messageTime;
+    }
+
+    public void setMessageTime(long messageTime) {
+        this.messageTime = messageTime;
     }
 }

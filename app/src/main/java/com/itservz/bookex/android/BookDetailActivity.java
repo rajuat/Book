@@ -49,7 +49,7 @@ public class BookDetailActivity extends BaseActivity {
                 /*Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
                 Intent intent = new Intent(BookDetailActivity.this, ChatActivity.class);
-                intent.putExtra(BookDetailFragment.ARG_ITEM_ID, getIntent().getStringExtra(BookDetailFragment.ARG_ITEM_ID));
+                //intent.putExtra(BookDetailFragment.ARG_ITEM_ID, getIntent().getStringExtra(BookDetailFragment.ARG_ITEM_ID));
                 startActivity(intent);
             }
         });

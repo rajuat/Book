@@ -1,44 +1,31 @@
 package com.itservz.bookex.android;
 
 import android.content.Intent;
-import android.os.Build;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
+import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+import com.itservz.bookex.android.backend.DBRefs;
+import com.itservz.bookex.android.backend.FirebaseService;
 import com.itservz.bookex.android.model.ChatMessage;
-import com.itservz.bookex.android.backend.ChatMessageService;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 
-public class ChatActivity extends AppCompatActivity implements View.OnClickListener,
-        ChatMessageService.MessagesCallbacks {
-
-    public static final String USER_EXTRA = "USER";
-
+public class ChatActivity extends AppCompatActivity {
     public static final String TAG = "ChatActivity";
-
-    private ArrayList<ChatMessage> mMessages;
-    private MessagesAdapter mAdapter;
-    private String mRecipient;
-    private ListView mListView;
-    private Date mLastMessageDate = new Date();
-    private String mConvoId;
-    private ChatMessageService.MessagesListener mListener;
+    private FirebaseListAdapter<ChatMessage> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,26 +42,55 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             //actionBar.setDisplayShowHomeEnabled(true);
         }
 
-        mRecipient = "James Bond";
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
-        mListView = (ListView) findViewById(R.id.messages_list);
-        mMessages = new ArrayList<>();
-        mAdapter = new MessagesAdapter(mMessages);
-        mListView.setAdapter(mAdapter);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText input = (EditText) findViewById(R.id.input);
 
-        setTitle(mRecipient);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+                // Read the input field and push a new instance
+                // of ChatMessage to the Firebase database
+                FirebaseService.getInstance().getDatabase().getReference(DBRefs.chats.name())
+                        .push()
+                        .setValue(new ChatMessage(input.getText().toString(),
+                                FirebaseAuth.getInstance()
+                                        .getCurrentUser()
+                                        .getDisplayName())
+                        );
 
-        Button sendMessage = (Button) findViewById(R.id.send_message);
-        sendMessage.setOnClickListener(this);
+                // Clear the input
+                input.setText("");
+            }
+        });
 
-        String[] ids = {"James", " - ", "Bond"};
-        Arrays.sort(ids);
-        mConvoId = ids[0] + ids[1] + ids[2];
+        displayChatMessages();
 
-        mListener = ChatMessageService.addMessagesListener(mConvoId, this);
+    }
+
+    private void displayChatMessages() {
+        ListView listOfMessages = (ListView) findViewById(R.id.list_of_messages);
+
+        adapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,
+                R.layout.message, FirebaseService.getInstance().getDatabase().getReference(DBRefs.chats.name())) {
+            @Override
+            protected void populateView(View v, ChatMessage model, int position) {
+                // Get references to the views of message.xml
+                TextView messageText = (TextView) v.findViewById(R.id.message_text);
+                TextView messageUser = (TextView) v.findViewById(R.id.message_user);
+                TextView messageTime = (TextView) v.findViewById(R.id.message_time);
+
+                // Set their text
+                messageText.setText(model.getMessageText());
+                messageUser.setText(model.getMessageUser());
+
+                // Format the date before showing it
+                messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",
+                        model.getMessageTime()));
+            }
+        };
+
+        listOfMessages.setAdapter(adapter);
 
     }
 
@@ -83,68 +99,11 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         int id = item.getItemId();
         if (id == android.R.id.home) {
             Intent intent = new Intent(this, BookDetailActivity.class);
-            intent.putExtra(BookDetailFragment.ARG_ITEM_ID, getIntent().getStringExtra(BookDetailFragment.ARG_ITEM_ID));
+            //intent.putExtra(BookDetailFragment.ARG_ITEM_ID, getIntent().getStringExtra(BookDetailFragment.ARG_ITEM_ID));
             NavUtils.navigateUpTo(this, intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void onClick(View v) {
-        EditText newMessageView = (EditText) findViewById(R.id.new_message);
-        String newMessage = newMessageView.getText().toString();
-        newMessageView.setText("");
-        ChatMessage msg = new ChatMessage();
-        msg.setDate(new Date());
-        msg.setText(newMessage);
-        msg.setSender("James Bond");
-
-        ChatMessageService.saveMessage(msg, mConvoId);
-    }
-
-    @Override
-    public void onMessageAdded(ChatMessage message) {
-        mMessages.add(message);
-        mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ChatMessageService.stop(mListener);
-    }
-
-
-    private class MessagesAdapter extends ArrayAdapter<ChatMessage> {
-        MessagesAdapter(ArrayList<ChatMessage> messages) {
-            super(ChatActivity.this, R.layout.chat_message, R.id.message, messages);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            convertView = super.getView(position, convertView, parent);
-            ChatMessage message = getItem(position);
-
-            TextView nameView = (TextView) convertView.findViewById(R.id.message);
-            nameView.setText(message.getText());
-
-            LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) nameView.getLayoutParams();
-
-
-            if ("James Bond".equals(message.getSender())) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    nameView.setBackgroundColor(getResources().getColor(R.color.colorPrimaryLight, null));
-                }
-                layoutParams.gravity = Gravity.RIGHT;
-            } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    nameView.setBackgroundColor(getResources().getColor(R.color.colorTextIcon, null));
-                }
-                layoutParams.gravity = Gravity.LEFT;
-            }
-
-            nameView.setLayoutParams(layoutParams);
-            return convertView;
-        }
-    }
 }
