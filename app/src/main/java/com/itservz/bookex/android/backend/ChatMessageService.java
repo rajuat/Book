@@ -1,3 +1,4 @@
+/*
 package com.itservz.bookex.android.backend;
 
 
@@ -14,9 +15,11 @@ import java.util.Date;
 import java.util.HashMap;
 
 
+
 /**
  * Created by raju.athokpam on 23-12-2016.
- */
+ *//*
+
 public class ChatMessageService {
     private static final DatabaseReference sRef = FirebaseService.getInstance().getDatabase().getReference(DBRefs.chats.name());
     private static SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyyMMddmmss");
@@ -80,4 +83,4 @@ public class ChatMessageService {
     public interface MessagesCallbacks{
         public void onMessageAdded(ChatMessage message);
     }
-}
+}*/
