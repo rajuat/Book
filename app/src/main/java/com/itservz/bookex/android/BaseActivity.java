@@ -9,10 +9,12 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -233,10 +235,14 @@ public abstract class BaseActivity extends AppCompatActivity implements GoogleAp
     protected void login() {
         //https://github.com/firebase/FirebaseUI-Android/tree/master/auth
         FirebaseAuth auth = FirebaseAuth.getInstance();
+        NavigationView drawerNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        MenuItem menuItem = drawerNavigationView.getMenu().findItem(R.id.loginBtn);
         if (auth.getCurrentUser() != null) {
+            menuItem.setTitle("Logout");
             Log.d(TAG, "signin: already");
             Snackbar.make(findViewById(R.id.drawer_layout), "Already Signin", Snackbar.LENGTH_LONG).show();
         } else {
+            menuItem.setTitle("Login");
             startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
                     .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
                     .setIsSmartLockEnabled(!BuildConfig.DEBUG)
@@ -250,6 +256,11 @@ public abstract class BaseActivity extends AppCompatActivity implements GoogleAp
             return auth.getCurrentUser().getDisplayName();
         }
         return "Guest";
+    }
+
+    protected boolean isLogin(){
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        return auth.getCurrentUser()!= null;
     }
 
     protected String getLoginEmail(){

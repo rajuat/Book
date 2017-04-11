@@ -77,7 +77,7 @@ public class LetterTileProvider {
 
         final Canvas c = mCanvas;
         c.setBitmap(bitmap);
-        c.drawColor(pickColor(key));
+        //c.drawColor(pickColor(key));
 
         if (isEnglishLetterOrDigit(firstChar)) {
             mFirstChar[0] = Character.toUpperCase(firstChar);

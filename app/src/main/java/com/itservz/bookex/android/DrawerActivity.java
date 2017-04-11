@@ -101,18 +101,18 @@ public class DrawerActivity extends BaseActivity
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 Log.d(TAG, "touch for expansion");
-                int x=(int)event.getX();
-                int y=(int)event.getY();
-                int width= categoriesFL.getLayoutParams().width;
+                int x = (int) event.getX();
+                int y = (int) event.getY();
+                int width = categoriesFL.getLayoutParams().width;
                 int height = categoriesFL.getLayoutParams().height;
 
 
-                if((x - width <= 20 && x - width > 0) ||(width - x <= 20 && width - x > 0)){
-                    switch (event.getAction()){
+                if ((x - width <= 20 && x - width > 0) || (width - x <= 20 && width - x > 0)) {
+                    switch (event.getAction()) {
                         case MotionEvent.ACTION_DOWN:
                             break;
                         case MotionEvent.ACTION_MOVE:
-                            Log.d(TAG,"width:"+width+" height:"+height+" x:"+x+" y:"+y);
+                            Log.d(TAG, "width:" + width + " height:" + height + " x:" + x + " y:" + y);
                             categoriesFL.getLayoutParams().width = x;
                             categoriesFL.getLayoutParams().height = y;
                             categoriesFL.requestLayout();
@@ -170,11 +170,11 @@ public class DrawerActivity extends BaseActivity
 
         //user
         setLoginInfo();
-        View headerView = ((NavigationView)findViewById(R.id.nav_view)).getHeaderView(0);
+        View headerView = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0);
         headerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), UserActivity.class );
+                Intent intent = new Intent(v.getContext(), UserActivity.class);
                 startActivity(intent);
             }
         });
@@ -196,15 +196,15 @@ public class DrawerActivity extends BaseActivity
     }
 
     private void setLoginInfo() {
-        View headerView = ((NavigationView)findViewById(R.id.nav_view)).getHeaderView(0);
+        View headerView = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0);
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = auth.getCurrentUser();
-        if(currentUser != null){
-            ((TextView)headerView.findViewById(R.id.loginNameTxt)).setText(currentUser.getDisplayName());
-            ((TextView)headerView.findViewById(R.id.loginEmailTxt)).setText(currentUser.getEmail());
+        if (currentUser != null) {
+            ((TextView) headerView.findViewById(R.id.loginNameTxt)).setText(currentUser.getDisplayName());
+            ((TextView) headerView.findViewById(R.id.loginEmailTxt)).setText(currentUser.getEmail());
         } else {
-            ((TextView)headerView.findViewById(R.id.loginNameTxt)).setText("Guest");
-            ((TextView)headerView.findViewById(R.id.loginEmailTxt)).setText("");
+            ((TextView) headerView.findViewById(R.id.loginNameTxt)).setText("Guest");
+            ((TextView) headerView.findViewById(R.id.loginEmailTxt)).setText("");
         }
     }
 
@@ -221,10 +221,10 @@ public class DrawerActivity extends BaseActivity
         LinearLayout containerNearby = (LinearLayout) findViewById(R.id.containerNearby);
         int dpAsPixels = new ScreenSizeScaler(getResources()).getdpAspixel(8);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(dpAsPixels, dpAsPixels, 0, dpAsPixels);
 
-        if(SortBy.recent.name().equals(sortBy)) {
+        if (SortBy.recent.name().equals(sortBy)) {
             View view = new SellItemAdapter(this, null).createBookItem(null, book);
             view.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
             containerNewlyAdded.addView(view, layoutParams);
@@ -237,7 +237,7 @@ public class DrawerActivity extends BaseActivity
                     context.startActivity(intent);
                 }
             });
-        } else if(SortBy.price.name().equals(sortBy)) {
+        } else if (SortBy.price.name().equals(sortBy)) {
             View priceView = new SellItemAdapter(this, null).createBookItem(null, book);
             priceView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -272,7 +272,8 @@ public class DrawerActivity extends BaseActivity
         /*if (id == R.id.action_settings) {
             startActivityForResult(new Intent(this, SettingsActivity.class), 1);
             return true;
-        } else*/ if (id == R.id.action_search) {
+        } else*/
+        if (id == R.id.action_search) {
             startActivity(new Intent(this, SearchActivity.class));
             return true;
         }
@@ -284,26 +285,24 @@ public class DrawerActivity extends BaseActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        if (id == R.id.nav_share) {
-        } else if (id == R.id.nav_send) {
-        } else if (id == R.id.loginBtn) {
-            login();
-        } else if (id == R.id.logoutBtn) {
-            //FirebaseService.getInstance().getAuth().signOut();
-            AuthUI.getInstance().signOut(this);
-            View headerView = ((NavigationView)findViewById(R.id.nav_view)).getHeaderView(0);
-            ((TextView)headerView.findViewById(R.id.loginNameTxt)).setText("Guest");
-            ((TextView)headerView.findViewById(R.id.loginEmailTxt)).setText("");
-            Snackbar.make(findViewById(R.id.drawer_layout), "Signout", Snackbar.LENGTH_LONG).show();
+        if (id == R.id.loginBtn) {
+            if (isLogin()) {
+                AuthUI.getInstance().signOut(this);
+                View headerView = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0);
+                ((TextView) headerView.findViewById(R.id.loginNameTxt)).setText("Guest");
+                ((TextView) headerView.findViewById(R.id.loginEmailTxt)).setText("");
+                Snackbar.make(findViewById(R.id.drawer_layout), "Signout", Snackbar.LENGTH_LONG).show();
+                item.setTitle("Login");
+            } else {
+                login();
+                item.setTitle("Logout");
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
 
 
     @Override

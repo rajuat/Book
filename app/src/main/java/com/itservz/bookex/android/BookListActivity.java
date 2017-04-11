@@ -44,10 +44,11 @@ public class BookListActivity extends BaseActivity implements FirebaseDatabaseSe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_list);
 
-        String title = getIntent().getStringExtra(BundleKeys.CATEGORY.name());
+        String categoryText = getIntent().getStringExtra(BundleKeys.CATEGORY.name());
+        Log.d(TAG, "categoryText: " + categoryText);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle((title == null || title.trim().length() < 1) ? getTitle() : title);
+        toolbar.setTitle((categoryText == null || categoryText.trim().length() < 1) ? getTitle() : categoryText);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -56,7 +57,7 @@ public class BookListActivity extends BaseActivity implements FirebaseDatabaseSe
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.book_list);
         assert recyclerView != null;
-        setupRecyclerView(recyclerView);
+        setupRecyclerView(recyclerView, categoryText);
 
         if (findViewById(R.id.book_detail_container) != null) {
             mTwoPane = true;
@@ -92,12 +93,16 @@ public class BookListActivity extends BaseActivity implements FirebaseDatabaseSe
         return super.onOptionsItemSelected(item);
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView, String cat) {
         String lastFetch = new PrefManager(this).getLastFetch();
         Intent intent = getIntent();
         String sortBy = intent.getStringExtra("sortBy");
         Log.d(TAG, "setupRecyclerView: " + sortBy);
-        FirebaseDatabaseService.getInstance(lastFetch).getSellingItems(this, sortBy);
+        if(cat != null){
+            FirebaseDatabaseService.getInstance(lastFetch).getSellItemsByCategory(this, cat);
+        } else {
+            FirebaseDatabaseService.getInstance(lastFetch).getSellingItems(this, sortBy);
+        }
 
         //ArrayList<Book> books = new ArrayList<>(FirebaseDatabaseService.getInstance(lastFetch).getBooks().values());
         bookListAdapter = new BookListAdapter(this, sortBy);

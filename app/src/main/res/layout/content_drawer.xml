@@ -30,11 +30,10 @@
             android:id="@+id/text_view_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawablePadding="@dimen/text_margin_small"
-            android:drawableRight="@drawable/ic_chevron_right_24dp"
+            android:paddingRight="16dp"
             android:gravity="right"
             android:text="All Categories"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorSecondaryText" />
 
         <com.itservz.bookex.android.view.FlowLayout
             android:id="@+id/flowLayout"

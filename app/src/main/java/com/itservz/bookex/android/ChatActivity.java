@@ -99,7 +99,7 @@ public class ChatActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             Intent intent = new Intent(this, BookDetailActivity.class);
-            //intent.putExtra(BookDetailFragment.ARG_ITEM_ID, getIntent().getStringExtra(BookDetailFragment.ARG_ITEM_ID));
+            intent.putExtra(BookDetailFragment.ARG_ITEM_ID, getIntent().getSerializableExtra(BookDetailFragment.ARG_ITEM_ID));
             NavUtils.navigateUpTo(this, intent);
             return true;
         }

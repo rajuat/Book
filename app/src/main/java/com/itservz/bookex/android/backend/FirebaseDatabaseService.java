@@ -77,6 +77,34 @@ public class FirebaseDatabaseService {
         return books.values();
     }
 
+    public Collection<Book> getSellItemsByCategory(final SellItemListener sellItemListener, final String category){
+
+        sellsQuery = sellsReference.orderByKey();//default
+        sellsQuery.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+                Book book = dataSnapshot.getValue(Book.class);
+                Log.d(TAG, book.getTitle());
+                if(sellItemListener != null && book.getCategoriesAsString() != null && book.getCategoriesAsString().contains(category)){
+                    sellItemListener.onSellItemAdded(book, "");
+                    books.put(book.getUuid(), book);
+                    Log.d(TAG, book.getTitle());
+                }
+            }
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
+            }
+            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.w("TAG:", "Failed to read value.", error.toException());
+            }
+        });
+        return books.values();
+    }
     public String addSellingItem(Book book) {
         DatabaseReference childRef = sellsReference.push();
         String uId = childRef.getKey();
