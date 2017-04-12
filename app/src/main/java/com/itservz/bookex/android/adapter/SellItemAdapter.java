@@ -87,7 +87,7 @@ public class SellItemAdapter extends BaseAdapter {
             byte[] imageDecoded = Base64.decode(book.image, Base64.DEFAULT);
             imgIcon.setImageBitmap(BitmapFactory.decodeByteArray(imageDecoded, 0, imageDecoded.length));
         }*/
-        yourPrice.append(""+book.getYourPrice());
+        yourPrice.setText("₹ "+book.getYourPrice());
         if(book.getMrp() > 0){
             mrp.setText("₹ "+book.getMrp());
         }

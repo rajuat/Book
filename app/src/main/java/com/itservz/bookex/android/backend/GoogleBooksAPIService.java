@@ -16,15 +16,14 @@ import cz.msebera.android.httpclient.Header;
 /**
  * Created by raju.athokpam on 19-12-2016.
  */
-//https://www.googleapis.com/books/v1/volumes?q=isbn:8184750110&fields=kind,totalItems,items(volumeInfo/title,volumeInfo/industryIdentifiers)
 //http://joerichard.net/android/android-google-books-api-example/
-//https://www.googleapis.com/books/v1/volumes?q=isbn:8184750110&fields=kind,totalItems,items(volumeInfo/title,volumeInfo/authors,volumeInfo/industryIdentifiers,volumeInfo/imageLinks/smallThumbnail,saleInfo/retailPrice)
+//https://www.googleapis.com/books/v1/volumes?q=isbn:8184750110&fields=kind,totalItems,items(volumeInfo/title,volumeInfo/authors,volumeInfo/description,volumeInfo/industryIdentifiers,volumeInfo/imageLinks/smallThumbnail,saleInfo/retailPrice)
 public class GoogleBooksAPIService {
 
     private final static String TAG = "GoogleBooksAPIService";
 
     public void getBook(String isbn, final Book book){
-        final String url = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn + "&fields=kind,totalItems,items(volumeInfo/title,volumeInfo/authors,volumeInfo/industryIdentifiers,volumeInfo/imageLinks/smallThumbnail,saleInfo)";
+        final String url = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn + "&fields=kind,totalItems,items(volumeInfo/title,volumeInfo/authors,volumeInfo/description,volumeInfo/industryIdentifiers,volumeInfo/imageLinks/smallThumbnail,saleInfo/retailPrice)";
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(url, new AsyncHttpResponseHandler() {
 
@@ -39,6 +38,7 @@ public class GoogleBooksAPIService {
                     book.setTitle(volumeInfo.getString("title"));
                     book.setAuthor(volumeInfo.getJSONArray("authors").getString(0));
                     book.setImageUrl(volumeInfo.getJSONObject("imageLinks").getString("smallThumbnail"));
+                    book.setDescription(volumeInfo.getString("description"));
 
                     JSONObject saleInfo = item.getJSONObject("saleInfo");
                     book.setMrp(saleInfo.getJSONObject("listPrice").getInt("amount"));

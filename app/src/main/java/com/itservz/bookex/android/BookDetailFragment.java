@@ -1,6 +1,7 @@
 package com.itservz.bookex.android;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -15,8 +16,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.itservz.bookex.android.backend.CallService;
+import com.itservz.bookex.android.backend.MessagingService;
 import com.itservz.bookex.android.model.Book;
 import com.itservz.bookex.android.model.Location;
+import com.itservz.bookex.android.util.AddressHelper;
 import com.itservz.bookex.android.util.DistanceCalculator;
 import com.itservz.bookex.android.util.LetterTileProvider;
 
@@ -79,10 +83,28 @@ public class BookDetailFragment extends Fragment {
                 double distanceinKM = DistanceCalculator.distance(book.getLocation().latitude, book.getLocation().longitude, location.getLatitude(), location.getLongitude());
                 ((TextView) rootView.findViewById(R.id.book_place_dis)).setText(distanceinKM + "km away");
             }
-            ((TextView) rootView.findViewById(R.id.book_description)).setText(book.getDescription());
-            ((TextView) rootView.findViewById(R.id.book_cat)).setText(book.getCategoriesAsString());
-            ((TextView) rootView.findViewById(R.id.book_condition)).append(book.getCondition());
 
+            ((TextView) rootView.findViewById(R.id.book_place)).setText(AddressHelper.getAddress(getContext(), book.getLocation()));
+            if(book.getDescription() != null) {
+                ((TextView) rootView.findViewById(R.id.book_description)).append(book.getDescription());
+            }
+            ((TextView) rootView.findViewById(R.id.book_cat)).append(""+book.getCategoriesAsString());
+            ((TextView) rootView.findViewById(R.id.book_condition)).append(""+book.getCondition());
+
+            rootView.findViewById(R.id.call).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = CallService.getCallIntent(book.getPhoneNumber());
+                    startActivity(intent);
+                }
+            });
+            rootView.findViewById(R.id.sms).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = MessagingService.getSMSIntent(book.getPhoneNumber());
+                    startActivity(intent);
+                }
+            });
         }
         final Resources res = getResources();
         final int tileSize = res.getDimensionPixelSize(R.dimen.letter_tile_size);

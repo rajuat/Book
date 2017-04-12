@@ -13,7 +13,7 @@ public class MessagingService {
         Uri uri = Uri.parse("smsto:" + phoneNumber);
         Intent smsIntent = new Intent(Intent.ACTION_SENDTO, uri);
         // Set the message to be sent
-        smsIntent.putExtra("sms_body", "I like to buy your posted book.");
+        smsIntent.putExtra("sms_body", "I like to buy your posted book in bookex.");
         return smsIntent;
     }
 

@@ -9,6 +9,7 @@
         <variable
             name="handler"
             type="com.itservz.bookex.android.model.SellHandler" />
+        <import type="android.view.View"/>
     </data>
 
     <ScrollView
@@ -40,7 +41,7 @@
                 android:id="@+id/isbn_wrapper"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="What about starting by entering ISBN?">
+                android:hint="What about starting by entering ISBN? (Optional)">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/isbn"
@@ -57,7 +58,7 @@
                 android:backgroundTint="@color/colorAccent"
                 android:onClick="@{handler.click(book)}"
                 android:text="Get details and fill the form" />
-
+            <!--android:visibility="@{book.ISBN.length()>0 ? View.VISIBLE: View.INVISIBLE}"-->
             <ImageView
                 android:id="@+id/book_image"
                 android:layout_width="@dimen/image_size_width"
@@ -65,6 +66,12 @@
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/ic_photo_camera_black_24dp"
                 android:src="@{book.imageUrl}"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top|center_horizontal"
+                android:text="Upload book cover" />
 
             <Space
                 android:layout_width="match_parent"
@@ -140,6 +147,11 @@
                     android:text="@={book.phoneNumber}" />
 
             </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Choose a category*"/>
 
             <com.itservz.bookex.android.view.FlowLayout
                 android:id="@+id/book_categories"

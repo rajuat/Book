@@ -41,7 +41,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookVi
                 if(SortBy.price.name().equals(sortBy)){
                     return o1.getYourPrice() - o2.getYourPrice();
                 } else if(SortBy.recent.name().equals(sortBy)){
-                    return (int)(o2.getUploadTime() - o1.getUploadTime());//uploadTime is in negative
+                    return (int)(o1.getUploadTime() - o2.getUploadTime());//uploadTime is in negative
                 } else {
                     return 0;
                 }

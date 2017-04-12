@@ -248,9 +248,30 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
+        <Button
+            android:id="@+id/call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="8dp"
+            android:layout_weight=".5"
+            android:background="@color/colorAccent"
+            android:textColor="@color/colorPrimaryLight"
+            android:text="Call" />
 
+        <Button
+            android:id="@+id/sms"
+            android:layout_weight=".5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="0dp"
+            android:text="SMS"
+            android:textColor="@color/colorPrimaryLight"
+            android:background="@color/colorAccent" />
 
     </LinearLayout>
 

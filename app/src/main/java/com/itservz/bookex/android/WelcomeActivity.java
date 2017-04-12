@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+import com.itservz.bookex.android.backend.FirebaseService;
 import com.itservz.bookex.android.preference.PrefManager;
 import com.itservz.bookex.android.backend.FirebaseStorageService;
 
@@ -167,14 +173,46 @@ public class WelcomeActivity extends AppCompatActivity {
 
         public MyViewPagerAdapter() {
         }
+        private static final String TAG = "WelcomeActivity";
+        private void getWelcomeMessage(DatabaseReference welcomeRefs, int position, final TextView headline, final TextView text ){
+            welcomeRefs.child(position+"/headline").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.d(TAG, "onDataChange: " + dataSnapshot.getValue(String.class));
+                    headline.setText(dataSnapshot.getValue(String.class));
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            welcomeRefs.child(position+"/text").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.d(TAG, "onDataChange: " + dataSnapshot.getValue(String.class));
+                    text.setText(dataSnapshot.getValue(String.class));
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             final View view = layoutInflater.inflate(layouts[position], container, false);
-            container.addView(view);
+
+            DatabaseReference welcomeRef = FirebaseService.getInstance().getDatabase().getReference("welcome");
             if(position == 0){
+                getWelcomeMessage(welcomeRef, position, (TextView) view.findViewById(R.id.slide_1_headline), (TextView) view.findViewById(R.id.slide_1_text));
+
                 FirebaseStorageService.getInstance().getImage("discount.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
                     @Override
                     public void onSuccess(byte[] bytes) {
@@ -183,6 +221,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     }
                 });
             } else if(position == 1){
+                getWelcomeMessage(welcomeRef, position, (TextView) view.findViewById(R.id.slide_2_headline), (TextView) view.findViewById(R.id.slide_2_text));
                 FirebaseStorageService.getInstance().getImage("food.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
                     @Override
                     public void onSuccess(byte[] bytes) {
@@ -191,6 +230,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     }
                 });
             } else if(position == 2){
+                getWelcomeMessage(welcomeRef, position, (TextView) view.findViewById(R.id.slide_3_headline), (TextView) view.findViewById(R.id.slide_3_text));
                 FirebaseStorageService.getInstance().getImage("movie.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
                     @Override
                     public void onSuccess(byte[] bytes) {
@@ -199,6 +239,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     }
                 });
             } else if(position == 3){
+                getWelcomeMessage(welcomeRef, position, (TextView) view.findViewById(R.id.slide_4_headline), (TextView) view.findViewById(R.id.slide_4_text));
                 FirebaseStorageService.getInstance().getImage("travel.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
                     @Override
                     public void onSuccess(byte[] bytes) {

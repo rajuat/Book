@@ -27,6 +27,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.itservz.bookex.android.service.FetchAddressIntentService;
+import com.itservz.bookex.android.util.Permissions;
 
 import java.util.Arrays;
 
@@ -62,11 +63,16 @@ public abstract class BaseActivity extends AppCompatActivity implements GoogleAp
      * Receiver registered with this activity to get the response from FetchAddressIntentService.
      */
     private AddressResultReceiver mResultReceiver;
+    private Permissions permissionsHelper;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        permissionsHelper = new Permissions(this);
+        if (!permissionsHelper.checkPermissions()) {
+            permissionsHelper.requestPermissions();
+        }
         mResultReceiver = new AddressResultReceiver(new Handler());
         // Set defaults, then update using values stored in the Bundle.
         mAddressRequested = false;
@@ -77,8 +83,8 @@ public abstract class BaseActivity extends AppCompatActivity implements GoogleAp
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        permissionsHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-
             case premissionCodeAccessFineLocation: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.d(TAG, "Permission granted for FINE_LOCATION");
@@ -199,33 +205,7 @@ public abstract class BaseActivity extends AppCompatActivity implements GoogleAp
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    /**
-     * Receiver for data sent from FetchAddressIntentService.
-     */
-    class AddressResultReceiver extends ResultReceiver {
-        public AddressResultReceiver(Handler handler) {
-            super(handler);
-        }
 
-        /**
-         *  Receives data sent from FetchAddressIntentService and updates the UI in MainActivity.
-         */
-        @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-            // Display the address string or an error message sent from the intent service.
-            mAddressOutput = resultData.getString(FetchAddressIntentService.Constants.RESULT_DATA_KEY);
-            displayAddressOutput();
-
-            // Show a toast message if an address was found.
-            if (resultCode == FetchAddressIntentService.Constants.SUCCESS_RESULT) {
-                showToast(getString(R.string.address_found));
-            }
-
-            // Reset. Enable the Fetch Address button and stop showing the progress bar.
-            mAddressRequested = false;
-            updateUIWidgets();
-        }
-    }
 
     abstract void displayAddressOutput();
     abstract void updateUIWidgets();
@@ -269,6 +249,34 @@ public abstract class BaseActivity extends AppCompatActivity implements GoogleAp
             return auth.getCurrentUser().getEmail();
         }
         return "Guest";
+    }
+
+    /**
+     * Receiver for data sent from FetchAddressIntentService.
+     */
+    class AddressResultReceiver extends ResultReceiver {
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        /**
+         *  Receives data sent from FetchAddressIntentService and updates the UI in MainActivity.
+         */
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            // Display the address string or an error message sent from the intent service.
+            mAddressOutput = resultData.getString(FetchAddressIntentService.Constants.RESULT_DATA_KEY);
+            displayAddressOutput();
+
+            // Show a toast message if an address was found.
+            if (resultCode == FetchAddressIntentService.Constants.SUCCESS_RESULT) {
+                showToast(getString(R.string.address_found));
+            }
+
+            // Reset. Enable the Fetch Address button and stop showing the progress bar.
+            mAddressRequested = false;
+            updateUIWidgets();
+        }
     }
 
 }

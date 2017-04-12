@@ -35,9 +35,10 @@ public class BookDetailActivity extends BaseActivity {
         setSupportActionBar(toolbar);
 
         book = (Book) getIntent().getSerializableExtra(BookDetailFragment.ARG_ITEM_ID);
-
-        Bitmap bitmap = BitmapHelper.decodeSampledBitmapFromBytes(getResources(), book.getImage());
-        ((ImageView)findViewById(R.id.backdrop)).setImageDrawable(new BitmapDrawable(getResources(), bitmap));
+        if(book.getImage() != null) {
+            Bitmap bitmap = BitmapHelper.decodeSampledBitmapFromBytes(getResources(), book.getImage());
+            ((ImageView) findViewById(R.id.backdrop)).setImageDrawable(new BitmapDrawable(getResources(), bitmap));
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

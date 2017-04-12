@@ -30,8 +30,8 @@
             android:id="@+id/text_view_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingRight="16dp"
             android:gravity="right"
+            android:paddingRight="32dp"
             android:text="All Categories"
             android:textColor="@color/colorSecondaryText" />
 
