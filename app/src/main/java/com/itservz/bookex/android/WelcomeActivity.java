@@ -2,13 +2,12 @@ package com.itservz.bookex.android;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,18 +16,15 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.itservz.bookex.android.backend.FirebaseService;
 import com.itservz.bookex.android.preference.PrefManager;
-import com.itservz.bookex.android.backend.FirebaseStorageService;
 
 public class WelcomeActivity extends AppCompatActivity {
     private ViewPager viewPager;
@@ -208,45 +204,46 @@ public class WelcomeActivity extends AppCompatActivity {
             layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             final View view = layoutInflater.inflate(layouts[position], container, false);
+            container.addView(view);
 
             DatabaseReference welcomeRef = FirebaseService.getInstance().getDatabase().getReference("welcome");
             if(position == 0){
                 getWelcomeMessage(welcomeRef, position, (TextView) view.findViewById(R.id.slide_1_headline), (TextView) view.findViewById(R.id.slide_1_text));
 
-                FirebaseStorageService.getInstance().getImage("discount.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                /*FirebaseStorageService.getInstance().getImage("discount.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
                     @Override
                     public void onSuccess(byte[] bytes) {
                         ImageView iv = (ImageView) view.findViewById(R.id.slide_1_image);
                         iv.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
                     }
-                });
+                });*/
             } else if(position == 1){
                 getWelcomeMessage(welcomeRef, position, (TextView) view.findViewById(R.id.slide_2_headline), (TextView) view.findViewById(R.id.slide_2_text));
-                FirebaseStorageService.getInstance().getImage("food.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                /*FirebaseStorageService.getInstance().getImage("food.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
                     @Override
                     public void onSuccess(byte[] bytes) {
                         ImageView iv = (ImageView) view.findViewById(R.id.slide_2_image);
                         iv.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
                     }
-                });
+                });*/
             } else if(position == 2){
                 getWelcomeMessage(welcomeRef, position, (TextView) view.findViewById(R.id.slide_3_headline), (TextView) view.findViewById(R.id.slide_3_text));
-                FirebaseStorageService.getInstance().getImage("movie.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                /*FirebaseStorageService.getInstance().getImage("movie.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
                     @Override
                     public void onSuccess(byte[] bytes) {
                         ImageView iv = (ImageView) view.findViewById(R.id.slide_3_image);
                         iv.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
                     }
-                });
+                });*/
             } else if(position == 3){
                 getWelcomeMessage(welcomeRef, position, (TextView) view.findViewById(R.id.slide_4_headline), (TextView) view.findViewById(R.id.slide_4_text));
-                FirebaseStorageService.getInstance().getImage("travel.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                /*FirebaseStorageService.getInstance().getImage("travel.png").addOnSuccessListener(new OnSuccessListener<byte[]>() {
                     @Override
                     public void onSuccess(byte[] bytes) {
                         ImageView iv = (ImageView) view.findViewById(R.id.slide_4_image);
                         iv.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
                     }
-                });
+                });*/
             }
             return view;
         }
