@@ -62,8 +62,9 @@ public class DrawerActivity extends BaseActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        login();//user are ask to login
+        if(getIntent().getBooleanExtra("landingPage", false)) {
+            login();//user are ask to login
+        }
 
         prefManager = new PrefManager(this);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_sell);

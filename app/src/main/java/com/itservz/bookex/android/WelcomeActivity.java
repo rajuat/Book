@@ -119,7 +119,9 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private void launchHomeScreen() {
         prefManager.setFirstTimeLaunch(false);
-        startActivity(new Intent(WelcomeActivity.this, DrawerActivity.class));
+        Intent intent = new Intent(WelcomeActivity.this, DrawerActivity.class);
+        intent.putExtra("landingPage", true);
+        startActivity(intent);
         finish();
     }
 

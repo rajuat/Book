@@ -219,7 +219,6 @@ public abstract class BaseActivity extends AppCompatActivity implements GoogleAp
         MenuItem menuItem = drawerNavigationView.getMenu().findItem(R.id.loginBtn);
         if (auth.getCurrentUser() != null) {
             menuItem.setTitle("Logout");
-            Log.d(TAG, "signin: already");
             Snackbar.make(findViewById(R.id.drawer_layout), "Already Signin", Snackbar.LENGTH_LONG).show();
         } else {
             menuItem.setTitle("Login");

@@ -10,10 +10,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -22,6 +24,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
+import com.google.firebase.auth.FirebaseAuth;
 import com.itservz.bookex.android.backend.FirebaseCategoryService;
 import com.itservz.bookex.android.backend.FirebaseDatabaseService;
 import com.itservz.bookex.android.backend.FirebaseStorageService;
@@ -39,6 +43,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -65,7 +70,9 @@ public class SellActivity extends BaseActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        checkLogin();
         //setContentView(R.layout.activity_sell);
+
         book = new Book();
         //http://www.singhajit.com/android-data-binding/
         ActivitySellBinding binding = DataBindingUtil.setContentView(this,R.layout.activity_sell);
@@ -86,65 +93,6 @@ public class SellActivity extends BaseActivity implements
             }
         });
 
-        /*final TextInputEditText isbn = (TextInputEditText) findViewById(R.id.isbn);
-        isbn.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                prefManager.setISBN(((TextInputEditText) v).getText().toString());
-                //book.ISBN = ((TextInputEditText)v).getText().toString();
-            }
-        });*/
-       /* Button button = (Button) findViewById(R.id.getBookDetails);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String isbnText = isbn.getText().toString();
-                Log.d(TAG, "onClick:ISBN " + isbnText);
-                new GoogleBooksAPIService().getBook(isbnText, book);
-                Log.d(TAG, "onClick:ISBN2 " + book.toString());
-            }
-        });*/
-        //TextInputEditText title = (TextInputEditText) findViewById(R.id.book_title);
-        /*title.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                prefManager.setTitle(((TextInputEditText) v).getText().toString());
-                //book.title = ((TextInputEditText)v).getText().toString();
-            }
-        });*/
-
-       /* TextInputEditText author = (TextInputEditText) findViewById(R.id.book_author);
-        author.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                book.setAuthor(((TextInputEditText)v).getText().toString());
-            }
-        });*/
-
-        /*TextInputEditText condition = (TextInputEditText) findViewById(R.id.book_condition);
-        condition.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                book.setCondition(((TextInputEditText)v).getText().toString());
-            }
-        });
-
-        TextInputEditText yourPrice = (TextInputEditText) findViewById(R.id.book_yourprice);
-        yourPrice.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                book.setYourPrice(Integer.parseInt(((TextInputEditText)v).getText().toString()));
-            }
-        });
-
-        TextInputEditText phone = (TextInputEditText) findViewById(R.id.book_phone);
-        phone.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                //book.condition = ((TextInputEditText)v).getText().toString();
-            }
-        });*/
-
         ((Button) findViewById(R.id.sell_button)).setOnClickListener(this);
 
         mLatitudeLabel = "Latitude";
@@ -157,6 +105,16 @@ public class SellActivity extends BaseActivity implements
 
         updateUIWidgets();
         updateValuesFromBundle(savedInstanceState);
+    }
+
+    void checkLogin(){
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() == null) {
+            startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
+                    .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+                    .setIsSmartLockEnabled(!BuildConfig.DEBUG)
+                    .build(), RC_SIGN_IN);
+        }
     }
 
     @Override
