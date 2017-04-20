@@ -4,8 +4,9 @@
         android:id="@+id/loginBtn"
         android:icon="@drawable/ic_exit_to_app_black_24dp"
         android:title="Login" />
-   <!-- <item
-        android:id="@+id/logoutBtn"
-        android:icon="@drawable/ic_exit_to_app_black_24dp"
-        android:title="Logout" />-->
+
+    <item
+        android:id="@+id/sell_book"
+        android:icon="@drawable/ic_add_black_24dp"
+        android:title="Sell a book" />
 </menu>

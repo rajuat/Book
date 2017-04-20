@@ -298,6 +298,9 @@ public class DrawerActivity extends BaseActivity
                 login();
                 item.setTitle("Logout");
             }
+        } else if(id == R.id.sell_book){
+            Intent sellIntent = new Intent(this, SellActivity.class);
+            startActivity(sellIntent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
