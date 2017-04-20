@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -90,6 +91,16 @@ public class SellActivity extends BaseActivity implements
             public void onClick(View view) {
                 Intent chooserIntent = new ImagePickerService().getImageFromPhoneIntent();
                 startActivityForResult(chooserIntent, PICK_IMAGE);
+            }
+        });
+
+        //scanner
+        findViewById(R.id.scanner).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(
+                        new Intent(SellActivity.this, SimpleScannerActivity.class),
+                        12);
             }
         });
 
@@ -229,6 +240,11 @@ public class SellActivity extends BaseActivity implements
                     }
                 }
             }
+        } else if(requestCode == 12){
+            String isbn = data.getStringExtra("ISBN");
+            Log.d(TAG, "onActivityResult: isbn" + isbn);
+            book.setISBN(isbn);
+            ((TextInputEditText)findViewById(R.id.isbn)).setText(isbn);
         }
     }
 

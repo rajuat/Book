@@ -13,6 +13,7 @@ import android.widget.Toast;
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CALL_PHONE;
+import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.SEND_SMS;
 
 /**
@@ -23,8 +24,7 @@ public class Permissions {
 
     Activity activity;
     Context context;
-    public String[] permissionArray = new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, CALL_PHONE, SEND_SMS};
-
+    public String[] permissionArray = new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, CALL_PHONE, SEND_SMS, CAMERA};
     public Permissions(Activity activity) {
         this.activity = activity;
         this.context = activity.getApplicationContext();
@@ -34,11 +34,13 @@ public class Permissions {
         int fine = ContextCompat.checkSelfPermission(context, ACCESS_FINE_LOCATION);
         int coarse = ContextCompat.checkSelfPermission(context, ACCESS_COARSE_LOCATION);
         int call = ContextCompat.checkSelfPermission(context, CALL_PHONE);
-        int camera = ContextCompat.checkSelfPermission(context, SEND_SMS);
+        int sms = ContextCompat.checkSelfPermission(context, SEND_SMS);
+        int camera = ContextCompat.checkSelfPermission(context, CAMERA);
 
         return fine == PackageManager.PERMISSION_GRANTED
                 && coarse == PackageManager.PERMISSION_GRANTED
                 && call == PackageManager.PERMISSION_GRANTED
+                && sms == PackageManager.PERMISSION_GRANTED
                 && camera == PackageManager.PERMISSION_GRANTED;
     }
 
@@ -54,12 +56,13 @@ public class Permissions {
                     boolean coarse = grantResults[1] == PackageManager.PERMISSION_GRANTED;
                     boolean call = grantResults[2] == PackageManager.PERMISSION_GRANTED;
                     boolean sms = grantResults[3] == PackageManager.PERMISSION_GRANTED;
+                    boolean camera = grantResults[4] == PackageManager.PERMISSION_GRANTED;
 
-                    if (coarse && fine && call && sms) {
-                        Toast.makeText(context, "Permission Granted, Now you can access location data, calling and sms.", Toast.LENGTH_LONG).show();
+                    if (coarse && fine && call && sms && camera) {
+                        Toast.makeText(context, "Permission Granted, Now you can access location data, calling, sms, and camera.", Toast.LENGTH_LONG).show();
                         return true;
                     } else {
-                        Toast.makeText(context, "Permission Denied, You cannot access location data, call and sms.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Permission Denied, You cannot access location data, call, sms, and camera.", Toast.LENGTH_LONG).show();
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             if (activity.shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)) {
