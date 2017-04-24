@@ -2,21 +2,23 @@ package com.itservz.bookex.android;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -67,6 +69,7 @@ public class SellActivity extends BaseActivity implements
     ProgressBar mProgressBar;
     Button mFetchAddressButton;
     private FlowLayout bookCategoriesLayout;
+    private LinearLayout categoryLL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +81,7 @@ public class SellActivity extends BaseActivity implements
         //http://www.singhajit.com/android-data-binding/
         ActivitySellBinding binding = DataBindingUtil.setContentView(this,R.layout.activity_sell);
         binding.setBook(book);
-        binding.setHandler(new SellHandler());
+        binding.setHandler(new SellHandler(this.getApplicationContext()));
 
         new FirebaseCategoryService(this).getCategories();
         bookCategoriesLayout = (FlowLayout) findViewById(R.id.book_categories);
@@ -108,12 +111,12 @@ public class SellActivity extends BaseActivity implements
 
         mLatitudeLabel = "Latitude";
         mLongitudeLabel = "Longitude";
-        mLatitudeText = (TextView) findViewById((R.id.latitude_text));
+        /*mLatitudeText = (TextView) findViewById((R.id.latitude_text));
         mLongitudeText = (TextView) findViewById((R.id.longitude_text));
         mLocationAddressTextView = (TextView) findViewById(R.id.location_address_view);
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
         mFetchAddressButton = (Button) findViewById(R.id.fetch_address_button);
-
+*/
         updateUIWidgets();
         updateValuesFromBundle(savedInstanceState);
     }
@@ -134,12 +137,12 @@ public class SellActivity extends BaseActivity implements
     }
 
     private void addCategories(FlowLayout flowLayout, String label) {
-        LinearLayout linearLayout = new LinearLayout(this);
+        categoryLL = new LinearLayout(this);
         LinearLayout.LayoutParams layout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        linearLayout.setLayoutParams(layout);
+        categoryLL.setLayoutParams(layout);
         ScreenSizeScaler screenSizeScaler = new ScreenSizeScaler(getResources());
         final int px = screenSizeScaler.getdpAspixel(8);
-        linearLayout.setPadding(px, px, px, px);
+        categoryLL.setPadding(px, px, px, px);
 
         final TextView textView = new TextView(this);
         textView.setLayoutParams(layout);
@@ -169,18 +172,62 @@ public class SellActivity extends BaseActivity implements
             }
         });
 
-        linearLayout.addView(textView);
-        flowLayout.addView(linearLayout);
+        categoryLL.addView(textView);
+        flowLayout.addView(categoryLL);
     }
 
     @Override
     public void onClick(View v) {
-        bookImage.setDrawingCacheEnabled(true);
-        bookImage.buildDrawingCache();
-        Bitmap bitmap = bookImage.getDrawingCache();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        //80 is recommended - http://stackoverflow.com/questions/35271817/compressing-image-in-android-is-loosing-the-quality-when-image-is-taken-from-pho
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
+        TextInputLayout title = (TextInputLayout) findViewById(R.id.title_wrapper);
+        if(book.getTitle() == null){
+            title.setError("Please enter the title");
+            return;
+        } else{
+            title.setError(null);
+        }
+        TextInputLayout authorWrapper = (TextInputLayout) findViewById(R.id.author_wrapper);
+        if(book.getAuthor() == null){
+            authorWrapper.setError("Please enter the author");
+            return;
+        } else {
+            authorWrapper.setError(null);
+        }
+        TextInputLayout conditionWrapper = (TextInputLayout) findViewById(R.id.condition_wrapper);
+        if(book.getCondition() == null){
+            conditionWrapper.setError("Hint: good, bad, 2 years old, read only once, etc");
+            return;
+        } else {
+            conditionWrapper.setError(null);
+        }
+        TextInputLayout priceWrapper = (TextInputLayout) findViewById(R.id.yourprice_wrapper);
+        if(book.getYourPrice() == 0){
+            priceWrapper.setError("Enter for how much do you want to sell.");
+            return;
+        } else {
+            priceWrapper.setError(null);
+        }
+        TextInputLayout phoneWrapper = (TextInputLayout) findViewById(R.id.phone_wrapper);
+        if(book.getPhoneNumber() == null){
+            phoneWrapper.setError("Enter your phone number.");
+            return;
+        } else {
+            phoneWrapper.setError(null);
+        }
+        boolean hasCat = false;
+        for(int index = 0 ; index < categoryLL.getChildCount(); index ++){
+            Object tag = categoryLL.getChildAt(index).getTag();
+            if(tag != null && "added".equals(tag.toString())){
+                hasCat = true;
+                Log.d(TAG, "onClick: asasasas");
+                break;
+            }
+        }
+        if(!hasCat){
+            Toast.makeText(this, "Please choose one or more categories.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+
         book.setISBN(prefManager.getISBN());
         //book.setTitle(prefManager.getTitle());
         book.setUploadTime(-1 * new Date().getTime());
@@ -188,7 +235,27 @@ public class SellActivity extends BaseActivity implements
         book.seller.name = getLoginDisplayName();
         book.seller.email = getLoginEmail();
         String uId = FirebaseDatabaseService.getInstance("").addSellingItem(book);
+        Bitmap bitmap = null;
+        if(bookImage.getDrawable() == null){
+            Resources res = getResources();
+            Drawable drawable = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                drawable = res.getDrawable(R.drawable.no_book, null);
+            } else{
+                drawable = res.getDrawable(R.drawable.no_book);
+            }
+            bitmap = ((BitmapDrawable)drawable).getBitmap();
+        } else {
+            bookImage.setDrawingCacheEnabled(true);
+            bookImage.buildDrawingCache();
+            bitmap = bookImage.getDrawingCache();
+        }
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        //80 is recommended - http://stackoverflow.com/questions/35271817/compressing-image-in-android-is-loosing-the-quality-when-image-is-taken-from-pho
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
         FirebaseStorageService.getInstance().setImage(uId, baos.toByteArray(), this);
+
         Snackbar.make(v, "Ad posted", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         finish();
     }
@@ -268,10 +335,10 @@ public class SellActivity extends BaseActivity implements
     public void onConnected(Bundle connectionHint) {
         super.onConnected(connectionHint);
         if (mLastLocation != null) {
-            mLatitudeText.setText(String.format("%s: %f", mLatitudeLabel,
+            /*mLatitudeText.setText(String.format("%s: %f", mLatitudeLabel,
                     mLastLocation.getLatitude()));
             mLongitudeText.setText(String.format("%s: %f", mLongitudeLabel,
-                    mLastLocation.getLongitude()));
+                    mLastLocation.getLongitude()));*/
 
             book.getLocation().latitude = mLastLocation.getLatitude();
             book.getLocation().longitude = mLastLocation.getLongitude();
@@ -305,13 +372,13 @@ public class SellActivity extends BaseActivity implements
      * Toggles the visibility of the progress bar. Enables or disables the Fetch Address button.
      */
     void updateUIWidgets() {
-        if (mAddressRequested) {
+        /*if (mAddressRequested) {
             mProgressBar.setVisibility(ProgressBar.VISIBLE);
             mFetchAddressButton.setEnabled(false);
         } else {
             mProgressBar.setVisibility(ProgressBar.GONE);
             mFetchAddressButton.setEnabled(true);
-        }
+        }*/
     }
 
     private void updateValuesFromBundle(Bundle savedInstanceState) {

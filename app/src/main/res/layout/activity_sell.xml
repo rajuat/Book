@@ -3,15 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="book"
             type="com.itservz.bookex.android.model.Book" />
-
         <variable
             name="handler"
             type="com.itservz.bookex.android.model.SellHandler" />
-
         <import type="android.view.View" />
     </data>
 
@@ -33,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="ISBN info can promote your book faster."
+                android:text="ISBN (unique book ID) can promote your book faster."
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="8sp" />
 
@@ -65,17 +62,18 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight=".25"
+                    android:textColor="@color/colorTextIcon"
                     android:backgroundTint="@color/colorAccent"
                     android:text="OR Scan ISBN barcode" />
 
             </LinearLayout>
-
             <Button
                 android:id="@+id/getBookDetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/colorAccent"
                 android:onClick="@{handler.click(book)}"
+                android:textColor="@color/colorTextIcon"
                 android:text="Get details and fill the form" />
             <!--android:visibility="@{book.ISBN.length()>0 ? View.VISIBLE: View.INVISIBLE}"-->
             <ImageView
@@ -114,7 +112,7 @@
                 android:id="@+id/author_wrapper"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Author*">
+                android:hint="Author* (eg. ncert)">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/book_author"
@@ -184,7 +182,7 @@
                 android:layout_height="wrap_content"
                 android:text="Submit" />
 
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            <!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -234,7 +232,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginTop="16dp"
                     android:textSize="20sp" />
-            </LinearLayout>
+            </LinearLayout>-->
 
         </LinearLayout>
     </ScrollView>

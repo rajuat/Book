@@ -1,6 +1,8 @@
 package com.itservz.bookex.android.backend;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.itservz.bookex.android.BookListActivity;
 import com.itservz.bookex.android.model.Book;
@@ -22,7 +24,7 @@ public class GoogleBooksAPIService {
 
     private final static String TAG = "GoogleBooksAPIService";
 
-    public void getBook(String isbn, final Book book){
+    public void getBook(String isbn, final Book book, final Context context){
         final String url = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn + "&fields=kind,totalItems,items(volumeInfo/title,volumeInfo/authors,volumeInfo/description,volumeInfo/industryIdentifiers,volumeInfo/imageLinks/smallThumbnail,saleInfo/retailPrice)";
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(url, new AsyncHttpResponseHandler() {
@@ -44,12 +46,12 @@ public class GoogleBooksAPIService {
                     book.setMrp(saleInfo.getJSONObject("listPrice").getInt("amount"));
                     Log.d(TAG, "onSuccess: " +book.toString());
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Toast.makeText(context, "We cannot find book info from the entered ISBN. Please fill yourself", Toast.LENGTH_LONG).show();
                 }
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Log.d("GoogleBooksAPIService", "Book not found: " + error.getMessage());
+                Toast.makeText(context, "We cannot find book info from the entered ISBN. Please fill yourself", Toast.LENGTH_LONG).show();
             }
         });
         //return book;
