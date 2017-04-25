@@ -20,6 +20,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,6 +50,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class SellActivity extends BaseActivity implements
         View.OnClickListener, FirebaseCategoryService.CategoryListener {
@@ -63,18 +65,17 @@ public class SellActivity extends BaseActivity implements
 
     protected String mLatitudeLabel;
     protected String mLongitudeLabel;
-    protected TextView mLatitudeText;
-    protected TextView mLongitudeText;
+
     protected TextView mLocationAddressTextView;
-    ProgressBar mProgressBar;
-    Button mFetchAddressButton;
+
     private FlowLayout bookCategoriesLayout;
-    private LinearLayout categoryLL;
+    private int SCANNER_REQUEST_CODE = 12;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        checkLogin();
+        //checkLogin();
         //setContentView(R.layout.activity_sell);
 
         book = new Book();
@@ -103,41 +104,23 @@ public class SellActivity extends BaseActivity implements
             public void onClick(View view) {
                 startActivityForResult(
                         new Intent(SellActivity.this, SimpleScannerActivity.class),
-                        12);
+                        SCANNER_REQUEST_CODE);
             }
         });
 
-        ((Button) findViewById(R.id.sell_button)).setOnClickListener(this);
+        findViewById(R.id.sell_button).setOnClickListener(this);
 
         mLatitudeLabel = "Latitude";
         mLongitudeLabel = "Longitude";
-        /*mLatitudeText = (TextView) findViewById((R.id.latitude_text));
-        mLongitudeText = (TextView) findViewById((R.id.longitude_text));
-        mLocationAddressTextView = (TextView) findViewById(R.id.location_address_view);
-        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        mFetchAddressButton = (Button) findViewById(R.id.fetch_address_button);
-*/
+
         updateUIWidgets();
         updateValuesFromBundle(savedInstanceState);
     }
 
-    void checkLogin(){
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        if (auth.getCurrentUser() == null) {
-            startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
-                    .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
-                    .setIsSmartLockEnabled(!BuildConfig.DEBUG)
-                    .build(), RC_SIGN_IN);
-        }
-    }
-
     @Override
-    public void onCategoryAdded(BookCategory bookCategory) {
-        addCategories(bookCategoriesLayout, bookCategory.longText);
-    }
+    public void onCategoryAdded(final BookCategory bookCategory) {
 
-    private void addCategories(FlowLayout flowLayout, String label) {
-        categoryLL = new LinearLayout(this);
+        LinearLayout categoryLL = new LinearLayout(this);
         LinearLayout.LayoutParams layout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         categoryLL.setLayoutParams(layout);
         ScreenSizeScaler screenSizeScaler = new ScreenSizeScaler(getResources());
@@ -149,7 +132,7 @@ public class SellActivity extends BaseActivity implements
         textView.setBackground(getResources().getDrawable(R.drawable.rounded_border));
         textView.setPadding(px, px, px, px);
         textView.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
-        textView.setText(label);
+        textView.setText(bookCategory.longText);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -157,15 +140,15 @@ public class SellActivity extends BaseActivity implements
                 if ("added".equals(textView.getTag())) {//deselect
                     textView.setBackground(getResources().getDrawable(R.drawable.rounded_border));
                     textView.setPadding(px, px, px, px);
-                    if (categories.contains(value)) {
-                        categories.remove(new BookCategory(value, value));
+                    if (categories.contains(bookCategory)) {
+                        categories.remove(bookCategory);
                     }
                     textView.setTag("");
                 } else {
                     textView.setBackground(getResources().getDrawable(R.drawable.rounded_border_selected));
                     textView.setPadding(px, px, px, px);
-                    if (!categories.contains(value)) {
-                        categories.add(new BookCategory(value, value));
+                    if (!categories.contains(bookCategory)) {
+                        categories.add(bookCategory);
                     }
                     textView.setTag("added");
                 }
@@ -173,7 +156,7 @@ public class SellActivity extends BaseActivity implements
         });
 
         categoryLL.addView(textView);
-        flowLayout.addView(categoryLL);
+        bookCategoriesLayout.addView(categoryLL, 0);
     }
 
     @Override
@@ -194,31 +177,34 @@ public class SellActivity extends BaseActivity implements
         }
         TextInputLayout conditionWrapper = (TextInputLayout) findViewById(R.id.condition_wrapper);
         if(book.getCondition() == null){
-            conditionWrapper.setError("Hint: good, bad, 2 years old, read only once, etc");
+            conditionWrapper.setError("Please enter a short description");
             return;
         } else {
             conditionWrapper.setError(null);
         }
         TextInputLayout priceWrapper = (TextInputLayout) findViewById(R.id.yourprice_wrapper);
         if(book.getYourPrice() == 0){
-            priceWrapper.setError("Enter for how much do you want to sell.");
+            priceWrapper.setError("Enter for how much do you want to sell!");
             return;
         } else {
             priceWrapper.setError(null);
         }
         TextInputLayout phoneWrapper = (TextInputLayout) findViewById(R.id.phone_wrapper);
-        if(book.getPhoneNumber() == null){
-            phoneWrapper.setError("Enter your phone number.");
+        if(book.getPhoneNumber() == null || !isValidPhoneNo(book.getPhoneNumber())){
+            phoneWrapper.setError("Enter a valid mobile number");
             return;
         } else {
             phoneWrapper.setError(null);
         }
         boolean hasCat = false;
+        LinearLayout categoryLL = (LinearLayout) bookCategoriesLayout.getChildAt(0);
         for(int index = 0 ; index < categoryLL.getChildCount(); index ++){
             Object tag = categoryLL.getChildAt(index).getTag();
+            String s =  tag == null ? " null " : tag.toString();
+            Log.d(TAG, "onClickTag: " +s );
+
             if(tag != null && "added".equals(tag.toString())){
                 hasCat = true;
-                Log.d(TAG, "onClick: asasasas");
                 break;
             }
         }
@@ -291,6 +277,7 @@ public class SellActivity extends BaseActivity implements
                 Bitmap bitmap = BitmapFactory.decodeStream(imageStream);
                 Log.d(TAG, "About to set to image view " + bitmap.getByteCount());
                 bookImage.setImageBitmap(bitmap);
+                bookImage.setBackground(null);
             } catch (FileNotFoundException e) {
                 if (ContextCompat.checkSelfPermission(this,
                         android.Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -307,7 +294,7 @@ public class SellActivity extends BaseActivity implements
                     }
                 }
             }
-        } else if(requestCode == 12){
+        } else if(requestCode == SCANNER_REQUEST_CODE){
             String isbn = data.getStringExtra("ISBN");
             Log.d(TAG, "onActivityResult: isbn" + isbn);
             book.setISBN(isbn);
@@ -323,6 +310,7 @@ public class SellActivity extends BaseActivity implements
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Bitmap bitmap = BitmapHelper.decodeSampledBitmapFromInputStream(getResources(), imageStream);
                     bookImage.setImageBitmap(bitmap);
+                    bookImage.setBackground(null);
                 } else {
                     Toast.makeText(this, "Denied", Toast.LENGTH_LONG);
                 }
@@ -394,6 +382,11 @@ public class SellActivity extends BaseActivity implements
                 displayAddressOutput();
             }
         }
+    }
+
+    private boolean isValidPhoneNo(CharSequence phoneNo) {
+        String pattern = "^(?:(?:\\+|0{0,2})91(\\s*[\\ -]\\s*)?|[0]?)?[789]\\d{9}|(\\d[ -]?){10}\\d$";
+        return Pattern.matches(pattern, phoneNo);
     }
 
 }

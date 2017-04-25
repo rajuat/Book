@@ -10,6 +10,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,7 @@ public class BookDetailFragment extends Fragment {
     private Book book;
     private android.location.Location location;
     private BookDetailActivity activity;
+    private static final String TAG = "BookDetail";
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -78,8 +80,8 @@ public class BookDetailFragment extends Fragment {
             if(book.getMrp() != 0){
                 ((TextView) rootView.findViewById(R.id.book_list_mrp)).setText("₹ " + book.getMrp());
             }
-            if(book.getLocation()!= null && book.getLocation().latitude != 0
-                    && location != null && location.getLatitude() != 0){
+            if(book.getLocation()!= null
+                    && location != null ){
                 double distanceinKM = DistanceCalculator.distance(book.getLocation().latitude, book.getLocation().longitude, location.getLatitude(), location.getLongitude());
                 ((TextView) rootView.findViewById(R.id.book_place_dis)).setText(distanceinKM + "km away");
             }
@@ -94,6 +96,7 @@ public class BookDetailFragment extends Fragment {
             rootView.findViewById(R.id.call).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Log.i(TAG, "Buyer " + ((BaseActivity)getActivity()).getLoginEmail() + " called Seller " + book.seller.email + " at " + book.getPhoneNumber());
                     Intent intent = CallService.getCallIntent(book.getPhoneNumber());
                     startActivity(intent);
                 }
@@ -101,6 +104,7 @@ public class BookDetailFragment extends Fragment {
             rootView.findViewById(R.id.sms).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Log.i(TAG, "Buyer " + ((BaseActivity)getActivity()).getLoginEmail() + " sms Seller " + book.seller.email + " at " + book.getPhoneNumber());
                     Intent intent = MessagingService.getSMSIntent(book.getPhoneNumber());
                     startActivity(intent);
                 }

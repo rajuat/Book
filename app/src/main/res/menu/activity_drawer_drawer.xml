@@ -3,7 +3,7 @@
     <item
         android:id="@+id/loginBtn"
         android:icon="@drawable/ic_exit_to_app_black_24dp"
-        android:title="Login" />
+        android:title="Signin" />
 
     <item
         android:id="@+id/sell_book"

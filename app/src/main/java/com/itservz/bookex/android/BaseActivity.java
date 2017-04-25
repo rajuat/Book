@@ -211,17 +211,17 @@ public abstract class BaseActivity extends AppCompatActivity implements GoogleAp
     abstract void updateUIWidgets();
 
     //login
-    protected static final int RC_SIGN_IN = 123;
-    protected void login() {
+    //protected static final int RC_SIGN_IN = 123;
+    protected void login(final int RC_SIGN_IN) {
         //https://github.com/firebase/FirebaseUI-Android/tree/master/auth
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        NavigationView drawerNavigationView = (NavigationView) findViewById(R.id.nav_view);
-        MenuItem menuItem = drawerNavigationView.getMenu().findItem(R.id.loginBtn);
+        /*NavigationView drawerNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        MenuItem menuItem = drawerNavigationView.getMenu().findItem(R.id.loginBtn);*/
         if (auth.getCurrentUser() != null) {
-            menuItem.setTitle("Logout");
+            //menuItem.setTitle("Logout");
             Snackbar.make(findViewById(R.id.drawer_layout), "Already Signin", Snackbar.LENGTH_LONG).show();
         } else {
-            menuItem.setTitle("Login");
+            //menuItem.setTitle("Logout");
             startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
                     .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
                     .setIsSmartLockEnabled(!BuildConfig.DEBUG)

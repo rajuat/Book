@@ -118,4 +118,7 @@
     <string name="no_internet_connection">No internet connection</string>
     <string name="unknown_error">Did not sign in</string>
     <string name="unknown_sign_in_response">Unknown response from AuthUI sign-in</string>
+
+    <string name="sign_in_to_sell">Please sign in to sell a book</string>
+    <string name="sign_out">Signout</string>
 </resources>

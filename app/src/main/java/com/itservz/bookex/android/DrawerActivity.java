@@ -3,6 +3,7 @@ package com.itservz.bookex.android;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.StringRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -54,6 +55,10 @@ public class DrawerActivity extends BaseActivity
     private ListView searchList;
     private FlowLayout categoriesFL;
     private CategoryBuilder categoryBuilder;
+    private static final int RC_SIGN_IN_FIRST_TIME = 111;
+    private static final int RC_SIGN_IN_DRAWER = 222;
+    private static final int RC_SIGN_IN_SELL = 333;
+    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,17 +67,16 @@ public class DrawerActivity extends BaseActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if(getIntent().getBooleanExtra("landingPage", false)) {
-            login();//user are ask to login
+        if (getIntent().getBooleanExtra("landingPage", false)) {
+            login(RC_SIGN_IN_FIRST_TIME);//user are ask to login
         }
 
         prefManager = new PrefManager(this);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_sell);
-        final Intent sellIntent = new Intent(this, SellActivity.class);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(sellIntent);
+                sell();
             }
         });
 
@@ -181,6 +185,16 @@ public class DrawerActivity extends BaseActivity
         });
     }
 
+    private void sell() {
+        if (isLogin()) {
+            Intent sellIntent = new Intent(DrawerActivity.this, SellActivity.class);
+            startActivity(sellIntent);
+        } else {
+            showSnackbar(R.string.sign_in_to_sell);
+            login(RC_SIGN_IN_SELL);
+        }
+    }
+
     @Override
     void displayAddressOutput() {
 
@@ -200,12 +214,16 @@ public class DrawerActivity extends BaseActivity
         View headerView = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0);
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = auth.getCurrentUser();
+        NavigationView drawerNavigationView = (NavigationView) findViewById(R.id.nav_view);
+        MenuItem menuItem = drawerNavigationView.getMenu().findItem(R.id.loginBtn);
         if (currentUser != null) {
             ((TextView) headerView.findViewById(R.id.loginNameTxt)).setText(currentUser.getDisplayName());
             ((TextView) headerView.findViewById(R.id.loginEmailTxt)).setText(currentUser.getEmail());
+            menuItem.setTitle("Signout");
         } else {
             ((TextView) headerView.findViewById(R.id.loginNameTxt)).setText("Guest");
             ((TextView) headerView.findViewById(R.id.loginEmailTxt)).setText("");
+            menuItem.setTitle("Signin");
         }
     }
 
@@ -263,7 +281,21 @@ public class DrawerActivity extends BaseActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (doubleBackToExitPressedOnce) {
+                super.onBackPressed();
+                return;
+            }
+
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, 2000);
         }
     }
 
@@ -278,7 +310,6 @@ public class DrawerActivity extends BaseActivity
             startActivity(new Intent(this, SearchActivity.class));
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -292,15 +323,14 @@ public class DrawerActivity extends BaseActivity
                 View headerView = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0);
                 ((TextView) headerView.findViewById(R.id.loginNameTxt)).setText("Guest");
                 ((TextView) headerView.findViewById(R.id.loginEmailTxt)).setText("");
-                Snackbar.make(findViewById(R.id.drawer_layout), "Signout", Snackbar.LENGTH_LONG).show();
-                item.setTitle("Login");
+                showSnackbar(R.string.sign_out);
+                item.setTitle("Signin");
             } else {
-                login();
-                item.setTitle("Logout");
+                login(RC_SIGN_IN_DRAWER);
+                //item.setTitle("Logout");
             }
-        } else if(id == R.id.sell_book){
-            Intent sellIntent = new Intent(this, SellActivity.class);
-            startActivity(sellIntent);
+        } else if (id == R.id.sell_book) {
+            sell();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -308,19 +338,19 @@ public class DrawerActivity extends BaseActivity
         return true;
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
+        if (requestCode == RC_SIGN_IN_FIRST_TIME
+                || requestCode == RC_SIGN_IN_DRAWER
+                || requestCode == RC_SIGN_IN_SELL) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
             if (resultCode == ResultCodes.OK) {
                 Snackbar.make(findViewById(R.id.drawer_layout), "Signin", Snackbar.LENGTH_LONG).show();
                 setLoginInfo();
-                /*Intent in = IdpResponse.getIntent(response);
-                in.setClass(context, SignedInActivity.class);
-                startActivity(SignedInActivity.createIntent(this, response));
-                finish();*/
+                if (requestCode == RC_SIGN_IN_SELL) {
+                    sell();
+                }
                 return;
             } else {
                 if (response == null) {
@@ -339,15 +369,13 @@ public class DrawerActivity extends BaseActivity
                     return;
                 }
             }
-
             showSnackbar(R.string.unknown_sign_in_response);
         }
     }
 
-    private void showSnackbar(@StringRes int errorMessageRes) {
-        Snackbar.make(findViewById(R.id.drawer_layout), errorMessageRes, Snackbar.LENGTH_LONG)
+    private void showSnackbar(@StringRes int message) {
+        Snackbar.make(findViewById(R.id.drawer_layout), message, Snackbar.LENGTH_LONG)
                 .show();
     }
-
 
 }
