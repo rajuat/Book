@@ -15,6 +15,7 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CALL_PHONE;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.SEND_SMS;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 
 /**
  * Created by Raju on 4/12/2017.
@@ -24,7 +25,7 @@ public class Permissions {
 
     Activity activity;
     Context context;
-    public String[] permissionArray = new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, CALL_PHONE, SEND_SMS, CAMERA};
+    public String[] permissionArray = new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, CALL_PHONE, SEND_SMS, CAMERA, READ_EXTERNAL_STORAGE};
     public Permissions(Activity activity) {
         this.activity = activity;
         this.context = activity.getApplicationContext();
@@ -36,12 +37,14 @@ public class Permissions {
         int call = ContextCompat.checkSelfPermission(context, CALL_PHONE);
         int sms = ContextCompat.checkSelfPermission(context, SEND_SMS);
         int camera = ContextCompat.checkSelfPermission(context, CAMERA);
+        int storage = ContextCompat.checkSelfPermission(context, READ_EXTERNAL_STORAGE);
 
         return fine == PackageManager.PERMISSION_GRANTED
                 && coarse == PackageManager.PERMISSION_GRANTED
                 && call == PackageManager.PERMISSION_GRANTED
                 && sms == PackageManager.PERMISSION_GRANTED
-                && camera == PackageManager.PERMISSION_GRANTED;
+                && camera == PackageManager.PERMISSION_GRANTED
+                && storage == PackageManager.PERMISSION_GRANTED;
     }
 
     public void requestPermissions() {
@@ -57,12 +60,13 @@ public class Permissions {
                     boolean call = grantResults[2] == PackageManager.PERMISSION_GRANTED;
                     boolean sms = grantResults[3] == PackageManager.PERMISSION_GRANTED;
                     boolean camera = grantResults[4] == PackageManager.PERMISSION_GRANTED;
+                    boolean storage = grantResults[5] == PackageManager.PERMISSION_GRANTED;
 
                     if (coarse && fine && call && sms && camera) {
-                        Toast.makeText(context, "Permission Granted, Now you can access location data, calling, sms, and camera.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Permission Granted, Now you can access location data, calling, sms, camera, and storage.", Toast.LENGTH_LONG).show();
                         return true;
                     } else {
-                        Toast.makeText(context, "Permission Denied, You cannot access location data, call, sms, and camera.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Permission Denied, You cannot access location data, call, sms, camera, and storage", Toast.LENGTH_LONG).show();
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             if (activity.shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)) {
