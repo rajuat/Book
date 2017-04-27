@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitCenter"
-                android:src="@drawable/no_book"
+                android:src="@drawable/ic_no_book_96dp"
                 app:layout_collapseMode="parallax" />
 
             <android.support.v7.widget.Toolbar

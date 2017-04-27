@@ -224,7 +224,7 @@ public abstract class BaseActivity extends AppCompatActivity implements GoogleAp
             //menuItem.setTitle("Logout");
             startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
                     .setProviders(Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
-                    .setIsSmartLockEnabled(!BuildConfig.DEBUG)
+                    .setIsSmartLockEnabled(false)
                     .build(), RC_SIGN_IN);
         }
     }
