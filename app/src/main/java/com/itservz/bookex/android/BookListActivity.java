@@ -56,6 +56,7 @@ public class BookListActivity extends BaseActivity implements FirebaseDatabaseSe
         }
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.book_list);
+        recyclerView.setNestedScrollingEnabled(false);
         assert recyclerView != null;
         setupRecyclerView(recyclerView, categoryText);
 
