@@ -81,7 +81,7 @@
                 android:layout_width="@dimen/image_size_width"
                 android:layout_height="@dimen/image_size_height"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/ic_photo_camera_black_24dp"
+                android:background="@drawable/ic_file_upload_black_24dp"
                 android:src="@{book.imageUrl}" />
 
             <TextView
